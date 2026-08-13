@@ -2,13 +2,12 @@ FROM node:20
 
 WORKDIR /app
 
-# Install dependencies (node:20 includes python3, make, g++ for native modules)
+# Install dependencies (gets Linux binary for better-sqlite3)
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --omit=dev
 
-# Build app
+# Copy pre-built app (built locally, committed to repo)
 COPY . .
-RUN npm run build
 
 EXPOSE 3000
 ENV PORT=3000
