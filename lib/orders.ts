@@ -1,0 +1,100 @@
+import { getDb } from "./db";
+import { randomBytes } from "crypto";
+
+export interface OrderItem {
+  id: string;
+  name: string;
+  price: string;
+  qty: number;
+  imageUrl: string;
+}
+
+export interface Order {
+  id: string;
+  ref: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  items: OrderItem[];
+  total: number;
+  status: "pending" | "proof_submitted" | "approved" | "rejected" | "shipped" | "delivered";
+  payment_method: "eft";
+  proof_url: string | null;
+  eft_reference: string | null;
+  notes: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+function genRef(): string {
+  return "DC-" + randomBytes(3).toString("hex").toUpperCase();
+}
+
+export function createOrder(data: {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  items: OrderItem[];
+  total: number;
+  eft_reference?: string;
+}): Order {
+  const db = getDb();
+  const now = new Date().toISOString();
+  const id = randomBytes(8).toString("hex");
+  const ref = genRef();
+
+  db.prepare(`
+    INSERT INTO orders (id, ref, name, email, phone, address, items, total, status, payment_method, eft_reference, createdAt, updatedAt)
+    VALUES (@id, @ref, @name, @email, @phone, @address, @items, @total, 'pending', 'eft', @eft_reference, @now, @now)
+  `).run({
+    id, ref,
+    name: data.name,
+    email: data.email,
+    phone: data.phone,
+    address: data.address,
+    items: JSON.stringify(data.items),
+    total: data.total,
+    eft_reference: data.eft_reference ?? null,
+    now,
+  });
+
+  return getOrder(id)!;
+}
+
+export function getOrder(id: string): Order | null {
+  const db = getDb();
+  const row = db.prepare("SELECT * FROM orders WHERE id = ? OR ref = ?").get(id, id) as Record<string, unknown> | undefined;
+  return row ? deserialize(row) : null;
+}
+
+export function listOrders(): Order[] {
+  const db = getDb();
+  const rows = db.prepare("SELECT * FROM orders ORDER BY createdAt DESC").all() as Record<string, unknown>[];
+  return rows.map(deserialize);
+}
+
+export function updateOrder(id: string, data: Partial<Pick<Order, "status" | "proof_url" | "notes" | "eft_reference">>): Order | null {
+  const db = getDb();
+  const sets: string[] = [];
+  const params: Record<string, unknown> = { id, now: new Date().toISOString() };
+
+  if (data.status !== undefined)       { sets.push("status = @status");             params.status = data.status; }
+  if (data.proof_url !== undefined)    { sets.push("proof_url = @proof_url");        params.proof_url = data.proof_url; }
+  if (data.notes !== undefined)        { sets.push("notes = @notes");               params.notes = data.notes; }
+  if (data.eft_reference !== undefined){ sets.push("eft_reference = @eft_reference"); params.eft_reference = data.eft_reference; }
+
+  if (!sets.length) return getOrder(id);
+  sets.push("updatedAt = @now");
+
+  db.prepare(`UPDATE orders SET ${sets.join(", ")} WHERE id = @id`).run(params);
+  return getOrder(id);
+}
+
+function deserialize(row: Record<string, unknown>): Order {
+  return {
+    ...row,
+    items: JSON.parse(row.items as string),
+  } as Order;
+}

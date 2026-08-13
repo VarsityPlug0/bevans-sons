@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# SQLite database and uploads (use persistent disk on Render)
+/data/
+/public/uploads/
+
+# Claude agent files
+AGENTS.md
+CLAUDE.md

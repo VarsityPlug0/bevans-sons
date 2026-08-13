@@ -1,0 +1,234 @@
+"use client";
+import { createContext, useContext, useReducer, useEffect, useState, useMemo } from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import { X, ShoppingCart, Trash2, Plus, Minus } from "lucide-react";
+
+export interface CartItem {
+  id: string;
+  name: string;
+  price: string;
+  imageUrl: string;
+  category: string;
+  qty: number;
+}
+
+type CartAction =
+  | { type: "ADD"; item: Omit<CartItem, "qty"> }
+  | { type: "REMOVE"; id: string }
+  | { type: "QTY"; id: string; qty: number }
+  | { type: "CLEAR" }
+  | { type: "LOAD"; items: CartItem[] };
+
+function cartReducer(state: CartItem[], action: CartAction): CartItem[] {
+  switch (action.type) {
+    case "ADD": {
+      const existing = state.find((i) => i.id === action.item.id);
+      if (existing) return state.map((i) => i.id === action.item.id ? { ...i, qty: i.qty + 1 } : i);
+      return [...state, { ...action.item, qty: 1 }];
+    }
+    case "REMOVE": return state.filter((i) => i.id !== action.id);
+    case "QTY":   return state.map((i) => i.id === action.id ? { ...i, qty: Math.max(1, action.qty) } : i);
+    case "CLEAR": return [];
+    case "LOAD":  return action.items;
+    default:      return state;
+  }
+}
+
+interface CartContextValue {
+  items: CartItem[];
+  count: number;
+  add: (item: Omit<CartItem, "qty">) => void;
+  remove: (id: string) => void;
+  setQty: (id: string, qty: number) => void;
+  clear: () => void;
+  openCart: () => void;
+}
+
+const CartContext = createContext<CartContextValue>({
+  items: [], count: 0,
+  add: () => {}, remove: () => {}, setQty: () => {}, clear: () => {}, openCart: () => {},
+});
+
+export function useCart() { return useContext(CartContext); }
+
+export function CartProvider({ children }: { children: React.ReactNode }) {
+  const [items, dispatch] = useReducer(cartReducer, []);
+  const [open, setOpen] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+  const pathname = usePathname();
+
+  // Close sidebar on navigation
+  useEffect(() => { setOpen(false); }, [pathname]);
+
+  // Load from localStorage after mount
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("daisy_cart");
+      if (stored) dispatch({ type: "LOAD", items: JSON.parse(stored) });
+    } catch { /* ignore */ }
+    setHydrated(true);
+  }, []);
+
+  // Persist to localStorage
+  useEffect(() => {
+    if (!hydrated) return;
+    localStorage.setItem("daisy_cart", JSON.stringify(items));
+  }, [items, hydrated]);
+
+  const count = items.reduce((s, i) => s + i.qty, 0);
+  function parsePrice(p: string): number { return parseFloat(p.replace(/[^0-9.]/g, "")) || 0; }
+
+  const ctx: CartContextValue = {
+    items, count,
+    add: (item) => dispatch({ type: "ADD", item }),
+    remove: (id) => dispatch({ type: "REMOVE", id }),
+    setQty: (id, qty) => dispatch({ type: "QTY", id, qty }),
+    clear: () => dispatch({ type: "CLEAR" }),
+    openCart: () => setOpen(true),
+  };
+
+  const waText = useMemo(() => {
+    if (items.length === 0) return "";
+    return encodeURIComponent(
+      "Hi Daisy & Co., I would like to enquire about the following products:\n\n" +
+      items.map((i) => `- ${i.name} (${i.price}) × ${i.qty}`).join("\n") +
+      "\n\nPlease send me pricing and availability."
+    );
+  }, [items]);
+
+  return (
+    <CartContext.Provider value={ctx}>
+      {children}
+
+      {/* Backdrop */}
+      {open && (
+        <div className="fixed inset-0 bg-black/60 z-[60] backdrop-blur-sm" onClick={() => setOpen(false)} />
+      )}
+
+      {/* Cart sidebar */}
+      <div
+        className="fixed top-0 right-0 h-full z-[70] flex flex-col"
+        style={{
+          width: "min(420px, 100vw)",
+          background: "#0f0f0f",
+          borderLeft: "1px solid rgba(255,255,255,0.07)",
+          transform: open ? "translateX(0)" : "translateX(100%)",
+          transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+          boxShadow: open ? "-20px 0 60px rgba(0,0,0,0.6)" : "none",
+        }}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-5 border-b border-[#1A1A1A]">
+          <div className="flex items-center gap-3">
+            <ShoppingCart size={20} color="#D4AF37" />
+            <h2 className="text-white font-bold">Enquiry List</h2>
+            {count > 0 && (
+              <span className="text-xs font-bold text-[#0A0A0A] bg-[#D4AF37] rounded-full w-5 h-5 flex items-center justify-center">
+                {count}
+              </span>
+            )}
+          </div>
+          <button onClick={() => setOpen(false)} className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/8 transition-colors">
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="flex-1 overflow-y-auto">
+          {items.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full gap-4 px-6 text-center">
+              <ShoppingCart size={48} color="#2a2a2a" strokeWidth={1} />
+              <p className="text-gray-500 text-sm">Your enquiry list is empty.</p>
+              <p className="text-gray-700 text-xs">Add products you are interested in, then send us the list via WhatsApp for a quote.</p>
+              <button onClick={() => setOpen(false)} className="btn-outline px-6 py-2.5 rounded-xl text-sm font-bold">
+                Browse Products
+              </button>
+            </div>
+          ) : (
+            <div className="px-4 py-4 space-y-3">
+              {items.map((item) => (
+                <div key={item.id} className="flex gap-4 bg-[#111111] border border-[#1A1A1A] rounded-2xl p-4">
+                  {item.imageUrl && (
+                    <div className="w-16 h-16 rounded-xl overflow-hidden shrink-0 bg-[#0A0A0A]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white text-sm font-medium leading-snug truncate">{item.name}</p>
+                    <p className="text-gray-500 text-xs mb-2">{item.category}</p>
+                    <p className="text-[#D4AF37] font-bold text-sm">{item.price}</p>
+                    {/* Qty controls */}
+                    <div className="flex items-center gap-2 mt-2">
+                      <button
+                        onClick={() => ctx.setQty(item.id, item.qty - 1)}
+                        disabled={item.qty <= 1}
+                        className="w-6 h-6 rounded-lg border border-[#2a2a2a] flex items-center justify-center text-gray-400 hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:text-gray-400"
+                      >
+                        <Minus size={12} />
+                      </button>
+                      <span className="text-white text-xs font-bold w-5 text-center">{item.qty}</span>
+                      <button onClick={() => ctx.setQty(item.id, item.qty + 1)}
+                        className="w-6 h-6 rounded-lg border border-[#2a2a2a] flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+                        <Plus size={12} />
+                      </button>
+                      <button onClick={() => ctx.remove(item.id)}
+                        className="ml-auto w-6 h-6 rounded-lg flex items-center justify-center text-gray-600 hover:text-red-400 transition-colors">
+                        <Trash2 size={12} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Footer CTAs */}
+        {items.length > 0 && (
+          <div className="px-4 py-5 border-t border-[#1A1A1A] space-y-3">
+            <p className="text-xs text-gray-600 text-center mb-2">{count} item{count !== 1 ? "s" : ""} in your enquiry list</p>
+            <a
+              href={`https://wa.me/27848961782?text=${waText}`}
+              target="_blank" rel="noopener noreferrer"
+              className="btn-gold w-full py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+              </svg>
+              Enquire via WhatsApp
+            </a>
+            <Link href="/checkout" onClick={() => setOpen(false)}
+              className="btn-outline w-full py-3 rounded-xl font-bold text-sm text-center block">
+              Checkout &amp; Pay via EFT
+            </Link>
+            <button onClick={() => ctx.clear()}
+              className="w-full text-center text-xs text-gray-600 hover:text-red-400 transition-colors py-1">
+              Clear list
+            </button>
+          </div>
+        )}
+      </div>
+    </CartContext.Provider>
+  );
+}
+
+// Cart icon for header
+export function CartButton() {
+  const { count, openCart } = useCart();
+  return (
+    <button
+      onClick={openCart}
+      className="relative w-9 h-9 flex items-center justify-center rounded-xl text-gray-400 hover:text-white hover:bg-white/6 transition-all"
+      aria-label="Enquiry list"
+    >
+      <ShoppingCart size={19} strokeWidth={1.8} />
+      {count > 0 && (
+        <span className="absolute -top-1 -right-1 w-4.5 h-4.5 min-w-[18px] min-h-[18px] text-[9px] font-bold text-[#0A0A0A] bg-[#D4AF37] rounded-full flex items-center justify-center leading-none px-0.5">
+          {count}
+        </span>
+      )}
+    </button>
+  );
+}
