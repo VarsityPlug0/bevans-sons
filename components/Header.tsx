@@ -60,15 +60,27 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
       {/* Announcement Bar — scrolling ticker */}
-      <div className="overflow-hidden flex items-center"
-        style={{ background: "linear-gradient(90deg, #C9971C, #D4AF37, #F0CE6A, #D4AF37, #C9971C)", color: "#0A0A0A", height: 44,
-          transform: "translateZ(0)", WebkitTransform: "translateZ(0)" }}>
-        <div className="ticker-track">
-          {/* Render twice so the loop is seamless */}
+      <style>{`
+        @keyframes daisy-ticker {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
+        }
+        .daisy-ticker-track {
+          display: flex;
+          flex-wrap: nowrap;
+          width: max-content;
+          animation: daisy-ticker 36s linear infinite;
+          will-change: transform;
+        }
+      `}</style>
+      <div style={{ overflow: "hidden", display: "flex", alignItems: "center",
+        background: "linear-gradient(90deg, #C9971C, #D4AF37, #F0CE6A, #D4AF37, #C9971C)",
+        color: "#0A0A0A", height: 44 }}>
+        <div className="daisy-ticker-track">
           {[0, 1].map((copy) => (
-            <span key={copy} style={{ display: "inline-flex", alignItems: "center" }}>
+            <span key={copy} style={{ display: "inline-flex", alignItems: "center", whiteSpace: "nowrap" }}>
               {tickerItems.map((item, i) => (
-                <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 6, paddingRight: 40,
+                <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 6, paddingRight: 48,
                   fontFamily: "var(--font-outfit)", fontWeight: 700, fontSize: 11, letterSpacing: "0.03em" }}>
                   <Tag size={10} strokeWidth={2.5} style={{ flexShrink: 0 }} />
                   {item}

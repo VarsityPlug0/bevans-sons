@@ -319,8 +319,7 @@ export default function AIAssistant() {
           style={{
             bottom: "calc(9rem + 3.5rem + 12px)",
             right: "clamp(8px, 4vw, 20px)",
-            left: "clamp(8px, 4vw, auto)",
-            width: "min(385px, calc(100vw - clamp(16px, 8vw, 40px)))",
+            width: "min(385px, calc(100vw - 16px))",
             maxHeight: "74vh",
             background: "#0f0f0f",
             border: "1px solid rgba(255,255,255,0.07)",
