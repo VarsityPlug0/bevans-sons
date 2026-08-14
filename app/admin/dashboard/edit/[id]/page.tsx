@@ -10,22 +10,22 @@ export default async function EditProduct({ params }: { params: Promise<{ id: st
 
   return (
     <div className="min-h-screen bg-[#0A0A0A]">
-      <header className="bg-[#0f0f0f] border-b border-[#1A1A1A] px-6 py-4 flex items-center gap-4">
+      <header className="bg-[#0f0f0f] border-b border-[#1A1A1A] px-4 sm:px-6 py-3 flex items-center gap-3">
         <Link href="/admin/dashboard"
-          className="text-gray-500 hover:text-white text-sm transition-colors">
+          className="text-gray-500 hover:text-white text-sm transition-colors shrink-0">
           ← Dashboard
         </Link>
         <span className="text-gray-700">/</span>
-        <h1 className="text-white font-semibold text-sm">Edit Product</h1>
+        <h1 className="text-white font-semibold text-sm truncate">Edit Product</h1>
       </header>
 
-      <div className="max-w-5xl mx-auto px-6 py-10">
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-white mb-1">Edit Product</h2>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+        <div className="mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">Edit Product</h2>
           <p className="text-gray-500 text-sm">Update the details below. Changes are saved immediately.</p>
         </div>
 
-        <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-8">
+        <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-4 sm:p-8">
           <ProductForm product={product} />
         </div>
       </div>

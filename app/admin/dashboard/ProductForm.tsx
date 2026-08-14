@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { CATEGORIES } from "@/lib/categories";
 import type { Product } from "@/lib/products";
-import { Upload, X, Image as ImageIcon } from "lucide-react";
+import { Upload, X } from "lucide-react";
 
 interface Props {
   product?: Product;
@@ -233,13 +233,13 @@ export default function ProductForm({ product }: Props) {
       </div>
 
       {/* Submit */}
-      <div className="flex gap-4 pt-2">
+      <div className="flex flex-col sm:flex-row gap-3 pt-2">
         <button type="submit" disabled={saving || uploading}
-          className="btn-gold px-10 py-3.5 rounded-xl font-bold text-sm disabled:opacity-60">
+          className="btn-gold flex-1 sm:flex-none sm:px-10 py-3.5 rounded-xl font-bold text-sm disabled:opacity-60">
           {saving ? "Saving…" : isEdit ? "Save Changes" : "Add Product"}
         </button>
         <button type="button" onClick={() => router.back()}
-          className="btn-outline px-8 py-3.5 rounded-xl text-sm">
+          className="btn-outline flex-1 sm:flex-none sm:px-8 py-3.5 rounded-xl text-sm">
           Cancel
         </button>
       </div>
