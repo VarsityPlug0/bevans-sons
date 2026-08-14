@@ -135,10 +135,10 @@ export default function CheckoutPage() {
               }`}>
                 {i + 1}
               </div>
-              <span className={`text-sm font-medium ${step === s ? "text-white" : "text-gray-500"}`}>
+              <span className={`hidden sm:inline text-sm font-medium ${step === s ? "text-white" : "text-gray-500"}`}>
                 {s === "details" ? "Your Details" : s === "payment" ? "Pay via EFT" : "Confirmed"}
               </span>
-              {i < 2 && <div className="w-12 h-px bg-[#1F1F1F]" />}
+              {i < 2 && <div className="w-8 sm:w-12 h-px bg-[#1F1F1F]" />}
             </div>
           ))}
         </div>
@@ -179,7 +179,7 @@ export default function CheckoutPage() {
 
             {/* Order summary */}
             <div className="lg:col-span-2">
-              <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-6 sticky top-24">
+              <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-6 sticky top-[124px]">
                 <h3 className="text-base font-semibold text-white mb-5">Order Summary</h3>
                 <div className="space-y-4 mb-5">
                   {items.map(item => (
@@ -300,7 +300,7 @@ export default function CheckoutPage() {
             </div>
 
             <div className="lg:col-span-2">
-              <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-6 sticky top-24 space-y-4">
+              <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-6 sticky top-[124px] space-y-4">
                 <h3 className="text-base font-semibold text-white">Order Placed</h3>
                 <div className="bg-[#0A0A0A] rounded-xl p-4 text-center">
                   <p className="text-xs text-gray-500 mb-1">Your Order Reference</p>

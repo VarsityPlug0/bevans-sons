@@ -48,16 +48,34 @@ export default function Header() {
 
   const isActive = (href: string) => href === "/" ? pathname === "/" : pathname.startsWith(href.split("?")[0]);
 
+  const tickerItems = [
+    "30% OFF — August to December Special",
+    "Free Worldwide Delivery",
+    "Orders Over R10,000 Get 25% Discount",
+    "Same-Day Delivery in South Africa",
+    "100% Authentic Products",
+    "WhatsApp Support — We Respond in Minutes",
+  ];
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      {/* Announcement Bar */}
-      <div className="flex items-center justify-center gap-3 px-4 py-2.5 text-center"
-        style={{ background: "linear-gradient(90deg, #C9971C, #D4AF37, #F0CE6A, #D4AF37, #C9971C)", color: "#0A0A0A" }}>
-        <Tag size={12} strokeWidth={2.5} />
-        <span style={{ fontFamily: "var(--font-outfit)", fontWeight: 700, fontSize: 11, letterSpacing: "0.03em" }}>
-          30% OFF — August to December Special &nbsp;•&nbsp; Free Worldwide Delivery &nbsp;•&nbsp; Orders Over R10,000 Get 25% Discount
-        </span>
-        <Tag size={12} strokeWidth={2.5} />
+      {/* Announcement Bar — scrolling ticker */}
+      <div className="overflow-hidden flex items-center"
+        style={{ background: "linear-gradient(90deg, #C9971C, #D4AF37, #F0CE6A, #D4AF37, #C9971C)", color: "#0A0A0A", height: 44 }}>
+        <div className="ticker-track">
+          {/* Render twice so the loop is seamless */}
+          {[0, 1].map((copy) => (
+            <span key={copy} style={{ display: "inline-flex", alignItems: "center" }}>
+              {tickerItems.map((item, i) => (
+                <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 6, paddingRight: 40,
+                  fontFamily: "var(--font-outfit)", fontWeight: 700, fontSize: 11, letterSpacing: "0.03em" }}>
+                  <Tag size={10} strokeWidth={2.5} style={{ flexShrink: 0 }} />
+                  {item}
+                </span>
+              ))}
+            </span>
+          ))}
+        </div>
       </div>
 
       {/* Main Nav */}
