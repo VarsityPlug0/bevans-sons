@@ -110,8 +110,25 @@ const sections = [
   },
 ];
 
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: sections.flatMap((s) =>
+    s.items.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    }))
+  ),
+};
+
 export default function FAQPage() {
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
     <div className="max-w-4xl mx-auto px-5 sm:px-8 py-20">
 
       <div className="text-center mb-14">
@@ -158,5 +175,6 @@ export default function FAQPage() {
       </div>
 
     </div>
+    </>
   );
 }

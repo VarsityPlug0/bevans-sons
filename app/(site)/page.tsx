@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import type { Metadata } from "next";
 import { getProducts } from "@/lib/products";
 import {
   Smartphone, Tv, Gamepad2, Laptop, Package,
@@ -8,6 +9,18 @@ import {
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Daisy Gadgets Co. | Premium Gadgets — Worldwide Shipping",
+  description: "Shop iPhones, Smart TVs, PS5, Xbox, Gaming PCs, MacBooks, Laptops, Solar Inverters, Home Appliances & more. Same-day delivery in South Africa. Free worldwide shipping.",
+  alternates: { canonical: "https://daisygadgetsco.co.za" },
+  openGraph: {
+    title: "Daisy Gadgets Co. | Premium Gadgets — Worldwide Shipping",
+    description: "Shop iPhones, Smart TVs, PS5, Xbox, Gaming PCs, MacBooks, Laptops, Solar & more. 30% OFF August to December. Same-day delivery in South Africa.",
+    url: "https://daisygadgetsco.co.za",
+    type: "website",
+  },
+};
 
 const CATEGORIES = [
   { label: "Smartphones",        href: "/shop?cat=Smartphones",                      icon: Smartphone,  color: "#3B82F6" },
@@ -34,12 +47,32 @@ const TRUST = [
   { icon: Headphones,  title: "WhatsApp Support",    desc: "Real human support via WhatsApp. We respond within minutes." },
 ];
 
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Daisy Gadgets Co.",
+  url: "https://daisygadgetsco.co.za",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: "https://daisygadgetsco.co.za/shop?q={search_term_string}",
+    },
+    "query-input": "required name=search_term_string",
+  },
+};
+
 export default async function HomePage() {
   const allProducts = getProducts().filter((p) => p.inStock);
   const featured = allProducts.filter((p) => p.featured).slice(0, 8);
   const newArrivals = allProducts.slice(-8).reverse();
 
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+      />
     <div className="overflow-x-hidden">
 
       {/* ── Hero ─────────────────────────────────────────────────── */}
@@ -247,6 +280,7 @@ export default async function HomePage() {
       </section>
 
     </div>
+    </>
   );
 }
 

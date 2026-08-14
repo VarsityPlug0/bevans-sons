@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin", "/api/"],
       },
     ],
-    sitemap: "https://daisyandco.co.za/sitemap.xml",
+    sitemap: "https://daisygadgetsco.co.za/sitemap.xml",
   };
 }

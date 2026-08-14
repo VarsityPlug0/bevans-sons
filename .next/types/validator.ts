@@ -483,6 +483,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../app/(site)/track-order/layout.tsx
+{
+  type __IsExpected<Specific extends LayoutConfig<"/track-order">> = Specific
+  const handler = {} as typeof import("../../app/(site)/track-order/layout.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/admin/dashboard/layout.tsx
 {
   type __IsExpected<Specific extends LayoutConfig<"/admin/dashboard">> = Specific

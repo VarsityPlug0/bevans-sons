@@ -9,14 +9,31 @@ import BuyNowButton from "./BuyNowButton";
 
 export const dynamic = "force-dynamic";
 
+const BASE = "https://daisygadgetsco.co.za";
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   const p = getProduct(id);
   if (!p) return { title: "Product Not Found" };
+  const desc = p.description || `Buy the ${p.name} at ${p.price}. 100% authentic with full warranty. Fast delivery across South Africa and worldwide.`;
+  const images = p.imageUrl ? [{ url: p.imageUrl, alt: p.name }] : [{ url: "/logo.jpg", alt: "Daisy Gadgets Co." }];
   return {
-    title: `${p.name} — ${p.price} | Daisy & Co.`,
-    description: p.description || `Buy ${p.name} at ${p.price}. Available at Daisy & Co. — South Africa's trusted solar and electronics store.`,
-    openGraph: { title: p.name, description: p.description, images: p.imageUrl ? [p.imageUrl] : [] },
+    title: `${p.name} — ${p.price}`,
+    description: desc,
+    alternates: { canonical: `${BASE}/shop/${p.id}` },
+    openGraph: {
+      title: `${p.name} — ${p.price} | Daisy Gadgets Co.`,
+      description: desc,
+      url: `${BASE}/shop/${p.id}`,
+      type: "website",
+      images,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${p.name} — ${p.price}`,
+      description: desc,
+      images: p.imageUrl ? [p.imageUrl] : ["/logo.jpg"],
+    },
   };
 }
 
@@ -30,7 +47,47 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   const related = getRelated(id, product.category);
   const waMessage = encodeURIComponent(`Hi, I'm interested in the ${product.name} (${product.price}). Please send me more details.`);
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: BASE },
+      { "@type": "ListItem", position: 2, name: "Shop", item: `${BASE}/shop` },
+      { "@type": "ListItem", position: 3, name: product.category, item: `${BASE}/shop?cat=${encodeURIComponent(product.category)}` },
+      { "@type": "ListItem", position: 4, name: product.name, item: `${BASE}/shop/${product.id}` },
+    ],
+  };
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description || `${product.name} available at Daisy Gadgets Co.`,
+    image: product.imageUrl ? [product.imageUrl] : [],
+    sku: product.id,
+    brand: { "@type": "Brand", name: "Daisy Gadgets Co." },
+    offers: {
+      "@type": "Offer",
+      url: `${BASE}/shop/${product.id}`,
+      priceCurrency: "ZAR",
+      price: product.price.replace(/[^0-9.]/g, "") || "0",
+      availability: product.inStock
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock",
+      seller: { "@type": "Organization", name: "Daisy Gadgets Co." },
+    },
+  };
+
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     <div className="max-w-7xl mx-auto px-4 sm:px-8 py-12">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm text-gray-500 mb-6">
@@ -150,5 +207,6 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
         </section>
       )}
     </div>
+    </>
   );
 }

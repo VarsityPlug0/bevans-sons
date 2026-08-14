@@ -9,10 +9,45 @@ import AddToEnquiry from "./AddToEnquiry";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Shop — Premium Gadgets | Daisy Gadgets Co.",
-  description: "Browse our full range of smartphones, smart TVs, gaming consoles, laptops, MacBooks, home appliances, solar & more. Worldwide shipping available.",
+const CAT_META: Record<string, { title: string; description: string }> = {
+  "Smartphones":                  { title: "Smartphones — iPhones & Android",         description: "Shop iPhones, Samsung Galaxy, and more. 30% OFF August to December. Fast delivery across South Africa." },
+  "TVs":                          { title: "Smart TVs — Samsung, LG, Hisense",        description: "4K and OLED Smart TVs from Samsung, LG, Hisense and more. Great prices with free delivery in South Africa." },
+  "Gaming Consoles":              { title: "Gaming Consoles — PS5, Xbox & More",      description: "Buy PS5, Xbox Series X/S and gaming accessories. 100% authentic with full warranty." },
+  "Gaming PCs":                   { title: "Gaming PCs — High-Performance Rigs",      description: "Pre-built gaming PCs with RTX and AMD Ryzen. Ready to game out of the box." },
+  "Laptops & MacBooks":           { title: "Laptops & MacBooks",                       description: "Windows laptops and Apple MacBooks for work, study and creative use. M3 chip MacBooks available." },
+  "Tablets & Watches":            { title: "Tablets & Watches — iPads & Apple Watch", description: "Shop iPads and Apple Watches. Sealed, authentic devices delivered fast." },
+  "Home Appliances":              { title: "Home Appliances — Fridges, Washers & More", description: "Fridges, washing machines, dishwashers and more from trusted brands. Delivered to your door." },
+  "Kitchen Appliances":           { title: "Kitchen Appliances — Ovens, Hobs & More", description: "Ovens, hobs, espresso machines and kitchen tech at great prices." },
+  "Solar & Power Solutions":      { title: "Solar & Power Solutions — Inverters & Batteries", description: "Load-shedding solutions: 5kVA–10kVA inverters, lithium batteries and solar panels for home and business." },
+  "Electric Ride-On Cars":        { title: "Kids Electric Ride-On Cars",              description: "Licensed Mercedes and premium electric ride-on cars for kids. Safe, fun and fast delivery." },
+  "Furniture":                    { title: "Furniture — Sofas, Beds & More",          description: "Quality furniture delivered to your home. Sofas, beds, dining sets and more." },
+  "Office Equipment":             { title: "Office Equipment — Printers & Tech",      description: "Printers, shredders and office technology for home and business use." },
 };
+
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ cat?: string; q?: string }> }): Promise<Metadata> {
+  const { cat, q } = await searchParams;
+  if (q) {
+    return {
+      title: `Search: "${q}"`,
+      description: `Search results for "${q}" at Daisy Gadgets Co. Find smartphones, TVs, gaming, laptops, solar and more.`,
+    };
+  }
+  if (cat && CAT_META[cat]) {
+    const m = CAT_META[cat];
+    return {
+      title: m.title,
+      description: m.description,
+      alternates: { canonical: `https://daisygadgetsco.co.za/shop?cat=${encodeURIComponent(cat)}` },
+      openGraph: { title: `${m.title} | Daisy Gadgets Co.`, description: m.description },
+      twitter: { card: "summary_large_image", title: m.title, description: m.description },
+    };
+  }
+  return {
+    title: "Shop — Premium Gadgets",
+    description: "Browse our full range of smartphones, smart TVs, gaming consoles, laptops, MacBooks, home appliances, solar & more. Worldwide shipping available.",
+    alternates: { canonical: "https://daisygadgetsco.co.za/shop" },
+  };
+}
 
 export default async function Shop({ searchParams }: { searchParams: Promise<{ cat?: string; q?: string }> }) {
   const { cat, q } = await searchParams;
