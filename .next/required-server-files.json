@@ -342,7 +342,29 @@
     "turbopack": {
       "root": "C:\\Users\\money\\daisy-co"
     },
-    "distDirRoot": ".next"
+    "distDirRoot": ".next",
+    "_originalRedirects": [
+      {
+        "source": "/solar",
+        "destination": "/shop?cat=Solar%20%26%20Power%20Solutions",
+        "permanent": true
+      },
+      {
+        "source": "/solar/:path*",
+        "destination": "/shop?cat=Solar%20%26%20Power%20Solutions",
+        "permanent": true
+      },
+      {
+        "source": "/electronics",
+        "destination": "/shop",
+        "permanent": true
+      },
+      {
+        "source": "/electronics/:path*",
+        "destination": "/shop",
+        "permanent": true
+      }
+    ]
   },
   "appDir": "C:\\Users\\money\\daisy-co",
   "relativeAppDir": "",

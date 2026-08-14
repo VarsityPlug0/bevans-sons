@@ -38,7 +38,7 @@ module.exports=[85148,(e,r,T)=>{r.exports=e.x("better-sqlite3-90e2652d1716b047",
       estimatedPrice    TEXT NOT NULL DEFAULT '',
       message           TEXT NOT NULL DEFAULT '',
       status            TEXT NOT NULL DEFAULT 'new',
-      source            TEXT NOT NULL DEFAULT 'wizard',
+      source            TEXT NOT NULL DEFAULT 'contact',
       createdAt         TEXT NOT NULL
     );
 
@@ -70,11 +70,11 @@ module.exports=[85148,(e,r,T)=>{r.exports=e.x("better-sqlite3-90e2652d1716b047",
     CREATE TABLE IF NOT EXISTS migrations (
       name TEXT PRIMARY KEY
     );
-  `),function(e){if(e.prepare("SELECT name FROM migrations WHERE name = ?").get("json_import"))return;let r=T.default.join(a,"products.json");if((0,t.existsSync)(r))try{let T=JSON.parse((0,t.readFileSync)(r,"utf-8")),a=e.prepare(`
-        INSERT OR IGNORE INTO products
-          (id, name, price, category, description, imageUrl, inStock, featured, createdAt, updatedAt)
-        VALUES
-          (@id, @name, @price, @category, @description, @imageUrl, @inStock, @featured, @createdAt, @updatedAt)
-      `);e.transaction(e=>{for(let r of e)a.run({...r,inStock:+!!r.inStock,featured:+!!r.featured})})(T)}catch{}e.prepare("INSERT INTO migrations (name) VALUES (?)").run("json_import")}(n)),n}])}];
+  `),function(e){if(e.prepare("SELECT name FROM migrations WHERE name = ?").get("json_import_gadgets_v1"))return;let r=T.default.join(a,"products.json");if((0,t.existsSync)(r))try{let T=JSON.parse((0,t.readFileSync)(r,"utf-8"));if(Array.isArray(T)&&T.length>0){e.prepare("DELETE FROM products").run();let r=e.prepare(`
+          INSERT OR REPLACE INTO products
+            (id, name, price, category, description, imageUrl, inStock, featured, createdAt, updatedAt)
+          VALUES
+            (@id, @name, @price, @category, @description, @imageUrl, @inStock, @featured, @createdAt, @updatedAt)
+        `);e.transaction(e=>{for(let T of e)r.run({...T,inStock:+!!T.inStock,featured:+!!T.featured})})(T)}}catch{}e.prepare("INSERT OR IGNORE INTO migrations (name) VALUES (?)").run("json_import_gadgets_v1")}(n)),n}])}];
 
 //# sourceMappingURL=%5Broot-of-the-server%5D__0-q_dei._.js.map

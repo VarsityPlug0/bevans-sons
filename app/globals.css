@@ -57,6 +57,10 @@ h1, h2, h3, h4, h5, h6 {
   background-clip: text;
 }
 
+/* ─── Hide scrollbars on scroll containers ───────────────── */
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
 /* ─── Section heading label ──────────────────────────────── */
 .section-label {
   font-family: var(--font-inter), sans-serif;

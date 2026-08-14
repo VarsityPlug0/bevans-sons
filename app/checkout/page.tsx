@@ -6,11 +6,12 @@ import Image from "next/image";
 import { Upload, CheckCircle, Copy } from "lucide-react";
 
 const BANK = {
-  bank: "TymeBank",
-  accountHolder: "Daisy & Co.",
+  bank: "FNB / RMB",
+  accountHolder: "Daisy Gadgets Co.",
   accountType: "Business",
-  accountNumber: "51072673949",
-  branchCode: "678910",
+  accountNumber: "63211629332",
+  branchCode: "250655",
+  payshap: "+27848961782@FNB",
 };
 
 function parsePrice(p: string): number {
@@ -29,7 +30,7 @@ export default function CheckoutPage() {
   const [proofPreview, setProofPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState<string | null>(null);
   const [error, setError] = useState("");
 
   const cartItems = items.map(i => ({ id: i.id, name: i.name, price: i.price, qty: i.qty, imageUrl: i.imageUrl }));
@@ -110,11 +111,14 @@ export default function CheckoutPage() {
     }
   }
 
-  function copy(text: string) {
+  function copy(text: string, key: string) {
     navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setCopied(key);
+    setTimeout(() => setCopied(null), 2000);
   }
+
+  const discount = cartTotal >= 10000 ? cartTotal * 0.25 : 0;
+  const finalTotal = cartTotal - discount;
 
   return (
     <div className="min-h-screen py-10 px-4 sm:px-6">
@@ -139,18 +143,17 @@ export default function CheckoutPage() {
           ))}
         </div>
 
-        {/* ── Step 1: Customer Details ────────────────────────── */}
+        {/* ── Step 1: Customer Details ─────────────────────────── */}
         {step === "details" && (
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-            {/* Form */}
             <div className="lg:col-span-3 bg-[#111111] border border-[#1F1F1F] rounded-2xl p-7">
               <h2 className="text-xl font-bold text-white mb-6">Your Details</h2>
               <div className="space-y-4">
                 {[
-                  { key: "name",    label: "Full Name",     type: "text",  placeholder: "John Smith" },
-                  { key: "email",   label: "Email Address", type: "email", placeholder: "john@example.com" },
-                  { key: "phone",   label: "Phone Number",  type: "tel",   placeholder: "082 000 0000" },
-                  { key: "address", label: "Delivery Address", type: "text", placeholder: "123 Main St, Johannesburg" },
+                  { key: "name",    label: "Full Name",        type: "text",  placeholder: "John Smith" },
+                  { key: "email",   label: "Email Address",    type: "email", placeholder: "john@example.com" },
+                  { key: "phone",   label: "Phone Number",     type: "tel",   placeholder: "082 000 0000" },
+                  { key: "address", label: "Delivery Address", type: "text",  placeholder: "123 Main St, Johannesburg" },
                 ].map(({ key, label, type, placeholder }) => (
                   <div key={key}>
                     <label className="block text-sm text-gray-400 mb-1.5">{label}</label>
@@ -191,49 +194,63 @@ export default function CheckoutPage() {
                         <p className="text-xs text-gray-500">Qty: {item.qty}</p>
                       </div>
                       <p className="text-sm text-[#D4AF37] font-semibold shrink-0">
-                        R {(Number(item.price) * item.qty).toLocaleString()}
+                        R {(parsePrice(item.price) * item.qty).toLocaleString()}
                       </p>
                     </div>
                   ))}
                 </div>
-                <div className="border-t border-[#1F1F1F] pt-4 flex justify-between items-center">
-                  <span className="text-gray-400 text-sm">Total</span>
-                  <span className="text-xl font-extrabold text-white">R {cartTotal.toLocaleString()}</span>
+                <div className="border-t border-[#1F1F1F] pt-4 space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-400 text-sm">Subtotal</span>
+                    <span className="text-white text-sm">R {cartTotal.toLocaleString()}</span>
+                  </div>
+                  {discount > 0 && (
+                    <div className="flex justify-between items-center">
+                      <span className="text-green-400 text-sm">25% Bulk Discount</span>
+                      <span className="text-green-400 text-sm font-semibold">-R {discount.toLocaleString()}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between items-center pt-1">
+                    <span className="text-gray-400 text-sm font-medium">Total</span>
+                    <span className="text-xl font-extrabold text-white">R {finalTotal.toLocaleString()}</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         )}
 
-        {/* ── Step 2: EFT Payment ─────────────────────────────── */}
+        {/* ── Step 2: EFT Payment ──────────────────────────────── */}
         {step === "payment" && order && (
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
             <div className="lg:col-span-3 space-y-6">
-              {/* Bank details */}
               <div className="bg-[#111111] border border-[#D4AF37]/20 rounded-2xl p-7">
                 <p className="section-label mb-4">Bank Transfer Details</p>
                 <p className="text-gray-400 text-sm mb-6 leading-relaxed">
-                  Transfer the exact amount below to this bank account, then upload your proof of payment.
+                  Transfer the exact amount below to this account, then upload your proof of payment.
                 </p>
-                <div className="space-y-3">
+                <div className="space-y-1">
                   {[
-                    ["Bank",           BANK.bank],
-                    ["Account Holder", BANK.accountHolder],
-                    ["Account Type",   BANK.accountType],
-                    ["Account Number", BANK.accountNumber],
-                    ["Branch Code",    BANK.branchCode],
-                    ["Reference",      order.ref],
-                    ["Amount",         `R ${cartTotal.toLocaleString()}`],
-                  ].map(([label, value]) => (
-                    <div key={label} className="flex items-center justify-between py-2.5 border-b border-[#1F1F1F] last:border-0">
-                      <span className="text-gray-500 text-sm">{label}</span>
+                    ["Bank",           BANK.bank,          false],
+                    ["Account Holder", BANK.accountHolder, false],
+                    ["Account Type",   BANK.accountType,   false],
+                    ["Account Number", BANK.accountNumber, true],
+                    ["Branch Code",    BANK.branchCode,    false],
+                    ["PayShap",        BANK.payshap,       true],
+                    ["Reference",      order.ref,          true],
+                    ["Amount",         `R ${finalTotal.toLocaleString()}`, false],
+                  ].map(([label, value, copyable]) => (
+                    <div key={label as string} className="flex items-center justify-between py-2.5 border-b border-[#1F1F1F] last:border-0">
+                      <span className="text-gray-500 text-sm">{label as string}</span>
                       <div className="flex items-center gap-2">
-                        <span className={`text-sm font-semibold ${label === "Reference" || label === "Amount" ? "text-[#D4AF37]" : "text-white"}`}>
-                          {value}
-                        </span>
-                        {(label === "Account Number" || label === "Reference") && (
-                          <button onClick={() => copy(value)} className="text-gray-500 hover:text-[#D4AF37] transition-colors">
-                            {copied ? <CheckCircle size={14} /> : <Copy size={14} />}
+                        <span className={`text-sm font-semibold ${
+                          label === "Reference" || label === "Amount" || label === "Account Number"
+                            ? "text-[#D4AF37] font-mono"
+                            : "text-white"
+                        }`}>{value as string}</span>
+                        {copyable && (
+                          <button onClick={() => copy(value as string, label as string)} className="text-gray-500 hover:text-[#D4AF37] transition-colors">
+                            {copied === label ? <CheckCircle size={14} color="#22c55e" /> : <Copy size={14} />}
                           </button>
                         )}
                       </div>
@@ -242,13 +259,11 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              {/* Proof upload */}
               <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-7">
                 <p className="section-label mb-4">Upload Proof of Payment</p>
                 <p className="text-gray-400 text-sm mb-5">
                   Upload a screenshot or photo of your payment confirmation. Your order will be processed once verified.
                 </p>
-
                 <label className="block cursor-pointer">
                   <div className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors ${
                     proof ? "border-[#D4AF37]/50 bg-[#D4AF37]/5" : "border-[#2a2a2a] hover:border-[#D4AF37]/30"
@@ -267,9 +282,7 @@ export default function CheckoutPage() {
                   </div>
                   <input type="file" accept="image/*,.pdf" onChange={handleFileChange} className="hidden" />
                 </label>
-
                 {error && <p className="text-red-400 text-sm mt-3">{error}</p>}
-
                 <button
                   onClick={submitProof}
                   disabled={!proof || uploading}
@@ -277,7 +290,6 @@ export default function CheckoutPage() {
                 >
                   {uploading ? "Uploading…" : "Submit Proof of Payment"}
                 </button>
-
                 <p className="text-center text-gray-600 text-xs mt-3">
                   Don&apos;t have proof yet?{" "}
                   <button onClick={() => router.push(`/checkout/success?ref=${order.ref}`)} className="text-[#D4AF37] underline">
@@ -287,7 +299,6 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            {/* Order ref sidebar */}
             <div className="lg:col-span-2">
               <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-6 sticky top-24 space-y-4">
                 <h3 className="text-base font-semibold text-white">Order Placed</h3>
@@ -298,7 +309,7 @@ export default function CheckoutPage() {
                 </div>
                 <div className="border-t border-[#1F1F1F] pt-4 flex justify-between">
                   <span className="text-gray-400 text-sm">Total to pay</span>
-                  <span className="text-white font-bold">R {cartTotal.toLocaleString()}</span>
+                  <span className="text-white font-bold">R {finalTotal.toLocaleString()}</span>
                 </div>
                 <p className="text-xs text-gray-600 leading-relaxed">
                   We will review your proof of payment and confirm your order via email within 2–4 hours.
@@ -308,7 +319,7 @@ export default function CheckoutPage() {
           </div>
         )}
 
-        {/* ── Step 3: Confirmed ───────────────────────────────── */}
+        {/* ── Step 3: Confirmed ────────────────────────────────── */}
         {step === "done" && order && (
           <div className="max-w-lg mx-auto text-center py-10">
             <div className="w-20 h-20 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 flex items-center justify-center mx-auto mb-6">
@@ -316,9 +327,9 @@ export default function CheckoutPage() {
             </div>
             <h2 className="text-3xl font-extrabold text-white mb-3">Proof Received!</h2>
             <p className="text-gray-400 mb-8 leading-relaxed">
-              Thank you {form.name}. We've received your proof of payment for order{" "}
+              Thank you {form.name}. We&apos;ve received your proof of payment for order{" "}
               <span className="text-[#D4AF37] font-semibold">{order.ref}</span>.
-              We'll verify and confirm via email within 2–4 hours.
+              We&apos;ll verify and confirm via email within 2–4 hours.
             </p>
             <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-6 text-left mb-8 space-y-2">
               <p className="text-sm text-gray-500">Confirmation sent to</p>

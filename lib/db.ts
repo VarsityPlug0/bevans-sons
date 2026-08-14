@@ -60,7 +60,7 @@ function initSchema(db: Database.Database) {
       estimatedPrice    TEXT NOT NULL DEFAULT '',
       message           TEXT NOT NULL DEFAULT '',
       status            TEXT NOT NULL DEFAULT 'new',
-      source            TEXT NOT NULL DEFAULT 'wizard',
+      source            TEXT NOT NULL DEFAULT 'contact',
       createdAt         TEXT NOT NULL
     );
 
@@ -96,24 +96,27 @@ function initSchema(db: Database.Database) {
 }
 
 function migrateFromJson(db: Database.Database) {
-  const done = db.prepare("SELECT name FROM migrations WHERE name = ?").get("json_import");
+  const done = db.prepare("SELECT name FROM migrations WHERE name = ?").get("json_import_gadgets_v1");
   if (done) return;
 
   const jsonPath = path.join(DATA_DIR, "products.json");
   if (existsSync(jsonPath)) {
     try {
       const products = JSON.parse(readFileSync(jsonPath, "utf-8"));
-      const insert = db.prepare(`
-        INSERT OR IGNORE INTO products
-          (id, name, price, category, description, imageUrl, inStock, featured, createdAt, updatedAt)
-        VALUES
-          (@id, @name, @price, @category, @description, @imageUrl, @inStock, @featured, @createdAt, @updatedAt)
-      `);
-      db.transaction((rows: Record<string, unknown>[]) => {
-        for (const row of rows) insert.run({ ...row, inStock: row.inStock ? 1 : 0, featured: row.featured ? 1 : 0 });
-      })(products);
+      if (Array.isArray(products) && products.length > 0) {
+        db.prepare("DELETE FROM products").run();
+        const insert = db.prepare(`
+          INSERT OR REPLACE INTO products
+            (id, name, price, category, description, imageUrl, inStock, featured, createdAt, updatedAt)
+          VALUES
+            (@id, @name, @price, @category, @description, @imageUrl, @inStock, @featured, @createdAt, @updatedAt)
+        `);
+        db.transaction((rows: Record<string, unknown>[]) => {
+          for (const row of rows) insert.run({ ...row, inStock: row.inStock ? 1 : 0, featured: row.featured ? 1 : 0 });
+        })(products);
+      }
     } catch { /* ignore corrupt JSON */ }
   }
 
-  db.prepare("INSERT INTO migrations (name) VALUES (?)").run("json_import");
+  db.prepare("INSERT OR IGNORE INTO migrations (name) VALUES (?)").run("json_import_gadgets_v1");
 }

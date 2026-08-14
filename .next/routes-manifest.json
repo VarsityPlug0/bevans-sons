@@ -12,6 +12,30 @@
       "priority": true,
       "statusCode": 308,
       "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    },
+    {
+      "source": "/solar",
+      "destination": "/shop?cat=Solar%20%26%20Power%20Solutions",
+      "statusCode": 308,
+      "regex": "^(?!/_next)/solar(?:/)?$"
+    },
+    {
+      "source": "/solar/:path*",
+      "destination": "/shop?cat=Solar%20%26%20Power%20Solutions",
+      "statusCode": 308,
+      "regex": "^(?!/_next)/solar(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$"
+    },
+    {
+      "source": "/electronics",
+      "destination": "/shop",
+      "statusCode": 308,
+      "regex": "^(?!/_next)/electronics(?:/)?$"
+    },
+    {
+      "source": "/electronics/:path*",
+      "destination": "/shop",
+      "statusCode": 308,
+      "regex": "^(?!/_next)/electronics(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?(?:/)?$"
     }
   ],
   "headers": [],
@@ -147,6 +171,18 @@
       "namedRegex": "^/api/admin/upload(?:/)?$"
     },
     {
+      "page": "/api/ai-assistant",
+      "regex": "^/api/ai\\-assistant(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/ai\\-assistant(?:/)?$"
+    },
+    {
+      "page": "/api/contact",
+      "regex": "^/api/contact(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/contact(?:/)?$"
+    },
+    {
       "page": "/api/orders",
       "regex": "^/api/orders(?:/)?$",
       "routeKeys": {},
@@ -163,6 +199,12 @@
       "regex": "^/api/quotes(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/api/quotes(?:/)?$"
+    },
+    {
+      "page": "/api/track-order",
+      "regex": "^/api/track\\-order(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/track\\-order(?:/)?$"
     },
     {
       "page": "/api/upload-proof",
@@ -183,6 +225,12 @@
       "namedRegex": "^/contact(?:/)?$"
     },
     {
+      "page": "/delivery",
+      "regex": "^/delivery(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/delivery(?:/)?$"
+    },
+    {
       "page": "/electronics",
       "regex": "^/electronics(?:/)?$",
       "routeKeys": {},
@@ -199,6 +247,54 @@
       "regex": "^/favicon\\.ico(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/favicon\\.ico(?:/)?$"
+    },
+    {
+      "page": "/new-arrivals",
+      "regex": "^/new\\-arrivals(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/new\\-arrivals(?:/)?$"
+    },
+    {
+      "page": "/payment-options",
+      "regex": "^/payment\\-options(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/payment\\-options(?:/)?$"
+    },
+    {
+      "page": "/policies/privacy",
+      "regex": "^/policies/privacy(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/policies/privacy(?:/)?$"
+    },
+    {
+      "page": "/policies/refund",
+      "regex": "^/policies/refund(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/policies/refund(?:/)?$"
+    },
+    {
+      "page": "/policies/returns",
+      "regex": "^/policies/returns(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/policies/returns(?:/)?$"
+    },
+    {
+      "page": "/policies/terms",
+      "regex": "^/policies/terms(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/policies/terms(?:/)?$"
+    },
+    {
+      "page": "/policies/warranty",
+      "regex": "^/policies/warranty(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/policies/warranty(?:/)?$"
+    },
+    {
+      "page": "/reviews",
+      "regex": "^/reviews(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/reviews(?:/)?$"
     },
     {
       "page": "/robots.txt",
@@ -253,6 +349,18 @@
       "regex": "^/solar/wizard(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/solar/wizard(?:/)?$"
+    },
+    {
+      "page": "/special-offers",
+      "regex": "^/special\\-offers(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/special\\-offers(?:/)?$"
+    },
+    {
+      "page": "/track-order",
+      "regex": "^/track\\-order(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/track\\-order(?:/)?$"
     }
   ],
   "dataRoutes": [],

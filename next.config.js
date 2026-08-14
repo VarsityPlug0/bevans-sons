@@ -8,6 +8,14 @@ const nextConfig = {
       { protocol: "https", hostname: "res.cloudinary.com" },
     ],
   },
+  async redirects() {
+    return [
+      { source: "/solar",                       destination: "/shop?cat=Solar%20%26%20Power%20Solutions", permanent: true },
+      { source: "/solar/:path*",                destination: "/shop?cat=Solar%20%26%20Power%20Solutions", permanent: true },
+      { source: "/electronics",                 destination: "/shop",                                     permanent: true },
+      { source: "/electronics/:path*",          destination: "/shop",                                     permanent: true },
+    ];
+  },
 };
 
 module.exports = nextConfig;

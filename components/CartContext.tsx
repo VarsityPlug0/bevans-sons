@@ -91,7 +91,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const waText = useMemo(() => {
     if (items.length === 0) return "";
     return encodeURIComponent(
-      "Hi Daisy & Co., I would like to enquire about the following products:\n\n" +
+      "Hi Daisy Gadgets Co., I would like to enquire about the following products:\n\n" +
       items.map((i) => `- ${i.name} (${i.price}) × ${i.qty}`).join("\n") +
       "\n\nPlease send me pricing and availability."
     );

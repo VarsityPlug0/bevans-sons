@@ -10,8 +10,8 @@ import AddToEnquiry from "./AddToEnquiry";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Shop — Solar Systems & Electronics | Daisy & Co.",
-  description: "Browse our full range of premium solar systems, inverters, batteries, smart TVs and electronics. Nationwide delivery across South Africa.",
+  title: "Shop — Premium Gadgets | Daisy Gadgets Co.",
+  description: "Browse our full range of smartphones, smart TVs, gaming consoles, laptops, MacBooks, home appliances, solar & more. Worldwide shipping available.",
 };
 
 export default async function Shop({ searchParams }: { searchParams: Promise<{ cat?: string; q?: string }> }) {
@@ -33,18 +33,16 @@ export default async function Shop({ searchParams }: { searchParams: Promise<{ c
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-8 py-16">
 
-      {/* Header */}
       <div className="mb-12">
         <p className="text-[#D4AF37] text-sm uppercase tracking-widest mb-3">All Products</p>
         <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
           Our <span className="gold-text">Shop</span>
         </h1>
         <p className="text-gray-400 text-lg leading-relaxed max-w-xl">
-          Browse our full range of solar systems and electronics. Enquire on WhatsApp for pricing and availability.
+          Premium gadgets across all categories. {cat ? `Showing: ${cat}` : "Browse everything or filter by category."}
         </p>
       </div>
 
-      {/* Filters */}
       <Suspense fallback={null}>
         <ShopFilters />
       </Suspense>
@@ -61,11 +59,10 @@ export default async function Shop({ searchParams }: { searchParams: Promise<{ c
         </Suspense>
       )}
 
-      {/* CTA */}
       <div className="mt-12 bg-[#111111] border border-[#D4AF37]/25 rounded-2xl p-7 text-center">
-        <h3 className="text-xl font-bold text-white mb-2">Need something specific?</h3>
+        <h3 className="text-xl font-bold text-white mb-2">Can&apos;t find what you&apos;re looking for?</h3>
         <p className="text-gray-400 text-sm mb-5 max-w-lg mx-auto leading-relaxed">
-          We source a wide range of products. Chat with us on WhatsApp and we&apos;ll find it for you.
+          We source a wide range of gadgets. Chat with us on WhatsApp and we&apos;ll find it for you.
         </p>
         <a href="https://wa.me/27848961782" target="_blank" rel="noopener noreferrer"
           className="btn-gold px-10 py-4 rounded-xl font-bold text-base">
@@ -87,8 +84,6 @@ function ProductGrid({ products, featured }: { products: ReturnType<typeof getPr
           </div>
         </section>
       )}
-
-      {/* Group remaining by category */}
       {Object.entries(
         products.reduce((acc, p) => {
           if (!acc[p.category]) acc[p.category] = [];

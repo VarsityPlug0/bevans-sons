@@ -5,11 +5,12 @@ import { getProduct } from "@/lib/products";
 import nodemailer from "nodemailer";
 
 const BANK = {
-  bank: "TymeBank",
-  accountHolder: "Daisy & Co.",
+  bank: "FNB / RMB",
+  accountHolder: "Daisy Gadgets Co.",
   accountType: "Business",
-  accountNumber: "51072673949",
-  branchCode: "678910",
+  accountNumber: "63211629332",
+  branchCode: "250655",
+  payshap: "+27848961782@FNB",
 };
 
 const transporter = process.env.MAIL_USER && process.env.MAIL_PASS
@@ -60,9 +61,9 @@ export async function POST(req: NextRequest) {
     const itemLines = order.items.map(i => `${i.name} × ${i.qty} — R ${Number(i.price).toLocaleString()}`).join("\n");
     transporter.sendMail({
       from: process.env.MAIL_USER,
-      to: "info@daisyandco.co.za",
+      to: "daisygadgetsco@gmail.com",
       subject: `New Order ${order.ref} — R${order.total.toLocaleString()} — ${name}`,
-      text: `New order received.\n\nRef: ${order.ref}\nCustomer: ${name}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address}\n\nItems:\n${itemLines}\n\nTotal: R${order.total.toLocaleString()}\n\nBank: ${BANK.bank} | ${BANK.accountHolder} | ${BANK.accountNumber}`,
+      text: `New order received.\n\nRef: ${order.ref}\nCustomer: ${name}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address}\n\nItems:\n${itemLines}\n\nTotal: R${order.total.toLocaleString()}\n\nBank: ${BANK.bank} | ${BANK.accountHolder} | Acc: ${BANK.accountNumber} | Branch: ${BANK.branchCode} | PayShap: ${BANK.payshap}`,
     }).catch(console.error);
   }
 

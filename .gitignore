@@ -13,7 +13,9 @@
 # testing
 /coverage
 
-# next.js
+# next.js — exclude cache but keep server bundle for Docker deploy
+.next/cache/
+.next/dev/
 
 /out/
 
