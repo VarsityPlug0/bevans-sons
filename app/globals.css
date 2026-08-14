@@ -239,6 +239,7 @@ input:focus, textarea:focus, select:focus {
 .ticker-track {
   display: flex;
   flex-wrap: nowrap;
+  width: max-content;
   white-space: nowrap;
   animation: ticker-scroll 36s linear infinite;
   -webkit-animation: ticker-scroll 36s linear infinite;
