@@ -34,6 +34,9 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
   const shopRef = useRef<HTMLDivElement>(null);
+  const tickerRef = useRef<HTMLDivElement>(null);
+  const posRef = useRef(0);
+  const rafRef = useRef<number>(0);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -45,6 +48,25 @@ export default function Header() {
   }, []);
 
   useEffect(() => { setMobileOpen(false); setShopOpen(false); }, [pathname]);
+
+  // JS-based ticker — works on all mobile browsers
+  useEffect(() => {
+    const el = tickerRef.current;
+    if (!el) return;
+    let last = 0;
+    function step(ts: number) {
+      if (last) {
+        posRef.current -= (ts - last) * 0.04; // ~2.4px per frame at 60fps
+        const half = el!.scrollWidth / 2;
+        if (Math.abs(posRef.current) >= half) posRef.current = 0;
+        el!.style.transform = `translateX(${posRef.current}px)`;
+      }
+      last = ts;
+      rafRef.current = requestAnimationFrame(step);
+    }
+    rafRef.current = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, []);
 
   const isActive = (href: string) => href === "/" ? pathname === "/" : pathname.startsWith(href.split("?")[0]);
 
@@ -59,26 +81,13 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      {/* Announcement Bar — scrolling ticker */}
-      <style>{`
-        @keyframes daisy-ticker {
-          from { transform: translateX(0); }
-          to   { transform: translateX(-50%); }
-        }
-        .daisy-ticker-track {
-          display: flex;
-          flex-wrap: nowrap;
-          width: max-content;
-          animation: daisy-ticker 36s linear infinite;
-          will-change: transform;
-        }
-      `}</style>
+      {/* Announcement Bar — JS-driven ticker */}
       <div style={{ overflow: "hidden", display: "flex", alignItems: "center",
         background: "linear-gradient(90deg, #C9971C, #D4AF37, #F0CE6A, #D4AF37, #C9971C)",
         color: "#0A0A0A", height: 44 }}>
-        <div className="daisy-ticker-track">
+        <div ref={tickerRef} style={{ display: "flex", flexShrink: 0, whiteSpace: "nowrap", willChange: "transform" }}>
           {[0, 1].map((copy) => (
-            <span key={copy} style={{ display: "inline-flex", alignItems: "center", whiteSpace: "nowrap" }}>
+            <span key={copy} style={{ display: "inline-flex", alignItems: "center" }}>
               {tickerItems.map((item, i) => (
                 <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 6, paddingRight: 48,
                   fontFamily: "var(--font-outfit)", fontWeight: 700, fontSize: 11, letterSpacing: "0.03em" }}>
