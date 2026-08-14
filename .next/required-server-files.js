@@ -76,6 +76,22 @@ self.__SERVER_FILES_MANIFEST={
         {
           "protocol": "https",
           "hostname": "res.cloudinary.com"
+        },
+        {
+          "protocol": "https",
+          "hostname": "fdn2.gsmarena.com"
+        },
+        {
+          "protocol": "https",
+          "hostname": "gmedia.playstation.com"
+        },
+        {
+          "protocol": "https",
+          "hostname": "store.storeimages.cdn-apple.com"
+        },
+        {
+          "protocol": "https",
+          "hostname": "images.samsung.com"
         }
       ],
       "qualities": [

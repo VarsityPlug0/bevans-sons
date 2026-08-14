@@ -6,6 +6,10 @@ const nextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "images.pexels.com" },
       { protocol: "https", hostname: "res.cloudinary.com" },
+      { protocol: "https", hostname: "fdn2.gsmarena.com" },
+      { protocol: "https", hostname: "gmedia.playstation.com" },
+      { protocol: "https", hostname: "store.storeimages.cdn-apple.com" },
+      { protocol: "https", hostname: "images.samsung.com" },
     ],
   },
   async redirects() {
