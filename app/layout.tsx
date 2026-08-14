@@ -3,7 +3,6 @@ import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import WhatsAppButton from "@/components/WhatsAppButton";
 import AIAssistant from "@/components/AIAssistant";
 import { CartProvider } from "@/components/CartContext";
 import Script from "next/script";
@@ -42,7 +41,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Header />
           <main className="pt-[116px] pb-[64px] md:pb-0">{children}</main>
           <Footer />
-          <WhatsAppButton />
           <AIAssistant />
           {process.env.NODE_ENV === "development" && (
             <Script src="http://localhost:7891/vibe-client.js" data-project="C:/Users/money/daisy-co" strategy="afterInteractive" />
