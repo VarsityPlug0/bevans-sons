@@ -1,3 +1,0 @@
-module.exports=[25940,a=>{"use strict";var b=a.i(7997);a.s(["default",0,function({children:a}){return(0,b.jsx)(b.Fragment,{children:a})},"metadata",0,{title:"Contact Us & Get a Free Quote | Daisy & Co.",description:"Get a free solar or electronics quote from Daisy & Co. Contact us via WhatsApp, email or our online form. We respond fast — nationwide South Africa."}])},79668,function(a){a.n(a.i(25940))}];
-
-//# sourceMappingURL=app_contact_layout_tsx_08u7icx._.js.map

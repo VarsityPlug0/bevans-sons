@@ -2,12 +2,12 @@
   "headers": {
     "x-nextjs-stale-time": "300",
     "x-nextjs-prerender": "1",
-    "x-next-cache-tags": "_N_T_/layout,_N_T_/policies/layout,_N_T_/policies/privacy/layout,_N_T_/policies/privacy/page,_N_T_/policies/privacy"
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(site)/layout,_N_T_/(site)/policies/layout,_N_T_/(site)/policies/privacy/layout,_N_T_/(site)/policies/privacy/page,_N_T_/policies/privacy"
   },
   "segmentPaths": [
     "/_tree",
     "/_full",
-    "/policies/privacy/__PAGE__"
+    "/!KHNpdGUp/policies/privacy/__PAGE__"
   ],
   "prefetchHints": {
     "hints": 64,
@@ -19,8 +19,13 @@
             "hints": 96,
             "slots": {
               "children": {
-                "hints": 160,
-                "slots": null
+                "hints": 96,
+                "slots": {
+                  "children": {
+                    "hints": 160,
+                    "slots": null
+                  }
+                }
               }
             }
           }

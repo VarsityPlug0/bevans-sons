@@ -2,12 +2,12 @@
   "headers": {
     "x-nextjs-stale-time": "300",
     "x-nextjs-prerender": "1",
-    "x-next-cache-tags": "_N_T_/layout,_N_T_/solar/layout,_N_T_/solar/compare/layout,_N_T_/solar/compare/page,_N_T_/solar/compare"
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(site)/layout,_N_T_/(site)/solar/layout,_N_T_/(site)/solar/compare/layout,_N_T_/(site)/solar/compare/page,_N_T_/solar/compare"
   },
   "segmentPaths": [
     "/_tree",
     "/_full",
-    "/solar/compare/__PAGE__"
+    "/!KHNpdGUp/solar/compare/__PAGE__"
   ],
   "prefetchHints": {
     "hints": 64,
@@ -19,8 +19,13 @@
             "hints": 96,
             "slots": {
               "children": {
-                "hints": 160,
-                "slots": null
+                "hints": 96,
+                "slots": {
+                  "children": {
+                    "hints": 160,
+                    "slots": null
+                  }
+                }
               }
             }
           }

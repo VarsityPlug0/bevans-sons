@@ -29,22 +29,13 @@
         "hints": 96,
         "slots": {
           "children": {
-            "hints": 160,
-            "slots": null
-          }
-        }
-      }
-    }
-  },
-  "/admin": {
-    "hints": 64,
-    "slots": {
-      "children": {
-        "hints": 96,
-        "slots": {
-          "children": {
-            "hints": 160,
-            "slots": null
+            "hints": 96,
+            "slots": {
+              "children": {
+                "hints": 160,
+                "slots": null
+              }
+            }
           }
         }
       }
@@ -57,8 +48,13 @@
         "hints": 96,
         "slots": {
           "children": {
-            "hints": 160,
-            "slots": null
+            "hints": 96,
+            "slots": {
+              "children": {
+                "hints": 160,
+                "slots": null
+              }
+            }
           }
         }
       }
@@ -71,8 +67,13 @@
         "hints": 96,
         "slots": {
           "children": {
-            "hints": 160,
-            "slots": null
+            "hints": 96,
+            "slots": {
+              "children": {
+                "hints": 160,
+                "slots": null
+              }
+            }
           }
         }
       }
@@ -85,8 +86,13 @@
         "hints": 96,
         "slots": {
           "children": {
-            "hints": 160,
-            "slots": null
+            "hints": 96,
+            "slots": {
+              "children": {
+                "hints": 160,
+                "slots": null
+              }
+            }
           }
         }
       }
@@ -99,8 +105,13 @@
         "hints": 96,
         "slots": {
           "children": {
-            "hints": 160,
-            "slots": null
+            "hints": 96,
+            "slots": {
+              "children": {
+                "hints": 160,
+                "slots": null
+              }
+            }
           }
         }
       }
@@ -113,8 +124,13 @@
         "hints": 96,
         "slots": {
           "children": {
-            "hints": 160,
-            "slots": null
+            "hints": 96,
+            "slots": {
+              "children": {
+                "hints": 160,
+                "slots": null
+              }
+            }
           }
         }
       }
@@ -130,8 +146,13 @@
             "hints": 96,
             "slots": {
               "children": {
-                "hints": 160,
-                "slots": null
+                "hints": 96,
+                "slots": {
+                  "children": {
+                    "hints": 160,
+                    "slots": null
+                  }
+                }
               }
             }
           }
@@ -149,8 +170,13 @@
             "hints": 96,
             "slots": {
               "children": {
-                "hints": 160,
-                "slots": null
+                "hints": 96,
+                "slots": {
+                  "children": {
+                    "hints": 160,
+                    "slots": null
+                  }
+                }
               }
             }
           }
@@ -168,8 +194,13 @@
             "hints": 96,
             "slots": {
               "children": {
-                "hints": 160,
-                "slots": null
+                "hints": 96,
+                "slots": {
+                  "children": {
+                    "hints": 160,
+                    "slots": null
+                  }
+                }
               }
             }
           }
@@ -187,8 +218,13 @@
             "hints": 96,
             "slots": {
               "children": {
-                "hints": 160,
-                "slots": null
+                "hints": 96,
+                "slots": {
+                  "children": {
+                    "hints": 160,
+                    "slots": null
+                  }
+                }
               }
             }
           }
@@ -206,8 +242,13 @@
             "hints": 96,
             "slots": {
               "children": {
-                "hints": 160,
-                "slots": null
+                "hints": 96,
+                "slots": {
+                  "children": {
+                    "hints": 160,
+                    "slots": null
+                  }
+                }
               }
             }
           }
@@ -222,8 +263,13 @@
         "hints": 96,
         "slots": {
           "children": {
-            "hints": 160,
-            "slots": null
+            "hints": 96,
+            "slots": {
+              "children": {
+                "hints": 160,
+                "slots": null
+              }
+            }
           }
         }
       }
@@ -239,8 +285,13 @@
             "hints": 96,
             "slots": {
               "children": {
-                "hints": 160,
-                "slots": null
+                "hints": 96,
+                "slots": {
+                  "children": {
+                    "hints": 160,
+                    "slots": null
+                  }
+                }
               }
             }
           }
@@ -258,6 +309,30 @@
             "hints": 96,
             "slots": {
               "children": {
+                "hints": 96,
+                "slots": {
+                  "children": {
+                    "hints": 160,
+                    "slots": null
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/track-order": {
+    "hints": 64,
+    "slots": {
+      "children": {
+        "hints": 96,
+        "slots": {
+          "children": {
+            "hints": 96,
+            "slots": {
+              "children": {
                 "hints": 160,
                 "slots": null
               }
@@ -267,7 +342,7 @@
       }
     }
   },
-  "/track-order": {
+  "/admin": {
     "hints": 64,
     "slots": {
       "children": {
