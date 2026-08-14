@@ -61,7 +61,8 @@ export default function Header() {
     <header className="fixed top-0 left-0 right-0 z-50">
       {/* Announcement Bar — scrolling ticker */}
       <div className="overflow-hidden flex items-center"
-        style={{ background: "linear-gradient(90deg, #C9971C, #D4AF37, #F0CE6A, #D4AF37, #C9971C)", color: "#0A0A0A", height: 44 }}>
+        style={{ background: "linear-gradient(90deg, #C9971C, #D4AF37, #F0CE6A, #D4AF37, #C9971C)", color: "#0A0A0A", height: 44,
+          transform: "translateZ(0)", WebkitTransform: "translateZ(0)" }}>
         <div className="ticker-track">
           {/* Render twice so the loop is seamless */}
           {[0, 1].map((copy) => (

@@ -232,10 +232,20 @@ input:focus, textarea:focus, select:focus {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
 }
+@-webkit-keyframes ticker-scroll {
+  from { -webkit-transform: translateX(0); transform: translateX(0); }
+  to   { -webkit-transform: translateX(-50%); transform: translateX(-50%); }
+}
 .ticker-track {
   display: flex;
+  flex-wrap: nowrap;
   white-space: nowrap;
   animation: ticker-scroll 36s linear infinite;
+  -webkit-animation: ticker-scroll 36s linear infinite;
   will-change: transform;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 .ticker-track:hover { animation-play-state: paused; }
