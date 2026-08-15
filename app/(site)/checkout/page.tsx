@@ -24,7 +24,8 @@ export default function CheckoutPage() {
   const router = useRouter();
 
   const [step, setStep] = useState<"details" | "payment" | "done">("details");
-  const [form, setForm] = useState({ name: "", email: "", phone: "", address: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "" });
+  const [addr, setAddr] = useState({ line1: "", line2: "", suburb: "", city: "", province: "", postal: "" });
   const [order, setOrder] = useState<{ id: string; ref: string } | null>(null);
   const [proof, setProof] = useState<File | null>(null);
   const [proofPreview, setProofPreview] = useState<string | null>(null);
@@ -52,10 +53,12 @@ export default function CheckoutPage() {
     setSubmitting(true);
     setError("");
     try {
+      const addressParts = [addr.line1, addr.line2, addr.suburb, addr.city, addr.province, addr.postal].filter(Boolean);
+      const address = addressParts.join(", ");
       const res = await fetch("/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, items: cartItems, total: cartTotal }),
+        body: JSON.stringify({ ...form, address, items: cartItems, total: cartTotal }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Order failed");
@@ -150,10 +153,9 @@ export default function CheckoutPage() {
               <h2 className="text-xl font-bold text-white mb-6">Your Details</h2>
               <div className="space-y-4">
                 {[
-                  { key: "name",    label: "Full Name",        type: "text",  placeholder: "John Smith" },
-                  { key: "email",   label: "Email Address",    type: "email", placeholder: "john@example.com" },
-                  { key: "phone",   label: "Phone Number",     type: "tel",   placeholder: "082 000 0000" },
-                  { key: "address", label: "Delivery Address", type: "text",  placeholder: "123 Main St, Johannesburg" },
+                  { key: "name",  label: "Full Name",     type: "text",  placeholder: "John Smith" },
+                  { key: "email", label: "Email Address", type: "email", placeholder: "john@example.com" },
+                  { key: "phone", label: "Phone Number",  type: "tel",   placeholder: "082 000 0000" },
                 ].map(({ key, label, type, placeholder }) => (
                   <div key={key}>
                     <label className="block text-sm text-gray-400 mb-1.5">{label}</label>
@@ -162,15 +164,70 @@ export default function CheckoutPage() {
                       value={form[key as keyof typeof form]}
                       onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
                       placeholder={placeholder}
-                      className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600"
+                      className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#D4AF37] transition-colors"
                     />
                   </div>
                 ))}
+
+                {/* Delivery Address */}
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1.5">Delivery Address</label>
+                  <div className="space-y-2">
+                    <input
+                      type="text"
+                      placeholder="Street address or PO Box *"
+                      value={addr.line1}
+                      onChange={e => setAddr(a => ({ ...a, line1: e.target.value }))}
+                      className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Apartment, unit, complex (optional)"
+                      value={addr.line2}
+                      onChange={e => setAddr(a => ({ ...a, line2: e.target.value }))}
+                      className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Suburb"
+                      value={addr.suburb}
+                      onChange={e => setAddr(a => ({ ...a, suburb: e.target.value }))}
+                      className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                    />
+                    <div className="grid grid-cols-2 gap-2">
+                      <input
+                        type="text"
+                        placeholder="City / Town"
+                        value={addr.city}
+                        onChange={e => setAddr(a => ({ ...a, city: e.target.value }))}
+                        className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Postal code"
+                        value={addr.postal}
+                        onChange={e => setAddr(a => ({ ...a, postal: e.target.value }))}
+                        className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#D4AF37] transition-colors"
+                      />
+                    </div>
+                    <select
+                      value={addr.province}
+                      onChange={e => setAddr(a => ({ ...a, province: e.target.value }))}
+                      className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#D4AF37] transition-colors appearance-none"
+                      style={{ color: addr.province ? "#fff" : "#4b5563" }}
+                    >
+                      <option value="" disabled>Province</option>
+                      {["Eastern Cape","Free State","Gauteng","KwaZulu-Natal","Limpopo","Mpumalanga","Northern Cape","North West","Western Cape"].map(p => (
+                        <option key={p} value={p} style={{ color: "#fff", background: "#0A0A0A" }}>{p}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
               </div>
               {error && <p className="text-red-400 text-sm mt-4">{error}</p>}
               <button
                 onClick={submitOrder}
-                disabled={submitting || !form.name || !form.email || !form.phone}
+                disabled={submitting || !form.name || !form.email || !form.phone || !addr.line1}
                 className="btn-gold w-full py-4 rounded-xl font-bold text-base mt-6 disabled:opacity-50"
               >
                 {submitting ? "Placing Order…" : "Place Order & Get Bank Details"}
