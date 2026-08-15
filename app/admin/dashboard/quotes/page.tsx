@@ -2,6 +2,7 @@ import { getQuotes } from "@/lib/quotes";
 import { isAuthenticated } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import QuoteActions from "./QuoteActions";
 
 export const dynamic = "force-dynamic";
 
@@ -93,7 +94,7 @@ export default async function AdminQuotesPage() {
                           Email
                         </a>
                       )}
-                      <UpdateStatus id={q.id} current={q.status} />
+                      <QuoteActions id={q.id} quoteRef={q.ref} currentStatus={q.status} hasEmail={!!q.email} recommendedPackage={q.recommendedPackage} estimatedPrice={q.estimatedPrice} />
                     </div>
                   </div>
 
@@ -153,11 +154,3 @@ export default async function AdminQuotesPage() {
 }
 
 // Server-side status display (update requires a form action)
-function UpdateStatus({ id, current }: { id: string; current: string }) {
-  const colors = STATUS_COLORS[current] ?? STATUS_COLORS.new;
-  return (
-    <span className={`text-[10px] px-2 py-1 rounded font-bold uppercase ${colors.bg} ${colors.text} border border-current/20`}>
-      {current}
-    </span>
-  );
-}

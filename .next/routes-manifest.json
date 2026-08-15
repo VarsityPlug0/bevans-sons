@@ -63,6 +63,14 @@
       "namedRegex": "^/api/admin/products/(?<nxtPid>[^/]+?)(?:/)?$"
     },
     {
+      "page": "/api/admin/quotes/[id]",
+      "regex": "^/api/admin/quotes/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/admin/quotes/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
       "page": "/api/orders/[id]",
       "regex": "^/api/orders/([^/]+?)(?:/)?$",
       "routeKeys": {

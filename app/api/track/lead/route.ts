@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
-import nodemailer from "nodemailer";
+import { sendMail, sendWelcomeEmail } from "@/lib/mailer";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -41,43 +41,33 @@ export async function POST(req: NextRequest) {
     now,
   );
 
-  // Create transporter inside handler so env vars are always resolved
-  const mailUser = process.env.MAIL_USER;
-  const mailPass = process.env.MAIL_PASS;
+  const waNum = String(phone ?? "").replace(/[^0-9]/g, "");
 
-  if (mailUser && mailPass) {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: { user: mailUser, pass: mailPass },
-    });
-    const waNum = String(phone ?? "").replace(/[^0-9]/g, "");
-    try {
-      await transporter.sendMail({
-        from: mailUser,
-        to: "daisygadgetsco@gmail.com",
-        subject: `New Lead — ${name || phone || email}`,
-        html: `
-          <div style="font-family:sans-serif;max-width:500px;margin:0 auto;color:#333">
-            <div style="background:#0A0A0A;padding:20px 28px;border-radius:8px 8px 0 0">
-              <h2 style="color:#D4AF37;margin:0;font-size:18px">New Lead Captured</h2>
-              <p style="color:#888;margin:4px 0 0;font-size:12px">via 20% off popup — ${new Date(now).toLocaleString("en-ZA", { timeZone: "Africa/Johannesburg" })}</p>
-            </div>
-            <div style="background:#f9f9f9;padding:28px;border-radius:0 0 8px 8px">
-              <table style="width:100%;border-collapse:collapse">
-                <tr><td style="padding:7px 0;color:#666;width:100px;font-size:14px">Name</td><td style="padding:7px 0;font-weight:600;font-size:14px">${name || "—"}</td></tr>
-                <tr><td style="padding:7px 0;color:#666;font-size:14px">Phone</td><td style="padding:7px 0;font-weight:600;font-size:14px">${phone || "—"}</td></tr>
-                <tr><td style="padding:7px 0;color:#666;font-size:14px">Email</td><td style="padding:7px 0;font-size:14px">${email || "—"}</td></tr>
-              </table>
-              ${waNum ? `<div style="margin-top:20px"><a href="https://wa.me/${waNum}" style="display:inline-block;background:#25D366;color:#fff;font-weight:bold;text-decoration:none;padding:10px 20px;border-radius:8px;font-size:14px">Message on WhatsApp</a></div>` : ""}
-            </div>
-          </div>
-        `,
-      });
-    } catch (err) {
-      console.error("Lead email error:", err);
-    }
-  } else {
-    console.error("Lead email skipped: MAIL_USER or MAIL_PASS not set");
+  // Email admin
+  sendMail({
+    to: "daisygadgetsco@gmail.com",
+    subject: `✨ New Lead — ${name || phone || email}`,
+    html: `
+      <div style="font-family:sans-serif;max-width:500px;margin:0 auto;color:#333">
+        <div style="background:#0A0A0A;padding:20px 28px;border-radius:8px 8px 0 0">
+          <h2 style="color:#D4AF37;margin:0;font-size:18px">New Lead Captured</h2>
+          <p style="color:#888;margin:4px 0 0;font-size:12px">via 20% off popup</p>
+        </div>
+        <div style="background:#f9f9f9;padding:28px;border-radius:0 0 8px 8px">
+          <table style="width:100%;border-collapse:collapse">
+            <tr><td style="padding:7px 0;color:#666;width:100px;font-size:14px">Name</td><td style="padding:7px 0;font-weight:600;font-size:14px">${name || "—"}</td></tr>
+            <tr><td style="padding:7px 0;color:#666;font-size:14px">Phone</td><td style="padding:7px 0;font-weight:600;font-size:14px">${phone || "—"}</td></tr>
+            <tr><td style="padding:7px 0;color:#666;font-size:14px">Email</td><td style="padding:7px 0;font-size:14px">${email || "—"}</td></tr>
+          </table>
+          ${waNum ? `<div style="margin-top:20px"><a href="https://wa.me/${waNum}" style="display:inline-block;background:#25D366;color:#fff;font-weight:bold;text-decoration:none;padding:10px 20px;border-radius:8px;font-size:14px">Message on WhatsApp</a></div>` : ""}
+        </div>
+      </div>
+    `,
+  });
+
+  // Welcome email to customer (only if they provided email)
+  if (email && email.includes("@")) {
+    sendWelcomeEmail({ name: name ?? "", email });
   }
 
   return NextResponse.json({ ok: true });

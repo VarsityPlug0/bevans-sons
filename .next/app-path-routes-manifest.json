@@ -37,6 +37,7 @@
   "/api/admin/logout/route": "/api/admin/logout",
   "/api/admin/products/[id]/route": "/api/admin/products/[id]",
   "/api/admin/products/route": "/api/admin/products",
+  "/api/admin/quotes/[id]/route": "/api/admin/quotes/[id]",
   "/api/admin/site-images/route": "/api/admin/site-images",
   "/api/admin/upload/route": "/api/admin/upload",
   "/api/ai-assistant/route": "/api/ai-assistant",

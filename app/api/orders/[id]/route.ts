@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getOrder, updateOrder } from "@/lib/orders";
 import { isAuthenticated } from "@/lib/auth";
+import { sendStatusUpdate, sendOrderConfirmation } from "@/lib/mailer";
 
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const ok = await isAuthenticated();
@@ -31,5 +32,24 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   const order = updateOrder(id, update);
   if (!order) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+  // Email customer when admin changes status
+  if (body.status && order.email) {
+    if (body.status === "approved") {
+      // Send the full order confirmation to customer on approval
+      sendOrderConfirmation({
+        name: order.name,
+        email: order.email,
+        ref: order.ref,
+        items: order.items,
+        total: order.total,
+        address: order.address,
+        phone: order.phone,
+      });
+    } else {
+      sendStatusUpdate({ name: order.name, email: order.email, ref: order.ref, status: body.status, notes: order.notes });
+    }
+  }
+
   return NextResponse.json(order);
 }

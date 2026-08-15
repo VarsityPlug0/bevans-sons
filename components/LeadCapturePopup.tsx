@@ -91,7 +91,7 @@ export default function LeadCapturePopup() {
             </div>
             <p className="text-xs font-bold tracking-[0.2em] text-[#D4AF37] uppercase mb-3">Limited Offer</p>
             <h2 className="text-white font-black text-3xl leading-tight mb-3">
-              Claim <span style={{ color: "#D4AF37" }}>20% OFF</span><br />your first order
+              Claim <span style={{ color: "#D4AF37" }}>25% OFF</span><br />your first order
             </h2>
             <p className="text-gray-400 text-sm leading-relaxed mb-8 max-w-xs mx-auto">
               Enter your WhatsApp number and we will send you an exclusive discount code right now.
@@ -102,7 +102,7 @@ export default function LeadCapturePopup() {
               style={{ background: "linear-gradient(135deg, #D4AF37 0%, #f5d76e 50%, #D4AF37 100%)", boxShadow: "0 8px 24px rgba(212,175,55,0.35)" }}
             >
               <Zap size={16} className="inline mr-2 mb-0.5" />
-              Yes! Claim my 20% off
+              Yes! Claim my 25% off
             </button>
             <button onClick={decline} className="w-full py-2 text-xs text-gray-700 hover:text-gray-500 transition-colors">
               No thanks, I will pay full price
@@ -115,7 +115,7 @@ export default function LeadCapturePopup() {
             <div className="text-center mb-6">
               <p className="text-xs font-bold tracking-[0.2em] text-[#D4AF37] uppercase mb-2">Almost there</p>
               <h2 className="text-white font-black text-2xl">Where do we send your code?</h2>
-              <p className="text-gray-500 text-sm mt-2">Your 20% discount will be sent straight to your WhatsApp.</p>
+              <p className="text-gray-500 text-sm mt-2">Your 25% discount will be sent straight to your WhatsApp.</p>
             </div>
             <form onSubmit={submit} className="space-y-3">
               <input
@@ -147,7 +147,7 @@ export default function LeadCapturePopup() {
                 className="w-full py-4 rounded-2xl font-black text-base text-[#0A0A0A] disabled:opacity-40 transition-all hover:scale-[1.02] active:scale-[0.98] mt-1"
                 style={{ background: "linear-gradient(135deg, #D4AF37 0%, #f5d76e 50%, #D4AF37 100%)", boxShadow: "0 8px 24px rgba(212,175,55,0.3)" }}
               >
-                {loading ? "Sending..." : "Send my 20% discount code"}
+                {loading ? "Sending..." : "Send my 25% discount code"}
               </button>
               <button type="button" onClick={decline} className="w-full py-2 text-xs text-gray-700 hover:text-gray-500 transition-colors">
                 No thanks, I will pay full price
@@ -163,7 +163,7 @@ export default function LeadCapturePopup() {
               You are in{name ? `, ${name.split(" ")[0]}` : ""}!
             </h2>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Your 20% discount code is on its way to your WhatsApp. Happy shopping!
+              Your 25% discount code is on its way to your WhatsApp. Happy shopping!
             </p>
           </div>
         )}

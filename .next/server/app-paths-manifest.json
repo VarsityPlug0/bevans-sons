@@ -37,6 +37,7 @@
   "/api/admin/logout/route": "app/api/admin/logout/route.js",
   "/api/admin/products/[id]/route": "app/api/admin/products/[id]/route.js",
   "/api/admin/products/route": "app/api/admin/products/route.js",
+  "/api/admin/quotes/[id]/route": "app/api/admin/quotes/[id]/route.js",
   "/api/admin/site-images/route": "app/api/admin/site-images/route.js",
   "/api/admin/upload/route": "app/api/admin/upload/route.js",
   "/api/ai-assistant/route": "app/api/ai-assistant/route.js",

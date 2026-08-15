@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createOrder, listOrders } from "@/lib/orders";
 import { isAuthenticated } from "@/lib/auth";
 import { getProduct } from "@/lib/products";
-import nodemailer from "nodemailer";
+import { sendMail } from "@/lib/mailer";
 
 const BANK = {
   bank: "FNB / RMB",
@@ -12,13 +12,6 @@ const BANK = {
   branchCode: "250655",
   payshap: "+27848961782@FNB",
 };
-
-const transporter = process.env.MAIL_USER && process.env.MAIL_PASS
-  ? nodemailer.createTransport({
-      service: "gmail",
-      auth: { user: process.env.MAIL_USER, pass: process.env.MAIL_PASS },
-    })
-  : null;
 
 export async function GET() {
   const ok = await isAuthenticated();
@@ -42,7 +35,6 @@ export async function POST(req: NextRequest) {
   if (typeof phone !== "string" || phone.length > 30) return NextResponse.json({ error: "Invalid phone" }, { status: 400 });
   if (items.length > 50) return NextResponse.json({ error: "Too many items" }, { status: 400 });
 
-  // Validate each item against actual product prices — never trust client totals
   const validatedItems: { id: string; name: string; price: string; qty: number; imageUrl: string }[] = [];
   let computedTotal = 0;
 
@@ -54,18 +46,22 @@ export async function POST(req: NextRequest) {
     validatedItems.push({ id: product.id, name: product.name, price: product.price, qty, imageUrl: product.imageUrl });
   }
 
-  const order = createOrder({ name: name.trim(), email: email.trim().toLowerCase(), phone: phone.trim(), address: (address ?? "").toString().slice(0, 500).trim(), items: validatedItems, total: computedTotal });
+  const order = createOrder({
+    name: name.trim(),
+    email: email.trim().toLowerCase(),
+    phone: phone.trim(),
+    address: (address ?? "").toString().slice(0, 500).trim(),
+    items: validatedItems,
+    total: computedTotal,
+  });
 
-  // Notify admin
-  if (transporter) {
-    const itemLines = order.items.map(i => `${i.name} × ${i.qty} — R ${Number(i.price).toLocaleString()}`).join("\n");
-    transporter.sendMail({
-      from: process.env.MAIL_USER,
-      to: "daisygadgetsco@gmail.com",
-      subject: `New Order ${order.ref} — R${order.total.toLocaleString()} — ${name}`,
-      text: `New order received.\n\nRef: ${order.ref}\nCustomer: ${name}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address}\n\nItems:\n${itemLines}\n\nTotal: R${order.total.toLocaleString()}\n\nBank: ${BANK.bank} | ${BANK.accountHolder} | Acc: ${BANK.accountNumber} | Branch: ${BANK.branchCode} | PayShap: ${BANK.payshap}`,
-    }).catch(console.error);
-  }
+  // Email admin — new order alert
+  const itemLines = order.items.map(i => `${i.name} × ${i.qty} — R ${Number(i.price).toLocaleString()}`).join("\n");
+  sendMail({
+    to: "daisygadgetsco@gmail.com",
+    subject: `New Order ${order.ref} — R${order.total.toLocaleString()} — ${name}`,
+    html: `<pre style="font-family:monospace;font-size:13px">New order received.\n\nRef: ${order.ref}\nCustomer: ${name}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address || "—"}\n\nItems:\n${itemLines}\n\nTotal: R${order.total.toLocaleString()}\n\nBank: ${BANK.bank} | ${BANK.accountHolder} | Acc: ${BANK.accountNumber} | Branch: ${BANK.branchCode} | PayShap: ${BANK.payshap}</pre>`,
+  });
 
   return NextResponse.json({ ok: true, ref: order.ref, id: order.id, bank: BANK });
 }
