@@ -17,7 +17,6 @@ export function getDb(): Database.Database {
   initSchema(_db);
   migrateFromJson(_db);
   seedDefaultProducts(_db);
-  patchImagesFromJson(_db);
   return _db;
 }
 
@@ -121,37 +120,6 @@ function migrateFromJson(db: Database.Database) {
   }
 
   db.prepare("INSERT OR IGNORE INTO migrations (name) VALUES (?)").run("json_import_gadgets_v1");
-}
-
-function patchImagesFromJson(db: Database.Database) {
-  const done = db.prepare("SELECT name FROM migrations WHERE name = ?").get("patch_images_v1");
-  if (done) return;
-
-  // Patch known broken seed-product image URLs by product ID
-  const brokenSeedFixes: [string, string][] = [
-    ["gp-002", "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&h=600&fit=crop"],
-    ["lb-002", "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/macbook-air-size-unselect-202601-gallery-1?wid=1600&hei=1040&fmt=jpeg&qlt=90&.v=1767638925491"],
-  ];
-  const patchById = db.prepare("UPDATE products SET imageUrl = ? WHERE id = ?");
-  for (const [id, url] of brokenSeedFixes) patchById.run(url, id);
-
-  // Patch any products whose IDs match the JSON file (updates imageUrls to latest)
-  const jsonPath = path.join(DATA_DIR, "products.json");
-  if (existsSync(jsonPath)) {
-    try {
-      const products = JSON.parse(readFileSync(jsonPath, "utf-8")) as { id: string; imageUrl: string }[];
-      if (Array.isArray(products) && products.length > 0) {
-        const update = db.prepare("UPDATE products SET imageUrl = ? WHERE id = ? AND imageUrl != ?");
-        db.transaction(() => {
-          for (const p of products) {
-            if (p.id && p.imageUrl) update.run(p.imageUrl, p.id, p.imageUrl);
-          }
-        })();
-      }
-    } catch { /* ignore */ }
-  }
-
-  db.prepare("INSERT OR IGNORE INTO migrations (name) VALUES (?)").run("patch_images_v1");
 }
 
 function seedDefaultProducts(db: Database.Database) {
