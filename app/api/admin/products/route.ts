@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
 import { getProducts, createProduct } from "@/lib/products";
+import { exportProductsJson } from "@/lib/db";
 
 export async function GET() {
   if (!(await isAuthenticated())) {
@@ -31,5 +32,6 @@ export async function POST(req: NextRequest) {
     featured: featured === true,
   });
 
+  exportProductsJson();
   return NextResponse.json(product, { status: 201 });
 }

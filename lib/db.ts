@@ -1,9 +1,14 @@
 import Database from "better-sqlite3";
 import path from "path";
-import { existsSync, mkdirSync, readFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 
 const DATA_DIR = process.env.DATA_DIR ?? path.join(process.cwd(), "data");
 const DB_PATH = path.join(DATA_DIR, "daisy.db");
+// Fallback JSON paths: persistent disk backup → built-in image seed
+const JSON_PATHS = [
+  path.join(DATA_DIR, "products-backup.json"),
+  path.join(process.cwd(), "data", "products.json"),
+];
 
 let _db: Database.Database | null = null;
 
@@ -17,7 +22,18 @@ export function getDb(): Database.Database {
   initSchema(_db);
   migrateFromJson(_db);
   seedDefaultProducts(_db);
+  exportProductsJson(_db);
   return _db;
+}
+
+// Call after any product create/update/delete to keep the backup current
+export function exportProductsJson(db?: Database.Database): void {
+  try {
+    const d = db ?? getDb();
+    const products = d.prepare("SELECT * FROM products ORDER BY category, name").all();
+    if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true });
+    writeFileSync(path.join(DATA_DIR, "products-backup.json"), JSON.stringify(products, null, 2));
+  } catch { /* non-fatal */ }
 }
 
 function initSchema(db: Database.Database) {
@@ -100,8 +116,9 @@ function migrateFromJson(db: Database.Database) {
   const done = db.prepare("SELECT name FROM migrations WHERE name = ?").get("json_import_gadgets_v1");
   if (done) return;
 
-  const jsonPath = path.join(DATA_DIR, "products.json");
-  if (existsSync(jsonPath)) {
+  // Try each fallback path in order: persistent disk backup → built-in image seed
+  for (const jsonPath of JSON_PATHS) {
+    if (!existsSync(jsonPath)) continue;
     try {
       const products = JSON.parse(readFileSync(jsonPath, "utf-8"));
       if (Array.isArray(products) && products.length > 0) {
@@ -115,8 +132,9 @@ function migrateFromJson(db: Database.Database) {
         db.transaction((rows: Record<string, unknown>[]) => {
           for (const row of rows) insert.run({ ...row, inStock: row.inStock ? 1 : 0, featured: row.featured ? 1 : 0 });
         })(products);
+        break;
       }
-    } catch { /* ignore corrupt JSON */ }
+    } catch { /* ignore corrupt JSON, try next */ }
   }
 
   db.prepare("INSERT OR IGNORE INTO migrations (name) VALUES (?)").run("json_import_gadgets_v1");
