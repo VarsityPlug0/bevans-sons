@@ -265,7 +265,87 @@ export async function sendProofAcknowledgement(data: { name: string; email: stri
   await sendMail({ to: data.email, subject: `Payment Proof Received — ${data.ref} | Daisy Gadgets Co.`, html });
 }
 
-// ─── 3. Order Status Updates ──────────────────────────────────────────────────
+// ─── 3. Rejection Email ──────────────────────────────────────────────────────
+export interface RejectionEmailData {
+  name: string;
+  email: string;
+  ref: string;
+  total: number;
+  items: { name: string; price: string; qty: number; imageUrl?: string }[];
+  reason?: string | null;
+}
+
+export async function sendRejectionEmail(data: RejectionEmailData) {
+  const itemRows = data.items.map(i => {
+    const lineTotal = (parseFloat(String(i.price).replace(/[^0-9.]/g, "")) * i.qty).toLocaleString("en-ZA");
+    return `<tr>
+      <td style="padding:8px 0;color:#d1d5db;font-size:13px;border-bottom:1px solid ${BORDER}">${i.name} × ${i.qty}</td>
+      <td style="padding:8px 0;text-align:right;color:${GOLD};font-size:13px;font-weight:700;border-bottom:1px solid ${BORDER}">R ${lineTotal}</td>
+    </tr>`;
+  }).join("");
+
+  const reasonHtml = data.reason
+    ? `<div style="background:${DARK2};border-left:3px solid #ef4444;border-radius:0 10px 10px 0;padding:14px 18px;margin:20px 0">
+        <p style="margin:0 0 4px;color:#ef4444;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Reason from our team</p>
+        <p style="margin:0;color:#fca5a5;font-size:14px;line-height:1.6">${data.reason}</p>
+       </div>`
+    : "";
+
+  const html = layout(`
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-size:44px;line-height:1;margin-bottom:12px">🔔</div>
+      <div style="display:inline-block;background:#ef444422;color:#ef4444;border:1px solid #ef444455;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.05em;margin-bottom:12px">Action Required</div>
+      <h1 style="margin:0 0 8px;color:#f9fafb;font-size:24px;font-weight:900">Payment could not be verified</h1>
+      <p style="margin:0;color:#9ca3af;font-size:14px">Hi ${data.name.split(" ")[0]}, we were unable to verify your proof of payment for order <strong style="color:${GOLD}">${data.ref}</strong>.</p>
+    </div>
+
+    ${reasonHtml}
+
+    <p style="margin:0 0 14px;color:#9ca3af;font-size:14px;line-height:1.7">
+      Don&apos;t worry — this happens sometimes. Please make a new payment using the details below and re-upload a clear screenshot or photo of your confirmation.
+    </p>
+
+    ${divider()}
+
+    <!-- Bank details -->
+    <p style="margin:0 0 12px;color:#e5e7eb;font-size:15px;font-weight:700">✦ Payment Details (EFT)</p>
+    <div style="background:${DARK2};border:1px solid ${BORDER};border-radius:12px;padding:4px 20px;margin-bottom:24px">
+      <table width="100%" cellpadding="0" cellspacing="0">
+        ${infoRow("Bank", BANK.bank)}
+        ${infoRow("Account Holder", BANK.accountHolder)}
+        ${infoRow("Account Type", BANK.accountType)}
+        ${infoRow("Account Number", `<span style="font-family:monospace;font-size:15px;color:${GOLD};letter-spacing:0.06em">${BANK.accountNumber}</span>`)}
+        ${infoRow("Branch Code", BANK.branchCode)}
+        ${infoRow("PayShap", BANK.payshap)}
+        ${infoRow("Reference", `<strong style="color:${GOLD};font-size:15px;font-family:monospace">${data.ref}</strong>`)}
+        ${infoRow("Amount", `<strong style="color:${GOLD};font-size:15px">R ${data.total.toLocaleString("en-ZA")}</strong>`)}
+      </table>
+    </div>
+
+    <!-- Order summary -->
+    <p style="margin:0 0 12px;color:#e5e7eb;font-size:15px;font-weight:700">✦ Your Order</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px">
+      ${itemRows}
+      <tr>
+        <td style="padding:10px 0 0;color:#e5e7eb;font-size:14px;font-weight:700">Total Due</td>
+        <td style="padding:10px 0 0;text-align:right;color:${GOLD};font-size:18px;font-weight:900">R ${data.total.toLocaleString("en-ZA")}</td>
+      </tr>
+    </table>
+
+    ${divider()}
+
+    <p style="margin:0 0 20px;color:#9ca3af;font-size:14px">Once you have made the payment, upload your new proof of payment below — or send it directly on WhatsApp.</p>
+    <div>
+      ${btn("📤 Upload New Proof", `${SITE}/checkout`, GOLD, BLACK)}
+      &nbsp;&nbsp;
+      ${btn("💬 Send via WhatsApp", `https://wa.me/${WA_NUM}?text=Hi%2C%20re-sending%20proof%20for%20order%20${data.ref}`, "#25D366", "#fff")}
+    </div>
+  `);
+
+  await sendMail({ to: data.email, subject: `⚠️ Action Required — ${data.ref} | Daisy Gadgets Co.`, html });
+}
+
+// ─── 4. Order Status Updates ──────────────────────────────────────────────────
 const STATUS_CONTENT: Record<string, { pill: [string, string]; title: string; body: string; cta?: [string, string]; icon: string }> = {
   approved: {
     pill: ["Payment Approved", "#22c55e"],
@@ -273,13 +353,6 @@ const STATUS_CONTENT: Record<string, { pill: [string, string]; title: string; bo
     title: "Your payment is confirmed!",
     body: "Great news — your payment has been verified and your order is now being packed and prepared for dispatch. We will notify you as soon as it ships.",
     cta: ["💬 Chat on WhatsApp", `https://wa.me/${WA_NUM}`],
-  },
-  rejected: {
-    pill: ["Action Required", "#ef4444"],
-    icon: "🔔",
-    title: "Payment could not be verified",
-    body: "Unfortunately we could not verify your payment. Please re-upload a clear, legible proof of payment or contact us directly to resolve this quickly.",
-    cta: ["📤 Upload New Proof", `${SITE}/checkout`],
   },
   shipped: {
     pill: ["Shipped", "#3b82f6"],

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getOrder, updateOrder } from "@/lib/orders";
 import { isAuthenticated } from "@/lib/auth";
-import { sendStatusUpdate, sendOrderConfirmation } from "@/lib/mailer";
+import { sendStatusUpdate, sendOrderConfirmation, sendRejectionEmail } from "@/lib/mailer";
 
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const ok = await isAuthenticated();
@@ -45,6 +45,15 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
         total: order.total,
         address: order.address,
         phone: order.phone,
+      });
+    } else if (body.status === "rejected") {
+      sendRejectionEmail({
+        name: order.name,
+        email: order.email,
+        ref: order.ref,
+        total: order.total,
+        items: order.items,
+        reason: order.notes,
       });
     } else {
       sendStatusUpdate({ name: order.name, email: order.email, ref: order.ref, status: body.status, notes: order.notes });
