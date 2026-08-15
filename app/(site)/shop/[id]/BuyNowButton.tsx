@@ -22,7 +22,7 @@ export default function BuyNowButton({ product }: Props) {
         onClick={handleBuyNow}
         className="btn-gold flex-1 py-4 rounded-xl font-bold text-base flex items-center justify-center gap-2.5"
       >
-        Buy Now — Pay via EFT
+        Buy Now
       </button>
       <button
         onClick={() => add(product)}
