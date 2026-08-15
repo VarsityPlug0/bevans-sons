@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
 
       await transporter.sendMail({
         from: process.env.MAIL_USER,
-        to: "info@daisyandco.co.za",
+        to: "daisygadgetsco@gmail.com",
         subject: `New Quote #${quote.ref} — ${esc(recommendedPackage) || "Solar Enquiry"} — ${esc(name)}`,
         html: `
           <div style="font-family:sans-serif;max-width:620px;margin:0 auto;color:#333">
