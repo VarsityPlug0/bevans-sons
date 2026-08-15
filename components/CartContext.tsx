@@ -214,7 +214,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             </a>
             <Link href="/checkout" onClick={() => setOpen(false)}
               className="btn-outline w-full py-3 rounded-xl font-bold text-sm text-center block">
-              Checkout &amp; Pay Via EFT
+              Checkout
             </Link>
             <button onClick={() => ctx.clear()}
               className="w-full text-center text-xs text-gray-600 hover:text-red-400 transition-colors py-1">
