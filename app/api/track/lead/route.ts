@@ -1,5 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
+import nodemailer from "nodemailer";
+
+const transporter =
+  process.env.MAIL_USER && process.env.MAIL_PASS
+    ? nodemailer.createTransport({
+        service: "gmail",
+        auth: { user: process.env.MAIL_USER, pass: process.env.MAIL_PASS },
+      })
+    : null;
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -12,7 +21,6 @@ export async function POST(req: NextRequest) {
   const db = getDb();
   const now = new Date().toISOString();
 
-  // Upsert visitor
   db.prepare(`
     INSERT INTO visitors (id, name, phone, email, createdAt)
     VALUES (?, ?, ?, ?, ?)
@@ -28,19 +36,44 @@ export async function POST(req: NextRequest) {
     now,
   );
 
-  // Also save to leads for admin visibility
   db.prepare(`
-    INSERT INTO leads (id, name, email, phone, message, productInterest, createdAt)
+    INSERT OR IGNORE INTO leads (id, name, email, phone, message, productInterest, createdAt)
     VALUES (?, ?, ?, ?, ?, ?, ?)
   `).run(
     visitorId,
     String(name ?? "").slice(0, 200),
     String(email ?? "").slice(0, 200),
     String(phone ?? "").slice(0, 50),
-    "Lead captured via site popup",
+    "Lead captured via 20% off popup",
     "General",
     now,
   );
+
+  // Email notification
+  if (transporter) {
+    const waNum = String(phone ?? "").replace(/[^0-9]/g, "");
+    transporter.sendMail({
+      from: process.env.MAIL_USER,
+      to: "daisygadgetsco@gmail.com",
+      subject: `New Lead — ${name || phone || email}`,
+      html: `
+        <div style="font-family:sans-serif;max-width:500px;margin:0 auto;color:#333">
+          <div style="background:#0A0A0A;padding:20px 28px;border-radius:8px 8px 0 0">
+            <h2 style="color:#D4AF37;margin:0;font-size:18px">New Lead Captured</h2>
+            <p style="color:#888;margin:4px 0 0;font-size:12px">via 20% off popup</p>
+          </div>
+          <div style="background:#f9f9f9;padding:28px;border-radius:0 0 8px 8px">
+            <table style="width:100%;border-collapse:collapse">
+              <tr><td style="padding:7px 0;color:#666;width:100px;font-size:14px">Name</td><td style="padding:7px 0;font-weight:600;font-size:14px">${name || "—"}</td></tr>
+              <tr><td style="padding:7px 0;color:#666;font-size:14px">Phone</td><td style="padding:7px 0;font-weight:600;font-size:14px">${phone || "—"}</td></tr>
+              <tr><td style="padding:7px 0;color:#666;font-size:14px">Email</td><td style="padding:7px 0;font-size:14px">${email || "—"}</td></tr>
+            </table>
+            ${waNum ? `<div style="margin-top:20px"><a href="https://wa.me/${waNum}" style="display:inline-block;background:#25D366;color:#fff;font-weight:bold;text-decoration:none;padding:10px 20px;border-radius:8px;font-size:14px">Message on WhatsApp</a></div>` : ""}
+          </div>
+        </div>
+      `,
+    }).catch(console.error);
+  }
 
   return NextResponse.json({ ok: true });
 }
