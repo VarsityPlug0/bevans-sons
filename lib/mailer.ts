@@ -31,13 +31,17 @@ function createTransporter() {
   return nodemailer.createTransport({ service: "gmail", auth: { user, pass } });
 }
 
-export async function sendMail(opts: { to: string; subject: string; html: string }) {
+type MailAttachment =
+  | { filename: string; path: string; cid: string }
+  | { filename: string; content: Buffer; cid: string };
+
+export async function sendMail(opts: { to: string; subject: string; html: string; attachments?: MailAttachment[] }) {
   const transporter = createTransporter();
   if (!transporter) { console.error("mailer: env vars missing"); return; }
   try {
-    const attachments: { filename: string; path: string; cid: string }[] = [];
+    const attachments: MailAttachment[] = opts.attachments ?? [];
     if (existsSync(LOGO_PATH)) {
-      attachments.push({ filename: "logo.jpg", path: LOGO_PATH, cid: LOGO_CID });
+      attachments.unshift({ filename: "logo.jpg", path: LOGO_PATH, cid: LOGO_CID });
     }
     await transporter.sendMail({
       from: `"Daisy Gadgets Co." <${process.env.MAIL_USER}>`,
@@ -47,6 +51,41 @@ export async function sendMail(opts: { to: string; subject: string; html: string
       attachments,
     });
   } catch (err) { console.error("mailer send error:", err); }
+}
+
+// Fetch a remote image URL and return a Buffer (for CID inlining)
+async function fetchImageBuffer(url: string): Promise<Buffer | null> {
+  try {
+    const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
+    if (!res.ok) return null;
+    return Buffer.from(await res.arrayBuffer());
+  } catch {
+    return null;
+  }
+}
+
+// Build CID attachment list + HTML thumb src map for a set of items
+async function buildProductAttachments(
+  items: { name: string; imageUrl?: string }[]
+): Promise<{ attachments: MailAttachment[]; cidMap: Map<string, string> }> {
+  const attachments: MailAttachment[] = [];
+  const cidMap = new Map<string, string>();
+
+  await Promise.all(
+    items.map(async (item, i) => {
+      if (!item.imageUrl) return;
+      const buf = await fetchImageBuffer(
+        item.imageUrl.startsWith("http") ? item.imageUrl : SITE + item.imageUrl
+      );
+      if (!buf) return;
+      const cid = `product-${i}@daisy`;
+      const ext = item.imageUrl.split(".").pop()?.split("?")[0] ?? "jpg";
+      attachments.push({ filename: `product-${i}.${ext}`, content: buf, cid });
+      cidMap.set(item.imageUrl, `cid:${cid}`);
+    })
+  );
+
+  return { attachments, cidMap };
 }
 
 // ─── Layout ──────────────────────────────────────────────────────────────────
@@ -152,14 +191,17 @@ export interface OrderEmailData {
 }
 
 export async function sendOrderConfirmation(data: OrderEmailData) {
+  const { attachments: imgAttachments, cidMap } = await buildProductAttachments(data.items);
+
   const itemRows = data.items.map(i => {
     const lineTotal = (parseFloat(String(i.price).replace(/[^0-9.]/g, "")) * i.qty).toLocaleString("en-ZA");
-    const thumb = i.imageUrl
-      ? `<img src="${i.imageUrl.startsWith("http") ? i.imageUrl : SITE + i.imageUrl}" alt="${i.name}" width="56" height="56" style="width:56px;height:56px;object-fit:cover;border-radius:8px;display:block;border:1px solid ${BORDER}" />`
-      : `<div style="width:56px;height:56px;background:${DARK2};border:1px solid ${BORDER};border-radius:8px"></div>`;
+    const src = i.imageUrl ? (cidMap.get(i.imageUrl) ?? (i.imageUrl.startsWith("http") ? i.imageUrl : SITE + i.imageUrl)) : null;
+    const thumb = src
+      ? `<img src="${src}" alt="${i.name}" width="64" height="64" style="width:64px;height:64px;object-fit:cover;border-radius:10px;display:block;border:1px solid ${BORDER}" />`
+      : `<div style="width:64px;height:64px;background:${DARK2};border:1px solid ${BORDER};border-radius:10px"></div>`;
     return `
     <tr>
-      <td style="padding:12px 0;border-bottom:1px solid ${BORDER};width:68px;vertical-align:middle">${thumb}</td>
+      <td style="padding:12px 0;border-bottom:1px solid ${BORDER};width:76px;vertical-align:middle">${thumb}</td>
       <td style="padding:12px 12px;border-bottom:1px solid ${BORDER};vertical-align:middle">
         <p style="margin:0 0 4px;color:#e5e7eb;font-size:14px;font-weight:600">${i.name}</p>
         <p style="margin:0;color:${MUTED};font-size:12px">Qty: ${i.qty}</p>
@@ -241,7 +283,7 @@ export async function sendOrderConfirmation(data: OrderEmailData) {
     </div>
   `);
 
-  await sendMail({ to: data.email, subject: `Order Confirmed ✨ — ${data.ref} | Daisy Gadgets Co.`, html });
+  await sendMail({ to: data.email, subject: `Order Confirmed ✨ — ${data.ref} | Daisy Gadgets Co.`, html, attachments: imgAttachments });
 }
 
 // ─── 2. Proof Acknowledgement ─────────────────────────────────────────────────
@@ -276,15 +318,18 @@ export interface RejectionEmailData {
 }
 
 export async function sendRejectionEmail(data: RejectionEmailData) {
+  const { attachments: imgAttachments, cidMap } = await buildProductAttachments(data.items);
+
   const itemRows = data.items.map(i => {
     const lineTotal = (parseFloat(String(i.price).replace(/[^0-9.]/g, "")) * i.qty).toLocaleString("en-ZA");
     const unitPrice = parseFloat(String(i.price).replace(/[^0-9.]/g, "")).toLocaleString("en-ZA");
-    const thumb = i.imageUrl
-      ? `<img src="${i.imageUrl.startsWith("http") ? i.imageUrl : SITE + i.imageUrl}" alt="${i.name}" width="56" height="56" style="width:56px;height:56px;object-fit:cover;border-radius:8px;display:block;border:1px solid ${BORDER}" />`
-      : `<div style="width:56px;height:56px;background:${DARK2};border:1px solid ${BORDER};border-radius:8px"></div>`;
+    const src = i.imageUrl ? (cidMap.get(i.imageUrl) ?? (i.imageUrl.startsWith("http") ? i.imageUrl : SITE + i.imageUrl)) : null;
+    const thumb = src
+      ? `<img src="${src}" alt="${i.name}" width="64" height="64" style="width:64px;height:64px;object-fit:cover;border-radius:10px;display:block;border:1px solid ${BORDER}" />`
+      : `<div style="width:64px;height:64px;background:${DARK2};border:1px solid ${BORDER};border-radius:10px"></div>`;
     return `
     <tr>
-      <td style="padding:12px 0;border-bottom:1px solid ${BORDER};width:68px;vertical-align:middle">${thumb}</td>
+      <td style="padding:12px 0;border-bottom:1px solid ${BORDER};width:76px;vertical-align:middle">${thumb}</td>
       <td style="padding:12px 10px;border-bottom:1px solid ${BORDER};vertical-align:middle">
         <p style="margin:0 0 3px;color:#e5e7eb;font-size:14px;font-weight:600">${i.name}</p>
         <p style="margin:0;color:${MUTED};font-size:12px">R ${unitPrice} × ${i.qty}</p>
@@ -364,7 +409,7 @@ export async function sendRejectionEmail(data: RejectionEmailData) {
     </div>
   `);
 
-  await sendMail({ to: data.email, subject: `⚠️ Action Required — ${data.ref} | Daisy Gadgets Co.`, html });
+  await sendMail({ to: data.email, subject: `⚠️ Action Required — ${data.ref} | Daisy Gadgets Co.`, html, attachments: imgAttachments });
 }
 
 // ─── 4. Order Status Updates ──────────────────────────────────────────────────
