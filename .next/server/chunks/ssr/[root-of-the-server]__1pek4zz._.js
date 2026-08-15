@@ -67,6 +67,24 @@ module.exports=[85148,(a,b,c)=>{b.exports=a.x("better-sqlite3-90e2652d1716b047",
       section TEXT NOT NULL
     );
 
+    CREATE TABLE IF NOT EXISTS visitors (
+      id          TEXT PRIMARY KEY,
+      name        TEXT,
+      phone       TEXT,
+      email       TEXT,
+      createdAt   TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS cart_events (
+      id          TEXT PRIMARY KEY,
+      visitorId   TEXT,
+      productId   TEXT NOT NULL,
+      productName TEXT NOT NULL,
+      price       TEXT NOT NULL,
+      category    TEXT NOT NULL,
+      createdAt   TEXT NOT NULL
+    );
+
     CREATE TABLE IF NOT EXISTS migrations (
       name TEXT PRIMARY KEY
     );

@@ -452,6 +452,24 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../app/api/track/cart/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/track/cart">> = Specific
+  const handler = {} as typeof import("../../app/api/track/cart/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/track/lead/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/track/lead">> = Specific
+  const handler = {} as typeof import("../../app/api/track/lead/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/api/upload-proof/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/upload-proof">> = Specific

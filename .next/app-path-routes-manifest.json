@@ -46,6 +46,8 @@
   "/api/quote/route": "/api/quote",
   "/api/quotes/route": "/api/quotes",
   "/api/track-order/route": "/api/track-order",
+  "/api/track/cart/route": "/api/track/cart",
+  "/api/track/lead/route": "/api/track/lead",
   "/api/upload-proof/route": "/api/upload-proof",
   "/favicon.ico/route": "/favicon.ico",
   "/robots.txt/route": "/robots.txt",

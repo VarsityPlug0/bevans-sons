@@ -201,6 +201,18 @@
       "namedRegex": "^/api/quotes(?:/)?$"
     },
     {
+      "page": "/api/track/cart",
+      "regex": "^/api/track/cart(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/track/cart(?:/)?$"
+    },
+    {
+      "page": "/api/track/lead",
+      "regex": "^/api/track/lead(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/track/lead(?:/)?$"
+    },
+    {
       "page": "/api/track-order",
       "regex": "^/api/track\\-order(?:/)?$",
       "routeKeys": {},

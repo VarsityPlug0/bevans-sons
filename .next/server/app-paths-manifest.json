@@ -46,6 +46,8 @@
   "/api/quote/route": "app/api/quote/route.js",
   "/api/quotes/route": "app/api/quotes/route.js",
   "/api/track-order/route": "app/api/track-order/route.js",
+  "/api/track/cart/route": "app/api/track/cart/route.js",
+  "/api/track/lead/route": "app/api/track/lead/route.js",
   "/api/upload-proof/route": "app/api/upload-proof/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/robots.txt/route": "app/robots.txt/route.js",
