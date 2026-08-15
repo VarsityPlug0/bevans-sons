@@ -33,13 +33,13 @@
   },
   {
     "route": "/shop",
-    "firstLoadUncompressedJsBytes": 545294,
+    "firstLoadUncompressedJsBytes": 545288,
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
       ".next\\static\\chunks\\1d2-fjsjigs-s.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
-      ".next\\static\\chunks\\2ikibww-pu3t7.js",
+      ".next\\static\\chunks\\2x2km174rgaen.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
       ".next\\static\\chunks\\36lm--m0zwqtj.js",
@@ -81,13 +81,13 @@
   },
   {
     "route": "/shop/[id]",
-    "firstLoadUncompressedJsBytes": 537080,
+    "firstLoadUncompressedJsBytes": 537071,
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
       ".next\\static\\chunks\\1d2-fjsjigs-s.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
-      ".next\\static\\chunks\\0ug4atrjgeg4r.js",
+      ".next\\static\\chunks\\43a0fsj8jq3bc.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
       ".next\\static\\chunks\\36lm--m0zwqtj.js",
@@ -97,13 +97,13 @@
   },
   {
     "route": "/new-arrivals",
-    "firstLoadUncompressedJsBytes": 536356,
+    "firstLoadUncompressedJsBytes": 536350,
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
       ".next\\static\\chunks\\1d2-fjsjigs-s.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
-      ".next\\static\\chunks\\0jio3lvvt4-vw.js",
+      ".next\\static\\chunks\\13byf_ymnfe4p.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
       ".next\\static\\chunks\\36lm--m0zwqtj.js",
@@ -113,13 +113,13 @@
   },
   {
     "route": "/special-offers",
-    "firstLoadUncompressedJsBytes": 536356,
+    "firstLoadUncompressedJsBytes": 536350,
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
       ".next\\static\\chunks\\1d2-fjsjigs-s.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
-      ".next\\static\\chunks\\0jio3lvvt4-vw.js",
+      ".next\\static\\chunks\\13byf_ymnfe4p.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
       ".next\\static\\chunks\\36lm--m0zwqtj.js",

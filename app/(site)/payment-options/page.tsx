@@ -72,7 +72,7 @@ export default function PaymentOptionsPage() {
         <h2 className="text-xl font-bold text-white mb-6">How to Pay via EFT</h2>
         <div className="space-y-4">
           {[
-            ["Add to Enquiry",       "Browse our shop and add products to your enquiry list."],
+            ["Add to Cart",          "Browse our shop and add products to your cart."],
             ["Checkout",               "Enter your details and place your order to receive your unique order reference."],
             ["Make Payment",         "Transfer the exact amount to our FNB account using your order reference as the payment reference."],
             ["Upload Proof",         "Upload your proof of payment on the checkout page. We verify and confirm within 2–4 hours."],

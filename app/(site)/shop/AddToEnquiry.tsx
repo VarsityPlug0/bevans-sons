@@ -35,7 +35,7 @@ export default function AddToEnquiry({ id, name, price, imageUrl, category }: Pr
       }}
     >
       {added ? <Check size={12} /> : <ShoppingCart size={12} />}
-      {added ? "Added to Enquiry" : "Add to Enquiry"}
+      {added ? "Added to Cart" : "Add to Cart"}
     </button>
   );
 }
