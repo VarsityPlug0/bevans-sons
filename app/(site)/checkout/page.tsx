@@ -230,7 +230,7 @@ export default function CheckoutPage() {
                 disabled={submitting || !form.name || !form.email || !form.phone || !addr.line1}
                 className="btn-gold w-full py-4 rounded-xl font-bold text-base mt-6 disabled:opacity-50"
               >
-                {submitting ? "Placing Order…" : "Place Order & Get Bank Details"}
+                {submitting ? "Placing Order…" : "Place Order"}
               </button>
             </div>
 
