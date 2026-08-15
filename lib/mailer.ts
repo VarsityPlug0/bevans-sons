@@ -278,38 +278,72 @@ export interface RejectionEmailData {
 export async function sendRejectionEmail(data: RejectionEmailData) {
   const itemRows = data.items.map(i => {
     const lineTotal = (parseFloat(String(i.price).replace(/[^0-9.]/g, "")) * i.qty).toLocaleString("en-ZA");
-    return `<tr>
-      <td style="padding:8px 0;color:#d1d5db;font-size:13px;border-bottom:1px solid ${BORDER}">${i.name} × ${i.qty}</td>
-      <td style="padding:8px 0;text-align:right;color:${GOLD};font-size:13px;font-weight:700;border-bottom:1px solid ${BORDER}">R ${lineTotal}</td>
+    const unitPrice = parseFloat(String(i.price).replace(/[^0-9.]/g, "")).toLocaleString("en-ZA");
+    const thumb = i.imageUrl
+      ? `<img src="${i.imageUrl.startsWith("http") ? i.imageUrl : SITE + i.imageUrl}" alt="${i.name}" width="56" height="56" style="width:56px;height:56px;object-fit:cover;border-radius:8px;display:block;border:1px solid ${BORDER}" />`
+      : `<div style="width:56px;height:56px;background:${DARK2};border:1px solid ${BORDER};border-radius:8px"></div>`;
+    return `
+    <tr>
+      <td style="padding:12px 0;border-bottom:1px solid ${BORDER};width:68px;vertical-align:middle">${thumb}</td>
+      <td style="padding:12px 10px;border-bottom:1px solid ${BORDER};vertical-align:middle">
+        <p style="margin:0 0 3px;color:#e5e7eb;font-size:14px;font-weight:600">${i.name}</p>
+        <p style="margin:0;color:${MUTED};font-size:12px">R ${unitPrice} × ${i.qty}</p>
+      </td>
+      <td style="padding:12px 0;border-bottom:1px solid ${BORDER};text-align:right;vertical-align:middle">
+        <span style="color:${GOLD};font-size:14px;font-weight:700">R ${lineTotal}</span>
+      </td>
     </tr>`;
   }).join("");
 
   const reasonHtml = data.reason
-    ? `<div style="background:${DARK2};border-left:3px solid #ef4444;border-radius:0 10px 10px 0;padding:14px 18px;margin:20px 0">
+    ? `<div style="background:${DARK2};border-left:3px solid #ef4444;border-radius:0 10px 10px 0;padding:16px 20px;margin-bottom:24px">
         <p style="margin:0 0 4px;color:#ef4444;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Reason from our team</p>
         <p style="margin:0;color:#fca5a5;font-size:14px;line-height:1.6">${data.reason}</p>
        </div>`
     : "";
 
   const html = layout(`
-    <div style="text-align:center;margin-bottom:24px">
-      <div style="font-size:44px;line-height:1;margin-bottom:12px">🔔</div>
-      <div style="display:inline-block;background:#ef444422;color:#ef4444;border:1px solid #ef444455;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.05em;margin-bottom:12px">Action Required</div>
-      <h1 style="margin:0 0 8px;color:#f9fafb;font-size:24px;font-weight:900">Payment could not be verified</h1>
-      <p style="margin:0;color:#9ca3af;font-size:14px">Hi ${data.name.split(" ")[0]}, we were unable to verify your proof of payment for order <strong style="color:${GOLD}">${data.ref}</strong>.</p>
+    <!-- Hero -->
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="font-size:48px;line-height:1;margin-bottom:14px">🔔</div>
+      <div style="display:inline-block;background:#ef444420;color:#ef4444;border:1px solid #ef444450;padding:5px 16px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.06em;margin-bottom:14px">Action Required</div>
+      <h1 style="margin:0 0 10px;color:#f9fafb;font-size:26px;font-weight:900;line-height:1.2">Payment could not be verified</h1>
+      <p style="margin:0;color:#9ca3af;font-size:14px;line-height:1.6">Hi <strong style="color:#e5e7eb">${data.name.split(" ")[0]}</strong>, we were unable to verify your proof of payment for order <strong style="color:${GOLD};font-family:monospace">${data.ref}</strong>.</p>
     </div>
 
     ${reasonHtml}
 
-    <p style="margin:0 0 14px;color:#9ca3af;font-size:14px;line-height:1.7">
-      Don&apos;t worry — this happens sometimes. Please make a new payment using the details below and re-upload a clear screenshot or photo of your confirmation.
+    <p style="margin:0 0 24px;color:#9ca3af;font-size:14px;line-height:1.7">
+      Don&apos;t worry — this happens sometimes. Please re-do your payment using the details below and upload a clear screenshot or photo of your confirmation.
     </p>
 
     ${divider()}
 
+    <!-- Order summary with images -->
+    <p style="margin:0 0 14px;color:#e5e7eb;font-size:15px;font-weight:700">✦ Your Order</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:4px">
+      ${itemRows}
+    </table>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:10px 0 28px">
+      <tr>
+        <td style="padding:6px 0;color:${MUTED};font-size:13px">Subtotal</td>
+        <td style="padding:6px 0;text-align:right;color:#d1d5db;font-size:13px">R ${data.total.toLocaleString("en-ZA")}</td>
+      </tr>
+      <tr>
+        <td style="padding:6px 0;color:${MUTED};font-size:13px">Shipping</td>
+        <td style="padding:6px 0;text-align:right;color:#22c55e;font-size:13px;font-weight:700">Free</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 0 0;color:#e5e7eb;font-size:16px;font-weight:800;border-top:1px solid ${BORDER}">Total Due</td>
+        <td style="padding:10px 0 0;text-align:right;color:${GOLD};font-size:20px;font-weight:900;border-top:1px solid ${BORDER}">R ${data.total.toLocaleString("en-ZA")}</td>
+      </tr>
+    </table>
+
+    ${divider()}
+
     <!-- Bank details -->
-    <p style="margin:0 0 12px;color:#e5e7eb;font-size:15px;font-weight:700">✦ Payment Details (EFT)</p>
-    <div style="background:${DARK2};border:1px solid ${BORDER};border-radius:12px;padding:4px 20px;margin-bottom:24px">
+    <p style="margin:0 0 14px;color:#e5e7eb;font-size:15px;font-weight:700">✦ Payment Details (EFT)</p>
+    <div style="background:${DARK2};border:1px solid ${BORDER};border-radius:12px;padding:4px 20px;margin-bottom:28px">
       <table width="100%" cellpadding="0" cellspacing="0">
         ${infoRow("Bank", BANK.bank)}
         ${infoRow("Account Holder", BANK.accountHolder)}
@@ -322,19 +356,7 @@ export async function sendRejectionEmail(data: RejectionEmailData) {
       </table>
     </div>
 
-    <!-- Order summary -->
-    <p style="margin:0 0 12px;color:#e5e7eb;font-size:15px;font-weight:700">✦ Your Order</p>
-    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px">
-      ${itemRows}
-      <tr>
-        <td style="padding:10px 0 0;color:#e5e7eb;font-size:14px;font-weight:700">Total Due</td>
-        <td style="padding:10px 0 0;text-align:right;color:${GOLD};font-size:18px;font-weight:900">R ${data.total.toLocaleString("en-ZA")}</td>
-      </tr>
-    </table>
-
-    ${divider()}
-
-    <p style="margin:0 0 20px;color:#9ca3af;font-size:14px">Once you have made the payment, upload your new proof of payment below — or send it directly on WhatsApp.</p>
+    <p style="margin:0 0 20px;color:#9ca3af;font-size:14px">Once paid, upload your new proof of payment — or send it directly on WhatsApp and we will update your order manually.</p>
     <div>
       ${btn("📤 Upload New Proof", `${SITE}/checkout`, GOLD, BLACK)}
       &nbsp;&nbsp;
