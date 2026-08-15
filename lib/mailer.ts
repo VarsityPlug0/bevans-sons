@@ -1,4 +1,9 @@
 import nodemailer from "nodemailer";
+import path from "path";
+import { existsSync } from "fs";
+
+const LOGO_PATH = path.join(process.cwd(), "public", "logo.jpg");
+const LOGO_CID  = "logo@daisygadgets";
 
 const GOLD        = "#D4AF37";
 const GOLD_LIGHT  = "#f5d76e";
@@ -30,11 +35,16 @@ export async function sendMail(opts: { to: string; subject: string; html: string
   const transporter = createTransporter();
   if (!transporter) { console.error("mailer: env vars missing"); return; }
   try {
+    const attachments: { filename: string; path: string; cid: string }[] = [];
+    if (existsSync(LOGO_PATH)) {
+      attachments.push({ filename: "logo.jpg", path: LOGO_PATH, cid: LOGO_CID });
+    }
     await transporter.sendMail({
       from: `"Daisy Gadgets Co." <${process.env.MAIL_USER}>`,
       to: opts.to,
       subject: opts.subject,
       html: opts.html,
+      attachments,
     });
   } catch (err) { console.error("mailer send error:", err); }
 }
@@ -62,7 +72,7 @@ function layout(content: string, accentBar = ""): string {
             <table width="100%" cellpadding="0" cellspacing="0">
               <tr>
                 <td>
-                  <img src="${SITE}/logo.jpg" alt="Daisy Gadgets Co." height="44" style="height:44px;width:auto;display:block;border:0" />
+                  <img src="cid:${LOGO_CID}" alt="Daisy Gadgets Co." height="44" style="height:44px;width:auto;display:block;border:0" />
                 </td>
                 <td align="right">
                   <a href="${SITE}" style="color:${MUTED};font-size:12px;text-decoration:none">daisygadgetsco.co.za</a>
