@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AIAssistant from "@/components/AIAssistant";
+import LeadCapturePopup from "@/components/LeadCapturePopup";
 import { CartProvider } from "@/components/CartContext";
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -10,6 +11,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       <main className="pt-[116px] pb-[64px] md:pb-0">{children}</main>
       <Footer />
       <AIAssistant />
+      <LeadCapturePopup />
     </CartProvider>
   );
 }

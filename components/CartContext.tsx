@@ -81,7 +81,20 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const ctx: CartContextValue = {
     items, count,
-    add: (item) => dispatch({ type: "ADD", item }),
+    add: (item) => {
+      dispatch({ type: "ADD", item });
+      try {
+        const visitorId = localStorage.getItem("daisy_visitor_id") ?? undefined;
+        const visitorName = localStorage.getItem("daisy_visitor_name") ?? undefined;
+        const visitorPhone = localStorage.getItem("daisy_visitor_phone") ?? undefined;
+        const visitorEmail = localStorage.getItem("daisy_visitor_email") ?? undefined;
+        fetch("/api/track/cart", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ visitorId, visitorName, visitorPhone, visitorEmail, productId: item.id, productName: item.name, price: item.price, category: item.category }),
+        }).catch(() => {});
+      } catch { }
+    },
     remove: (id) => dispatch({ type: "REMOVE", id }),
     setQty: (id, qty) => dispatch({ type: "QTY", id, qty }),
     clear: () => dispatch({ type: "CLEAR" }),
