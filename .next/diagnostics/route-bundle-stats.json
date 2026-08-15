@@ -5,7 +5,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\2h04prnrw3aiw.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
@@ -21,7 +21,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\2nh2ur9u1o56k.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
@@ -37,7 +37,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\2ikibww-pu3t7.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
@@ -53,7 +53,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\33hqb61_2enan.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
@@ -69,7 +69,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\05yztinzdr82f.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
@@ -81,13 +81,13 @@
   },
   {
     "route": "/shop/[id]",
-    "firstLoadUncompressedJsBytes": 537091,
+    "firstLoadUncompressedJsBytes": 537094,
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
-      ".next\\static\\chunks\\18o555fr-22m9.js",
+      ".next\\static\\chunks\\0ug4atrjgeg4r.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
       ".next\\static\\chunks\\36lm--m0zwqtj.js",
@@ -101,7 +101,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\0jio3lvvt4-vw.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
@@ -117,7 +117,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\0jio3lvvt4-vw.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
@@ -133,7 +133,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
@@ -148,7 +148,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
@@ -163,7 +163,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
@@ -178,7 +178,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
@@ -193,7 +193,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
@@ -208,7 +208,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
@@ -223,7 +223,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
@@ -238,7 +238,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
@@ -253,7 +253,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
@@ -268,7 +268,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
@@ -283,7 +283,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
@@ -298,7 +298,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
@@ -313,7 +313,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
@@ -328,7 +328,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
@@ -343,7 +343,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
@@ -358,7 +358,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
@@ -373,7 +373,7 @@
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
-      ".next\\static\\chunks\\06pjqqqm8ymcf.js",
+      ".next\\static\\chunks\\21hlvg4cvyivx.js",
       ".next\\static\\chunks\\3r-ltvu_9kaj4.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",

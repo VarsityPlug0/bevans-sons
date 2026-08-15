@@ -27,7 +27,7 @@ export default function BuyNowButton({ product }: Props) {
       <button
         onClick={() => add(product)}
         className="w-14 h-14 rounded-xl border border-[#2a2a2a] flex items-center justify-center text-gray-400 hover:text-white hover:border-[#D4AF37]/50 transition-colors shrink-0"
-        title="Add to cart"
+        title="Add to Enquiry"
       >
         <ShoppingCart size={20} />
       </button>
