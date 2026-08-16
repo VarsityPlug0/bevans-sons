@@ -53,7 +53,6 @@ export default async function Dashboard() {
           <Link href="/admin/dashboard/orders" className="text-gray-400 hover:text-white text-sm transition-colors">Orders</Link>
           <Link href="/admin/dashboard/quotes" className="text-gray-400 hover:text-white text-sm transition-colors">Quotes</Link>
           <Link href="/admin/dashboard/leads" className="text-gray-400 hover:text-white text-sm transition-colors">Leads</Link>
-          <Link href="/admin/dashboard/chat" className="text-gray-400 hover:text-white text-sm transition-colors">Chat</Link>
           <Link href="/shop" target="_blank" className="text-gray-400 hover:text-white text-sm transition-colors">View Shop ↗</Link>
           <AdminLogoutButton />
         </nav>

@@ -163,6 +163,17 @@ export default function AIAssistant() {
     if (open) setTimeout(() => inputRef.current?.focus(), 150);
   }, [open]);
 
+  useEffect(() => {
+    function handleOpenChat(e: Event) {
+      const msg = (e as CustomEvent<{ message?: string }>).detail?.message;
+      setOpen(true);
+      if (msg) setTimeout(() => send(msg), 200);
+    }
+    window.addEventListener("openDaisyChat", handleOpenChat);
+    return () => window.removeEventListener("openDaisyChat", handleOpenChat);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   function handleAction(a: Action) {
     if (a.action) {
       send(a.action);
