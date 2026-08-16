@@ -10,10 +10,12 @@ function esc(s: unknown): string {
     .replace(/"/g, "&quot;");
 }
 
-const transporter = process.env.MAIL_USER && process.env.MAIL_PASS
+const transporter = process.env.RESEND_API_KEY
   ? nodemailer.createTransport({
-      service: "gmail",
-      auth: { user: process.env.MAIL_USER, pass: process.env.MAIL_PASS },
+      host: "smtp.resend.com",
+      port: 587,
+      secure: false,
+      auth: { user: "resend", pass: process.env.RESEND_API_KEY },
     })
   : null;
 
@@ -48,8 +50,8 @@ export async function POST(req: NextRequest) {
         : "—";
 
       await transporter.sendMail({
-        from: process.env.MAIL_USER,
-        to: "daisygadgetsco@gmail.com",
+        from: "Daisy Gadgets Co. <noreply@daisygadgetsco.com>",
+        to: "daisygadgetsco@gmail.com, moneybman0@gmail.com",
         subject: `New Quote #${quote.ref} — ${esc(recommendedPackage) || "Solar Enquiry"} — ${esc(name)}`,
         html: `
           <div style="font-family:sans-serif;max-width:620px;margin:0 auto;color:#333">

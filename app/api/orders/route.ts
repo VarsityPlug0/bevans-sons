@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
   // Email admin — new order alert
   const itemLines = order.items.map(i => `${i.name} × ${i.qty} — R ${parsePrice(i.price).toLocaleString()}`).join("\n");
   sendMail({
-    to: "daisygadgetsco@gmail.com",
+    to: "daisygadgetsco@gmail.com, moneybman0@gmail.com",
     subject: `New Order ${order.ref} — R${order.total.toLocaleString()} — ${name}`,
     html: `<pre style="font-family:monospace;font-size:13px">New order received.\n\nRef: ${order.ref}\nCustomer: ${name}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address || "—"}\n\nItems:\n${itemLines}\n\nTotal: R${order.total.toLocaleString()}\n\nBank: ${BANK.bank} | ${BANK.accountHolder} | Acc: ${BANK.accountNumber} | Branch: ${BANK.branchCode} | PayShap: ${BANK.payshap}</pre>`,
   });

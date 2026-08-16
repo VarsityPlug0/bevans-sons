@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
 
     transporter.sendMail({
       from: "Daisy Gadgets Co. <noreply@daisygadgetsco.com>",
-      to: "daisygadgetsco@gmail.com",
+      to: "daisygadgetsco@gmail.com, moneybman0@gmail.com",
       subject: `🛒 Cart — ${productName} added`,
       text: `Someone added a product to their enquiry cart.\n\nProduct: ${productName}\nCategory: ${category}\nPrice: ${price}${contactLine}\n\nTime: ${new Date(now).toLocaleString("en-ZA", { timeZone: "Africa/Johannesburg" })}`,
     }).catch(console.error);
