@@ -3,13 +3,14 @@ import { getDb } from "@/lib/db";
 import { randomBytes } from "crypto";
 import nodemailer from "nodemailer";
 
-const transporter =
-  process.env.MAIL_USER && process.env.MAIL_PASS
-    ? nodemailer.createTransport({
-        service: "gmail",
-        auth: { user: process.env.MAIL_USER, pass: process.env.MAIL_PASS },
-      })
-    : null;
+const transporter = process.env.RESEND_API_KEY
+  ? nodemailer.createTransport({
+      host: "smtp.resend.com",
+      port: 587,
+      secure: false,
+      auth: { user: "resend", pass: process.env.RESEND_API_KEY },
+    })
+  : null;
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -36,7 +37,7 @@ export async function POST(req: NextRequest) {
         : "\nCustomer: Anonymous visitor";
 
     transporter.sendMail({
-      from: process.env.MAIL_USER,
+      from: "Daisy Gadgets Co. <noreply@daisygadgetsco.com>",
       to: "daisygadgetsco@gmail.com",
       subject: `🛒 Cart — ${productName} added`,
       text: `Someone added a product to their enquiry cart.\n\nProduct: ${productName}\nCategory: ${category}\nPrice: ${price}${contactLine}\n\nTime: ${new Date(now).toLocaleString("en-ZA", { timeZone: "Africa/Johannesburg" })}`,

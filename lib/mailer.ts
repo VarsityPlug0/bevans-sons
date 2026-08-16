@@ -13,7 +13,7 @@ const DARK2       = "#161616";
 const BORDER      = "#1F1F1F";
 const MUTED       = "#6b7280";
 const WA_NUM      = "27848961782";
-const SITE        = "https://daisygadgetsco.co.za";
+const SITE        = "https://daisygadgetsco.com";
 
 const BANK = {
   bank: "FNB / RMB",
@@ -25,10 +25,14 @@ const BANK = {
 };
 
 function createTransporter() {
-  const user = process.env.MAIL_USER;
-  const pass = process.env.MAIL_PASS;
-  if (!user || !pass) return null;
-  return nodemailer.createTransport({ service: "gmail", auth: { user, pass } });
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) return null;
+  return nodemailer.createTransport({
+    host: "smtp.resend.com",
+    port: 587,
+    secure: false,
+    auth: { user: "resend", pass: apiKey },
+  });
 }
 
 type MailAttachment =
@@ -44,7 +48,7 @@ export async function sendMail(opts: { to: string; subject: string; html: string
       attachments.unshift({ filename: "logo.jpg", path: LOGO_PATH, cid: LOGO_CID });
     }
     await transporter.sendMail({
-      from: `"Daisy Gadgets Co." <${process.env.MAIL_USER}>`,
+      from: `"Daisy Gadgets Co." <noreply@daisygadgetsco.com>`,
       to: opts.to,
       subject: opts.subject,
       html: opts.html,
