@@ -317,14 +317,6 @@ export default function SolarWizard() {
     const pkgId = recommend(answers);
     const pkg = PACKAGES[pkgId];
 
-    const applianceSummary = Object.entries(answers.appliances)
-      .map(([id, qty]) => `${APPLIANCES.find((a) => a.id === id)?.label ?? id} ×${qty}`)
-      .join(", ");
-
-    const waText = encodeURIComponent(
-      `Hi Daisy & Co.,\n\nI completed the Solar Wizard and received this recommendation:\n\nPackage: ${pkg.name} (${pkg.price})\n\nMy Details:\n- Property: ${propertyLabel(answers.propertyType)}\n- Goal: ${goalLabel(answers.mainGoal)}\n- Appliances: ${applianceSummary || "Not specified"}\n- Budget: ${budgetLabel(answers.budget)}\n\nPlease confirm availability and next steps. Thank you.`
-    );
-
     if (submitted) {
       return (
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12 text-center">
@@ -340,9 +332,9 @@ export default function SolarWizard() {
             We have received your request for the <strong className="text-white">{pkg.name}</strong>. Our team will review it and contact you within 24 hours via WhatsApp or email.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href={`https://wa.me/27848961782?text=${waText}`} target="_blank" rel="noopener noreferrer" className="btn-gold px-8 py-3.5 rounded-xl font-bold">
-              Also Chat on WhatsApp
-            </a>
+            <button onClick={() => window.dispatchEvent(new CustomEvent("openDaisyChat"))} className="btn-gold px-8 py-3.5 rounded-xl font-bold">
+              Chat with Us
+            </button>
             <Link href="/" className="btn-outline px-8 py-3.5 rounded-xl">Back to Home</Link>
           </div>
         </div>
@@ -423,13 +415,12 @@ export default function SolarWizard() {
 
         {/* Action buttons */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-          <a
-            href={`https://wa.me/27848961782?text=${waText}`}
-            target="_blank" rel="noopener noreferrer"
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent("openDaisyChat", { detail: { message: `Hi, I used the Solar Wizard and need help choosing the right system. My recommendation was: ${pkg.name} (${pkg.price}).` } }))}
             className="btn-outline py-3.5 rounded-xl text-sm font-bold text-center"
           >
             Talk to an Expert
-          </a>
+          </button>
           <Link href="/solar/compare" className="btn-outline py-3.5 rounded-xl text-sm font-bold text-center">
             Compare All Packages
           </Link>
@@ -500,10 +491,14 @@ export default function SolarWizard() {
               {submitting ? "Submitting..." : "Request Official Quote"}
             </button>
             <p className="text-center text-xs text-gray-600">
-              Or skip the form and{" "}
-              <a href={`https://wa.me/27848961782?text=${waText}`} target="_blank" rel="noopener noreferrer" className="text-green-400 hover:underline">
-                chat on WhatsApp directly
-              </a>
+              Or{" "}
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new CustomEvent("openDaisyChat", { detail: { message: `Hi, I'm interested in the ${pkg.name} solar package (${pkg.price}). Can you help me?` } }))}
+                className="text-[#D4AF37] hover:underline"
+              >
+                chat with us directly
+              </button>
             </p>
           </form>
         </div>

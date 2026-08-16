@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { getSiteImages } from "@/lib/siteImages";
+import ChatButton from "@/components/ChatButton";
 
 export const dynamic = "force-dynamic";
 
@@ -84,14 +85,12 @@ export default function Electronics() {
                     <p className="text-xs text-[#D4AF37] uppercase tracking-wider mb-1.5">{cat.name}</p>
                     <p className="font-semibold text-white text-sm leading-snug mb-2 flex-1">{item.name}</p>
                     <p className="text-[#D4AF37] font-bold text-lg mb-3">{item.price}</p>
-                    <a
-                      href={`https://wa.me/27848961782?text=Hi%2C%20I'm%20interested%20in%20the%20${encodeURIComponent(item.name)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <ChatButton
+                      message={`Hi, I'm interested in the ${item.name} (${item.price}). Can you help me?`}
                       className="btn-gold w-full py-3 rounded-xl text-sm font-bold"
                     >
-                      Enquire Now
-                    </a>
+                      Chat with Us
+                    </ChatButton>
                   </div>
                 </div>
               ))}

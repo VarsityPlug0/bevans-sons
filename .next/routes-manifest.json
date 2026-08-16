@@ -125,6 +125,12 @@
       "namedRegex": "^/admin/dashboard(?:/)?$"
     },
     {
+      "page": "/admin/dashboard/chat",
+      "regex": "^/admin/dashboard/chat(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/dashboard/chat(?:/)?$"
+    },
+    {
       "page": "/admin/dashboard/images",
       "regex": "^/admin/dashboard/images(?:/)?$",
       "routeKeys": {},
@@ -153,6 +159,18 @@
       "regex": "^/admin/dashboard/quotes(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/admin/dashboard/quotes(?:/)?$"
+    },
+    {
+      "page": "/api/admin/chat/reply",
+      "regex": "^/api/admin/chat/reply(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/chat/reply(?:/)?$"
+    },
+    {
+      "page": "/api/admin/chat/sessions",
+      "regex": "^/api/admin/chat/sessions(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/chat/sessions(?:/)?$"
     },
     {
       "page": "/api/admin/login",
@@ -189,6 +207,18 @@
       "regex": "^/api/ai\\-assistant(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/api/ai\\-assistant(?:/)?$"
+    },
+    {
+      "page": "/api/chat/messages",
+      "regex": "^/api/chat/messages(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/chat/messages(?:/)?$"
+    },
+    {
+      "page": "/api/chat/session",
+      "regex": "^/api/chat/session(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/chat/session(?:/)?$"
     },
     {
       "page": "/api/contact",

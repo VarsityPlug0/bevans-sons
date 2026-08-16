@@ -158,15 +158,6 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
               <BuyNowButton product={{ id: product.id, name: product.name, price: product.price, imageUrl: product.imageUrl ?? "", category: product.category }} />
             </div>
             <AddToEnquiry id={product.id} name={product.name} price={product.price} imageUrl={product.imageUrl ?? ""} category={product.category} />
-            {/* Secondary: WhatsApp */}
-            <a
-              href={`https://wa.me/27848961782?text=${waMessage}`}
-              target="_blank" rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 text-sm text-gray-400 hover:text-[#D4AF37] transition-colors py-2"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d={WaPath} /></svg>
-              Enquire on WhatsApp instead
-            </a>
           </div>
         </div>
       </div>

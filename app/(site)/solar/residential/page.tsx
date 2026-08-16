@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { getSiteImages } from "@/lib/siteImages";
+import ChatButton from "@/components/ChatButton";
 
 export const dynamic = "force-dynamic";
 
@@ -134,13 +135,12 @@ export default function ResidentialSolar() {
                 </ul>
               </div>
 
-              <a
-                href={`https://wa.me/27848961782?text=Hi%2C%20I'm%20interested%20in%20the%20${encodeURIComponent(pkg.name)}%20solar%20package%20(${encodeURIComponent(pkg.price)})`}
-                target="_blank" rel="noopener noreferrer"
+              <ChatButton
+                message={`Hi, I'm interested in the ${pkg.name} solar package (${pkg.price}). Can I get a quote?`}
                 className="btn-gold w-full py-4 rounded-xl font-bold text-sm"
               >
-                WhatsApp for Quote
-              </a>
+                Get a Quote
+              </ChatButton>
             </div>
           </div>
         ))}

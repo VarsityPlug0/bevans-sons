@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Check, X } from "lucide-react";
+import ChatButton from "@/components/ChatButton";
 
 export const metadata: Metadata = {
   title: "Compare Solar Packages — Essential, Premium & Business Pro | Daisy & Co.",
@@ -135,13 +136,12 @@ export default function ComparePage() {
               ))}
             </div>
             <div className="p-6 border-t" style={{ borderColor: "#1F1F1F" }}>
-              <a
-                href={`https://wa.me/27848961782?text=Hi%2C%20I'm%20interested%20in%20the%20${encodeURIComponent(pkg.name)}%20solar%20package%20(${encodeURIComponent(pkg.price)})`}
-                target="_blank" rel="noopener noreferrer"
+              <ChatButton
+                message={`Hi, I'm interested in the ${pkg.name} solar package (${pkg.price}). Can you help me?`}
                 className="btn-gold w-full py-3.5 rounded-xl font-bold text-sm"
               >
                 Request This Package
-              </a>
+              </ChatButton>
             </div>
           </div>
         ))}
@@ -206,13 +206,12 @@ export default function ComparePage() {
           {packages.map((pkg) => (
             <div key={pkg.id} className="p-4 border-r border-[#1F1F1F]"
               style={{ background: pkg.highlight ? "rgba(212,175,55,0.03)" : "transparent" }}>
-              <a
-                href={`https://wa.me/27848961782?text=Hi%2C%20I'm%20interested%20in%20the%20${encodeURIComponent(pkg.name)}%20solar%20package%20(${encodeURIComponent(pkg.price)})`}
-                target="_blank" rel="noopener noreferrer"
+              <ChatButton
+                message={`Hi, I'm interested in the ${pkg.name} solar package (${pkg.price}). Can you help me?`}
                 className={pkg.highlight ? "btn-gold w-full py-3.5 rounded-xl font-bold text-sm" : "btn-outline w-full py-3.5 rounded-xl font-bold text-sm"}
               >
                 Request This
-              </a>
+              </ChatButton>
             </div>
           ))}
         </div>
