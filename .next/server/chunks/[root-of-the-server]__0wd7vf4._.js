@@ -101,4 +101,4 @@ module.exports=[85148,(e,t,r)=>{t.exports=e.x("better-sqlite3-90e2652d1716b047",
     VALUES (@id, @ref, @name, @email, @phone, @address, @items, @total, 'pending', 'eft', @eft_reference, @now, @now)
   `).run({id:s,ref:n,name:e.name,email:e.email,phone:e.phone,address:e.address,items:JSON.stringify(e.items),total:e.total,eft_reference:e.eft_reference??null,now:o}),a(s)},"getOrder",0,a,"listOrders",0,function(){return(0,t.getDb)().prepare("SELECT * FROM orders ORDER BY createdAt DESC").all().map(i)},"updateOrder",0,function(e,r){let i=(0,t.getDb)(),o=[],s={id:e,now:new Date().toISOString()};return void 0!==r.status&&(o.push("status = @status"),s.status=r.status),void 0!==r.proof_url&&(o.push("proof_url = @proof_url"),s.proof_url=r.proof_url),void 0!==r.notes&&(o.push("notes = @notes"),s.notes=r.notes),void 0!==r.eft_reference&&(o.push("eft_reference = @eft_reference"),s.eft_reference=r.eft_reference),o.length&&(o.push("updatedAt = @now"),i.prepare(`UPDATE orders SET ${o.join(", ")} WHERE id = @id`).run(s)),a(e)}])}];
 
-//# sourceMappingURL=%5Broot-of-the-server%5D__0bdzd9j._.js.map
+//# sourceMappingURL=%5Broot-of-the-server%5D__0wd7vf4._.js.map

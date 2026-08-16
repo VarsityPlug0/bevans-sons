@@ -35,6 +35,20 @@ export async function POST(req: NextRequest) {
   if (typeof phone !== "string" || phone.length > 30) return NextResponse.json({ error: "Invalid phone" }, { status: 400 });
   if (items.length > 50) return NextResponse.json({ error: "Too many items" }, { status: 400 });
 
+  // Duplicate guard: same phone + same first item within 3 minutes
+  const { getDb } = await import("@/lib/db");
+  const db = getDb();
+  const threeMinAgo = new Date(Date.now() - 3 * 60 * 1000).toISOString();
+  const firstItemId = String(items[0]?.id ?? "");
+  const dup = db.prepare(`
+    SELECT o.id FROM orders o
+    WHERE o.phone = ? AND o.createdAt > ? AND json_extract(o.items, '$[0].id') = ?
+    LIMIT 1
+  `).get(phone.trim(), threeMinAgo, firstItemId);
+  if (dup) {
+    return NextResponse.json({ ok: true, ref: "DUPLICATE", duplicate: true }, { status: 200 });
+  }
+
   const validatedItems: { id: string; name: string; price: string; qty: number; imageUrl: string }[] = [];
   let computedTotal = 0;
 
@@ -56,7 +70,7 @@ export async function POST(req: NextRequest) {
   });
 
   // Email admin — new order alert
-  const itemLines = order.items.map(i => `${i.name} × ${i.qty} — R ${Number(i.price).toLocaleString()}`).join("\n");
+  const itemLines = order.items.map(i => `${i.name} × ${i.qty} — R ${parsePrice(i.price).toLocaleString()}`).join("\n");
   sendMail({
     to: "daisygadgetsco@gmail.com",
     subject: `New Order ${order.ref} — R${order.total.toLocaleString()} — ${name}`,

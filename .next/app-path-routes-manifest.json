@@ -28,6 +28,7 @@
   "/_not-found/page": "/_not-found",
   "/admin/dashboard/edit/[id]/page": "/admin/dashboard/edit/[id]",
   "/admin/dashboard/images/page": "/admin/dashboard/images",
+  "/admin/dashboard/leads/page": "/admin/dashboard/leads",
   "/admin/dashboard/new/page": "/admin/dashboard/new",
   "/admin/dashboard/orders/page": "/admin/dashboard/orders",
   "/admin/dashboard/page": "/admin/dashboard",

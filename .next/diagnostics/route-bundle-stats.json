@@ -449,6 +449,19 @@
     ]
   },
   {
+    "route": "/admin/dashboard/leads",
+    "firstLoadUncompressedJsBytes": 465654,
+    "firstLoadChunkPaths": [
+      ".next\\static\\chunks\\44oxwbh__ebkl.js",
+      ".next\\static\\chunks\\0axdrs6tow-4n.js",
+      ".next\\static\\chunks\\3ivcc6t1s04dh.js",
+      ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
+      ".next\\static\\chunks\\36lm--m0zwqtj.js",
+      ".next\\static\\chunks\\1pkas5ishxw0p.js",
+      ".next\\static\\chunks\\turbopack-2r8xr2_uqef0-.js"
+    ]
+  },
+  {
     "route": "/admin/dashboard/images",
     "firstLoadUncompressedJsBytes": 463645,
     "firstLoadChunkPaths": [

@@ -115,4 +115,4 @@ module.exports=[85148,(e,t,r)=>{t.exports=e.x("better-sqlite3-90e2652d1716b047",
     WHERE id = @id
   `).run({id:e,updatedAt:i,name:r.name??null,price:r.price??null,category:r.category??null,description:r.description??null,imageUrl:r.imageUrl??null,inStock:void 0!==r.inStock?+!!r.inStock:null,featured:void 0!==r.featured?+!!r.featured:null}),a(e)}])}];
 
-//# sourceMappingURL=%5Broot-of-the-server%5D__1lcwr_i._.js.map
+//# sourceMappingURL=%5Broot-of-the-server%5D__0i7bp5-._.js.map

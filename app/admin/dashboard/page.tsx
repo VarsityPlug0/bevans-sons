@@ -26,7 +26,7 @@ export default async function Dashboard() {
     { label: "Featured",       value: featured,        link: null },
     { label: "New Quotes",     value: newQuotes,       link: "/admin/dashboard/quotes" },
     { label: "Pending Orders", value: pendingOrders,   link: "/admin/dashboard/orders" },
-    { label: "Leads",          value: leads.length,    link: null },
+    { label: "Leads",          value: leads.length,    link: "/admin/dashboard/leads" },
   ];
 
   return (
@@ -52,6 +52,7 @@ export default async function Dashboard() {
           <Link href="/admin/dashboard/images" className="text-gray-400 hover:text-white text-sm transition-colors">Site Images</Link>
           <Link href="/admin/dashboard/orders" className="text-gray-400 hover:text-white text-sm transition-colors">Orders</Link>
           <Link href="/admin/dashboard/quotes" className="text-gray-400 hover:text-white text-sm transition-colors">Quotes</Link>
+          <Link href="/admin/dashboard/leads" className="text-gray-400 hover:text-white text-sm transition-colors">Leads</Link>
           <Link href="/shop" target="_blank" className="text-gray-400 hover:text-white text-sm transition-colors">View Shop ↗</Link>
           <AdminLogoutButton />
         </nav>
@@ -89,6 +90,7 @@ export default async function Dashboard() {
           {[
             { label: "Site Images", href: "/admin/dashboard/images" },
             { label: "Quotes",      href: "/admin/dashboard/quotes" },
+            { label: "Leads",       href: "/admin/dashboard/leads" },
             { label: "View Shop",   href: "/shop" },
           ].map((l) => (
             <Link key={l.href} href={l.href} target={l.href === "/shop" ? "_blank" : undefined}

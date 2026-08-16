@@ -131,6 +131,12 @@
       "namedRegex": "^/admin/dashboard/images(?:/)?$"
     },
     {
+      "page": "/admin/dashboard/leads",
+      "regex": "^/admin/dashboard/leads(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/dashboard/leads(?:/)?$"
+    },
+    {
       "page": "/admin/dashboard/new",
       "regex": "^/admin/dashboard/new(?:/)?$",
       "routeKeys": {},

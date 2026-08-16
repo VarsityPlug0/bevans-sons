@@ -95,3 +95,13 @@ export function saveLead(data: {
 export function getLeads() {
   return getDb().prepare("SELECT * FROM leads ORDER BY createdAt DESC").all();
 }
+
+export function getCartEvents() {
+  return getDb().prepare(`
+    SELECT c.*, v.name AS visitorName, v.phone AS visitorPhone, v.email AS visitorEmail
+    FROM cart_events c
+    LEFT JOIN visitors v ON c.visitorId = v.id
+    ORDER BY c.createdAt DESC
+    LIMIT 200
+  `).all();
+}
