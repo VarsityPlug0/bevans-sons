@@ -59,8 +59,8 @@ export default async function SpecialOffersPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {products.map((p) => {
-            const original = parsePrice(p.price);
-            const discounted = Math.round(original * 0.7);
+            const discounted = parsePrice(p.price);
+            const original = Math.round(discounted / 0.7);
             return (
               <Link key={p.id} href={`/shop/${p.id}`}
                 className="bg-[#111111] border border-[#1F1F1F] rounded-2xl overflow-hidden card-hover flex flex-col group">
