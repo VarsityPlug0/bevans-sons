@@ -27,6 +27,16 @@ export function getProducts(): Product[] {
     .map(toProduct);
 }
 
+export const SALE_CATEGORY_LIST = ["Home Appliances", "Tablets", "Tablets & Watches", "Wearables"];
+
+export function getSaleProducts(): Product[] {
+  const placeholders = SALE_CATEGORY_LIST.map(() => "?").join(", ");
+  return getDb()
+    .prepare(`SELECT * FROM products WHERE inStock = 1 AND category IN (${placeholders}) ORDER BY createdAt DESC`)
+    .all(...SALE_CATEGORY_LIST)
+    .map(toProduct);
+}
+
 export function getProduct(id: string): Product | undefined {
   const row = getDb().prepare("SELECT * FROM products WHERE id = ?").get(id);
   return row ? toProduct(row) : undefined;

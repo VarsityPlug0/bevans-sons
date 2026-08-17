@@ -1,4 +1,4 @@
-import { getProducts } from "@/lib/products";
+import { getSaleProducts } from "@/lib/products";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
@@ -17,8 +17,7 @@ function parsePrice(p: string): number {
 }
 
 export default async function SpecialOffersPage() {
-  const SALE_CATEGORIES = ["Home Appliances", "Tablets", "Tablets & Watches", "Wearables"];
-  const products = getProducts().filter((p) => p.inStock && SALE_CATEGORIES.includes(p.category));
+  const products = getSaleProducts();
 
   return (
     <div className="max-w-7xl mx-auto px-5 sm:px-8 py-16">
