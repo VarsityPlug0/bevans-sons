@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Special Offers — 30% OFF | Daisy Gadgets Co.",
-  description: "Shop our August to December special — 30% OFF everything. Free worldwide delivery. Orders over R10,000 get an extra 25% discount.",
+  description: "Shop our August to December special — 30% OFF Home Appliances, Tablets & Watches. Free worldwide delivery. Orders over R10,000 get an extra 25% discount.",
 };
 
 function parsePrice(p: string): number {
@@ -17,7 +17,8 @@ function parsePrice(p: string): number {
 }
 
 export default async function SpecialOffersPage() {
-  const products = getProducts().filter((p) => p.inStock);
+  const SALE_CATEGORIES = ["Home Appliances", "Tablets", "Tablets & Watches", "Wearables"];
+  const products = getProducts().filter((p) => p.inStock && SALE_CATEGORIES.includes(p.category));
 
   return (
     <div className="max-w-7xl mx-auto px-5 sm:px-8 py-16">
@@ -36,6 +37,9 @@ export default async function SpecialOffersPage() {
           <h1 style={{ fontFamily: "var(--font-outfit)", fontWeight: 900, fontSize: "clamp(2.5rem, 6vw, 4.5rem)", color: "#0A0A0A", lineHeight: 1.05, marginBottom: 12 }}>
             30% OFF Everything
           </h1>
+          <p style={{ color: "#1a1200", fontSize: 15, fontWeight: 600, marginBottom: 6 }}>
+            Home Appliances · Tablets · Watches
+          </p>
           <p style={{ color: "#1a1200", fontSize: 17, fontWeight: 500, marginBottom: 8 }}>
             Plus orders over R10,000 receive an additional 25% bulk discount.
           </p>
@@ -46,7 +50,7 @@ export default async function SpecialOffersPage() {
       </div>
 
       <div className="flex items-center gap-5 mb-8">
-        <h2 className="text-2xl font-bold text-white whitespace-nowrap">All Products on Sale</h2>
+        <h2 className="text-2xl font-bold text-white whitespace-nowrap">Home Appliances, Tablets & Watches on Sale</h2>
         <div className="flex-1 h-px bg-[#1F1F1F]" />
         <span className="text-[#D4AF37] text-sm font-semibold">{products.length} products</span>
       </div>
