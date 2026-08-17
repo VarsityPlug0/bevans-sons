@@ -1,15 +1,16 @@
 module.exports=[66879,a=>{"use strict";var b=a.i(85148),c=a.i(14747),d=a.i(22734);let e=process.env.DATA_DIR??c.default.join(process.cwd(),"data"),f=c.default.join(e,"daisy.db"),g=[c.default.join(e,"products-backup.json"),c.default.join(process.cwd(),"data","products.json")],h=null;a.s(["getDb",0,function a(){return h||((0,d.existsSync)(e)||(0,d.mkdirSync)(e,{recursive:!0}),(h=new b.default(f)).pragma("journal_mode = WAL"),h.pragma("foreign_keys = ON"),function(a){a.exec(`
     CREATE TABLE IF NOT EXISTS products (
-      id          TEXT PRIMARY KEY,
-      name        TEXT NOT NULL,
-      price       TEXT NOT NULL,
-      category    TEXT NOT NULL,
-      description TEXT NOT NULL DEFAULT '',
-      imageUrl    TEXT NOT NULL DEFAULT '',
-      inStock     INTEGER NOT NULL DEFAULT 1,
-      featured    INTEGER NOT NULL DEFAULT 0,
-      createdAt   TEXT NOT NULL,
-      updatedAt   TEXT NOT NULL
+      id            TEXT PRIMARY KEY,
+      name          TEXT NOT NULL,
+      price         TEXT NOT NULL,
+      originalPrice TEXT NOT NULL DEFAULT '',
+      category      TEXT NOT NULL,
+      description   TEXT NOT NULL DEFAULT '',
+      imageUrl      TEXT NOT NULL DEFAULT '',
+      inStock       INTEGER NOT NULL DEFAULT 1,
+      featured      INTEGER NOT NULL DEFAULT 0,
+      createdAt     TEXT NOT NULL,
+      updatedAt     TEXT NOT NULL
     );
 
     CREATE TABLE IF NOT EXISTS leads (
@@ -110,7 +111,7 @@ module.exports=[66879,a=>{"use strict";var b=a.i(85148),c=a.i(14747),d=a.i(22734
     CREATE TABLE IF NOT EXISTS migrations (
       name TEXT PRIMARY KEY
     );
-  `);try{a.exec("ALTER TABLE orders ADD COLUMN bank_id TEXT")}catch{}try{a.exec("ALTER TABLE orders ADD COLUMN tracking_number TEXT")}catch{}}(h),function(a){if(!a.prepare("SELECT name FROM migrations WHERE name = ?").get("json_import_gadgets_v1")){for(let b of g)if((0,d.existsSync)(b))try{let c=JSON.parse((0,d.readFileSync)(b,"utf-8"));if(Array.isArray(c)&&c.length>0){a.prepare("DELETE FROM products").run();let b=a.prepare(`
+  `);try{a.exec("ALTER TABLE orders ADD COLUMN bank_id TEXT")}catch{}try{a.exec("ALTER TABLE orders ADD COLUMN tracking_number TEXT")}catch{}}(h),function(a){try{a.exec("ALTER TABLE products ADD COLUMN originalPrice TEXT NOT NULL DEFAULT ''")}catch{}}(h),function(a){if(!a.prepare("SELECT name FROM migrations WHERE name = ?").get("json_import_gadgets_v1")){for(let b of g)if((0,d.existsSync)(b))try{let c=JSON.parse((0,d.readFileSync)(b,"utf-8"));if(Array.isArray(c)&&c.length>0){a.prepare("DELETE FROM products").run();let b=a.prepare(`
           INSERT OR REPLACE INTO products
             (id, name, price, category, description, imageUrl, inStock, featured, createdAt, updatedAt)
           VALUES

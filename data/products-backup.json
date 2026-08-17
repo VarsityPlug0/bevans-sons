@@ -9,7 +9,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "fridge-120-min",
@@ -21,7 +22,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "wm-12kg-fl",
@@ -33,7 +35,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "wm-12kg-tl",
@@ -45,7 +48,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "mw-15l",
@@ -57,7 +61,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "wm-15kg-tl",
@@ -69,7 +74,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "fridge-200-bar",
@@ -81,7 +87,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "mw-20l",
@@ -93,7 +100,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "ov-air-25",
@@ -105,7 +113,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "mw-25l-c",
@@ -117,7 +126,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "wd-rw-hcc",
@@ -129,7 +139,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "mw-30l",
@@ -141,7 +152,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "fridge-320-top",
@@ -153,7 +165,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "ov-conv-45",
@@ -165,7 +178,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "mw-45l",
@@ -177,7 +191,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "fridge-460-db",
@@ -189,7 +204,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "fridge-580-db",
@@ -201,7 +217,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "ov-bic-60",
@@ -213,7 +230,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "ov-60cm-ss",
@@ -225,7 +243,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "fridge-690-ss",
@@ -237,7 +256,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "wm-6kg-tl",
@@ -249,7 +269,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "wm-7kg-fl",
@@ -261,7 +282,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "wm-8kg-fl",
@@ -273,7 +295,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "wm-8kg-tl",
@@ -285,7 +308,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "ov-90cm-ss",
@@ -297,7 +321,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "wd-comp-hot",
@@ -309,7 +334,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "wd-filt-hc",
@@ -321,7 +347,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "wd-floor-c",
@@ -333,7 +360,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "wd-pou-hc",
@@ -345,7 +373,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "wd-portable",
@@ -357,7 +386,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "wd-smart",
@@ -369,7 +399,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "wd-table-hc",
@@ -381,7 +412,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "baby-stroller-3",
@@ -393,7 +425,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "baby-hchair-adj",
@@ -405,7 +438,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "baby-walker",
@@ -417,7 +451,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "baby-rocker",
@@ -429,7 +464,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "baby-hchair-fld",
@@ -441,7 +477,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "baby-stroller-lt",
@@ -453,7 +490,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "baby-booster",
@@ -465,7 +503,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "baby-crib-rock",
@@ -477,7 +516,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "lamborghini-huracan-24v-1seat",
@@ -489,7 +529,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "lamborghini-huracan-24v-2seat",
@@ -501,7 +542,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "lamborghini-huracan-sto-drift",
@@ -513,7 +555,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "lamborghini-revuelto-12v",
@@ -525,7 +568,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "lamborghini-urus-12v-suv",
@@ -537,7 +581,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "prt-bro-las",
@@ -549,7 +594,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "prt-can-mfp",
@@ -561,7 +607,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "prt-ep-eco",
@@ -573,7 +620,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "prt-hp-ink",
@@ -585,7 +633,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "prt-hp-las",
@@ -597,7 +646,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "prt-xer-mfp",
@@ -609,7 +659,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sofa-2-seater",
@@ -621,7 +672,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "electric-reclining-sofa-3",
@@ -633,7 +685,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "sofa-lt-3s",
@@ -645,7 +698,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sofa-3-seater",
@@ -657,7 +711,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sofa-5-piece",
@@ -669,7 +724,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sofa-7-piece",
@@ -681,7 +737,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "asgard-4poster-queen",
@@ -693,7 +750,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "ashley-power-reclining-sofa",
@@ -705,7 +763,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "bed-bunk",
@@ -717,7 +776,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "camila-bed-double",
@@ -729,7 +789,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "sofa-chaise",
@@ -741,7 +802,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "cloud-nine-memory-double",
@@ -753,7 +815,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "cloudrest-sofa-2-seater",
@@ -765,7 +828,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "cocicraft-sawyer-double-xl",
@@ -777,7 +841,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "comfy-bluetooth-cinema-sofa",
@@ -789,7 +854,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "danny-home-ribbed-sofa",
@@ -801,7 +867,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "bed-double-lt",
@@ -813,7 +880,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "edblo-pocket-spring-king-xl",
@@ -825,7 +893,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "sofa-pouf",
@@ -837,7 +906,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "forty-winks-dreamer-queen",
@@ -849,7 +919,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "jax-smart-sofa-coffee-table",
@@ -861,7 +932,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "bed-kids",
@@ -873,7 +945,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "bed-king-fab",
@@ -885,7 +958,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "bed-king-lt",
@@ -897,7 +971,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "large-deep-sofa-3-seater",
@@ -909,7 +984,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "sofa-lt-recliner",
@@ -921,7 +997,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "luxury-leather-sofa-3-seater",
@@ -933,7 +1010,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "modern-luxury-sofa-2-seater",
@@ -945,7 +1023,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "sofa-ottoman",
@@ -957,7 +1036,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "bed-queen-fab",
@@ -969,7 +1049,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "bed-queen-lt",
@@ -981,7 +1062,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "restonic-comfort-queen",
@@ -993,7 +1075,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "riveiera-sofa-3-seater",
@@ -1005,7 +1088,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "sealy-luxury-king",
@@ -1017,7 +1101,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "sofa-single",
@@ -1029,7 +1114,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "bed-single-lt",
@@ -1041,7 +1127,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "arcade-stick",
@@ -1053,7 +1140,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "gpc-rtx3080",
@@ -1065,7 +1153,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "gpc-rtx4070",
@@ -1077,7 +1166,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "gpc-rtx4090",
@@ -1089,7 +1179,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "gpc-ryzen9",
@@ -1101,7 +1192,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "log-g-pedal",
@@ -1113,7 +1205,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "log-g-shift",
@@ -1125,7 +1218,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "log-g29",
@@ -1137,7 +1231,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "log-g920",
@@ -1149,7 +1244,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "log-g923",
@@ -1161,7 +1257,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "switch-lite",
@@ -1173,7 +1270,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "switch-oled",
@@ -1185,7 +1283,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "ps4-pro",
@@ -1197,7 +1296,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "ps4-slim",
@@ -1209,7 +1309,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "ps5-dig",
@@ -1221,7 +1322,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "ps5-disc",
@@ -1233,7 +1335,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "gpc-starter",
@@ -1245,7 +1348,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "xbox-one-s",
@@ -1257,7 +1361,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "xbox-ss",
@@ -1269,7 +1374,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "xbox-sx",
@@ -1281,7 +1387,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "logitech-g923-ps-shifter",
@@ -1293,7 +1400,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "logitech-g923-xbox-shifter",
@@ -1305,7 +1413,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "logitech-g923-ps-pc",
@@ -1317,7 +1426,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "logitech-g923-premium-set",
@@ -1329,7 +1439,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "logitech-g923-xbox-pc",
@@ -1341,7 +1452,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "ps5-pro-2tb",
@@ -1353,7 +1465,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "ps5-slim-fortnite-bundle",
@@ -1365,7 +1478,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "ps5-slim-digital-1tb",
@@ -1377,7 +1491,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "ps5-slim-disc-1tb",
@@ -1389,7 +1504,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "ps5-standard-gt7-bundle",
@@ -1401,7 +1517,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "xbox-series-s-1tb",
@@ -1413,7 +1530,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "xbox-series-s-512gb",
@@ -1425,7 +1543,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "xbox-series-x-1tb",
@@ -1437,7 +1556,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "xbox-series-x-digital",
@@ -1449,7 +1569,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "xbox-series-x-galaxy-black",
@@ -1461,7 +1582,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "asus-rog-rtx4060ti",
@@ -1473,7 +1595,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "hp-omen-rtx4070-super",
@@ -1485,7 +1608,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "lenovo-legion-rtx4070",
@@ -1497,7 +1621,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "msi-gaming-rtx4060",
@@ -1509,7 +1634,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "pcbuilder-defender-ryzen5",
@@ -1521,7 +1647,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "braai-camp-gas",
@@ -1533,7 +1660,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "door-armrd",
@@ -1545,7 +1673,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "braai-barrel",
@@ -1557,7 +1686,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "door-burgr",
@@ -1569,7 +1699,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sink-comp",
@@ -1581,7 +1712,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sink-corner",
@@ -1593,7 +1725,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sink-dbl-pt",
@@ -1605,7 +1738,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sink-dbl-ss",
@@ -1617,7 +1751,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "door-garage-d",
@@ -1629,7 +1764,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "door-sec-dbl",
@@ -1641,7 +1777,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "braai-elec",
@@ -1653,7 +1790,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sink-farm",
@@ -1665,7 +1803,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "door-fold-patio",
@@ -1677,7 +1816,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "braai-port-char",
@@ -1689,7 +1829,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sink-sgl-ss",
@@ -1701,7 +1842,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "door-garage-s",
@@ -1713,7 +1855,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "door-slid",
@@ -1725,7 +1868,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sink-bar",
@@ -1737,7 +1881,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sink-workstat",
@@ -1749,7 +1894,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "door-sec-std",
@@ -1761,7 +1907,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "braai-weber-gen",
@@ -1773,7 +1920,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "braai-weber-ket",
@@ -1785,7 +1933,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "braai-weber-smoke",
@@ -1797,7 +1946,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "braai-weber-gas5",
@@ -1809,7 +1959,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "bennett-read-sponono-7kg",
@@ -1821,7 +1972,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "bennett-read-top-loader-15kg",
@@ -1833,7 +1985,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "bosch-series4-dishwasher-14",
@@ -1845,7 +1998,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "bosch-series4-front-loader-9kg",
@@ -1857,7 +2011,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "bosch-fridge-346l",
@@ -1869,7 +2024,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "defy-ddw242-13-place",
@@ -1881,7 +2037,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "defy-dishwasher-13-place",
@@ -1893,7 +2050,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "defy-top-loader-14kg",
@@ -1905,7 +2063,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "defy-top-loader-8kg",
@@ -1917,7 +2076,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "defy-fridge-335l",
@@ -1929,7 +2089,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "hisense-bottom-freezer-326l",
@@ -1941,7 +2102,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "hisense-front-loader-9kg",
@@ -1953,7 +2115,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "hisense-dishwasher-12-place",
@@ -1965,7 +2128,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "kic-fridge-freezer-276l",
@@ -1977,7 +2141,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "lg-ai-direct-drive-10kg",
@@ -1989,7 +2154,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "midea-countertop-dishwasher-6",
@@ -2001,7 +2167,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "midea-upright-231l",
@@ -2013,7 +2180,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "samsung-fridge-freezer-321l",
@@ -2025,7 +2193,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "samsung-front-loader-8kg",
@@ -2037,7 +2206,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "bennett-read-microwave-20l",
@@ -2049,7 +2219,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "bosch-series4-oven-hob-60cm",
@@ -2061,7 +2232,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "defy-oven-hob-60cm",
@@ -2073,7 +2245,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "defy-solo-microwave-34l",
@@ -2085,7 +2258,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "falco-combi-oven-ceran-60cm",
@@ -2097,7 +2271,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "hisense-microwave-oven-28l",
@@ -2109,7 +2284,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "hisense-oven-hob-60cm",
@@ -2121,7 +2297,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "midea-microwave-20l",
@@ -2133,7 +2310,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "samsung-grill-microwave-40l",
@@ -2145,7 +2323,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "univa-u336b-oven-hob-60cm",
@@ -2157,7 +2336,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "lap-asus-rog",
@@ -2169,7 +2349,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "lap-acer-pred",
@@ -2181,7 +2362,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "lap-budget",
@@ -2193,7 +2375,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "lap-dell-xps",
@@ -2205,7 +2388,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "lap-hp-spec",
@@ -2217,7 +2401,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "lap-len-x1",
@@ -2229,7 +2414,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "lap-mba-m2",
@@ -2241,7 +2427,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "lap-mbp-m2",
@@ -2253,7 +2440,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "lap-mbp-m3",
@@ -2265,7 +2453,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "lap-ms-surf",
@@ -2277,7 +2466,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "lap-sam-book",
@@ -2289,7 +2479,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "asus-vivobook-go-512gb",
@@ -2301,7 +2492,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "acer-aspire-lite-256gb",
@@ -2313,7 +2505,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "macbook-air-13-m4-256gb",
@@ -2325,7 +2518,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "macbook-air-13-m5-256gb",
@@ -2337,7 +2531,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "macbook-air-15-m4-256gb",
@@ -2349,7 +2544,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "macbook-neo-a18-pro-256gb",
@@ -2361,7 +2557,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "macbook-pro-14-m5-512gb",
@@ -2373,7 +2570,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "dell-pro-15-512gb",
@@ -2385,7 +2583,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "hp-250-g9-512gb",
@@ -2397,7 +2596,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "packard-bell-senna-r32",
@@ -2409,7 +2609,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "brother-hl1210w-wifi",
@@ -2421,7 +2622,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "canon-isenys-lbp6030b",
@@ -2433,7 +2635,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "hp-laserjet-m111w",
@@ -2445,7 +2648,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "pantum-bp2305w-wifi",
@@ -2457,7 +2661,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "pantum-p2512w-wifi",
@@ -2469,7 +2674,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "xerox-b230-mono-laser",
@@ -2481,7 +2687,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "sam-s23u",
@@ -2493,7 +2700,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sam-s24",
@@ -2505,7 +2713,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sam-s24u",
@@ -2517,7 +2726,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sam-s24p",
@@ -2529,7 +2739,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sam-s25",
@@ -2541,7 +2752,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sam-s25u",
@@ -2553,7 +2765,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sam-s25p",
@@ -2565,7 +2778,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "iphone-13-pro-max-256",
@@ -2577,7 +2791,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "iphone-14-pro-max-256",
@@ -2589,7 +2804,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "iph-15",
@@ -2601,7 +2817,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "iph-15-p",
@@ -2613,7 +2830,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "iphone-12-pro-max-256",
@@ -2625,7 +2843,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2026-08-14T12:02:46.573Z"
+    "updatedAt": "2026-08-14T12:02:46.573Z",
+    "originalPrice": ""
   },
   {
     "id": "iph-15-pm",
@@ -2637,7 +2856,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "iphone-15-pro-max-256",
@@ -2649,7 +2869,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "iph-16",
@@ -2661,7 +2882,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "iph-16-p",
@@ -2673,7 +2895,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "iph-16-pm",
@@ -2685,7 +2908,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "iphone-16-pro-max-256",
@@ -2697,7 +2921,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "iphone-17-pro-max-256",
@@ -2709,7 +2934,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "bat-100ah-agm",
@@ -2721,7 +2947,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "bat-100ah-li",
@@ -2733,7 +2960,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sol-100w",
@@ -2745,7 +2973,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "inv-10kva-hb",
@@ -2757,7 +2986,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "bat-12v-ups",
@@ -2769,7 +2999,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "bat-150ah-gel",
@@ -2781,7 +3012,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sol-150w",
@@ -2793,7 +3025,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "gen-15kva-di",
@@ -2805,7 +3038,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "inv-1kva-ups",
@@ -2817,7 +3051,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "bat-200ah-agm",
@@ -2829,7 +3064,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "bat-200ah-gel",
@@ -2841,7 +3077,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "bat-200ah-li",
@@ -2853,7 +3090,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sol-200w",
@@ -2865,7 +3103,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "gen-20kva-di",
@@ -2877,7 +3116,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "inv-2kva-ups",
@@ -2889,7 +3129,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sol-300w",
@@ -2901,7 +3142,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "inv-3kva-hb",
@@ -2913,7 +3155,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "inv-3kva-off",
@@ -2925,7 +3168,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "gen-3kva-pe",
@@ -2937,7 +3181,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sol-kit-3k",
@@ -2949,7 +3194,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sol-400w",
@@ -2961,7 +3207,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "bat-pack-4li",
@@ -2973,7 +3220,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sol-500w",
@@ -2985,7 +3233,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "inv-5kva-hb",
@@ -2997,7 +3246,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "inv-5kva-off",
@@ -3009,7 +3259,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "gen-5kva-pe",
@@ -3021,7 +3272,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "sol-kit-5k",
@@ -3033,7 +3285,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "inv-8kva-hb",
@@ -3045,7 +3298,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "gen-8kva-pe",
@@ -3057,7 +3311,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "bess-10kwh-lifepo",
@@ -3069,7 +3324,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "cnbm-330w-mono",
@@ -3081,7 +3337,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "canadian-solar-550w",
@@ -3093,7 +3350,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "canadian-solar-610w",
@@ -3105,7 +3363,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "deye-hybrid-5kw",
@@ -3117,7 +3376,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "deye-sun-8k-hybrid",
@@ -3129,7 +3389,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "dyness-5kwh-wall-mount",
@@ -3141,7 +3402,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "ecoflow-portable-160w",
@@ -3153,7 +3415,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "freedom-won-5kwh-48v",
@@ -3165,7 +3428,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "geewiz-50ah-lifepo",
@@ -3177,7 +3441,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "growatt-spf-hybrid-5kw",
@@ -3189,7 +3454,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "honda-eu22i-inverter",
@@ -3201,7 +3467,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "hubble-100ah-25v",
@@ -3213,7 +3480,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "husqvarna-g3200p",
@@ -3225,7 +3493,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "ingle-200ah-lifepo",
@@ -3237,7 +3506,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "ja-solar-450w-mono",
@@ -3249,7 +3519,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "jm-100ah-lifepo",
@@ -3261,7 +3532,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "jinko-solar-570w",
@@ -3273,7 +3545,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "longi-575w-mono",
@@ -3285,7 +3558,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "luxpower-hybrid-5kw",
@@ -3297,7 +3571,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "mecer-inverter-1kw",
@@ -3309,7 +3584,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "mobi-volt-1kw",
@@ -3321,7 +3597,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "pylontech-4kwh-48v",
@@ -3333,7 +3610,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "ryobi-rg-3500",
@@ -3345,7 +3623,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "ryobi-rg-950",
@@ -3357,7 +3636,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "steco-950w-generator",
@@ -3369,7 +3649,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "sunsynk-hybrid-8kw",
@@ -3381,7 +3662,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "trina-solar-600w",
@@ -3393,7 +3675,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "victron-vedirect-800va",
@@ -3405,7 +3688,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "hisense-55-4k-uhd",
@@ -3417,7 +3701,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "hisense-75-qled-4k",
@@ -3429,7 +3714,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "hisense-98-qled-4k",
@@ -3441,7 +3727,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "lg-65-uhd-4k-ai",
@@ -3453,7 +3740,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "samsung-55-crystal-uhd",
@@ -3465,7 +3753,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "samsung-65-neo-qled",
@@ -3477,7 +3766,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "samsung-85-crystal-uhd",
@@ -3489,7 +3779,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "samsung-98-crystal-uhd",
@@ -3501,7 +3792,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "skyworth-75-android",
@@ -3513,7 +3805,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "tcl-55-qled-google",
@@ -3525,7 +3818,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "tcl-85-mini-led-google",
@@ -3537,7 +3831,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "xiaomi-65-qled-4k",
@@ -3549,7 +3844,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "ipad-pencil",
@@ -3561,7 +3857,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "ipad-10th",
@@ -3573,7 +3870,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "ipad-9th",
@@ -3585,7 +3883,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "ipad-air-m2",
@@ -3597,7 +3896,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "ipad-air-13",
@@ -3609,7 +3909,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "ipad-pro-11",
@@ -3621,7 +3922,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "ipad-pro-13",
@@ -3633,7 +3935,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "ipad-mini6",
@@ -3645,7 +3948,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "apple-watch-se-2022-40mm",
@@ -3657,7 +3961,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "apple-watch-se3-40mm",
@@ -3669,7 +3974,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "apple-watch-series10-46mm",
@@ -3681,7 +3987,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "apple-watch-series11-46mm",
@@ -3693,7 +4000,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "apple-watch-series9-45mm",
@@ -3705,7 +4013,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "apple-watch-ultra2-49mm",
@@ -3717,7 +4026,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "apple-watch-ultra3-49mm",
@@ -3729,7 +4039,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "apple-watch-ultra-49mm",
@@ -3741,7 +4052,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "ipad-10th-64gb",
@@ -3753,7 +4065,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "ipad-11th-128gb",
@@ -3765,7 +4078,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "ipad-air-11-128gb",
@@ -3777,7 +4091,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "ipad-air-13-128gb",
@@ -3789,7 +4104,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "ipad-mini-128gb",
@@ -3801,7 +4117,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "ipad-pro-11-256gb",
@@ -3813,7 +4130,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "ipad-pro-13-1tb",
@@ -3825,7 +4143,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "ipad-pro-13-512gb",
@@ -3837,7 +4156,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "updatedAt": "2024-01-01T00:00:00.000Z",
+    "originalPrice": ""
   },
   {
     "id": "tool-tb-120",
@@ -3849,7 +4169,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "tool-drill-18v",
@@ -3861,7 +4182,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "tool-tb-260",
@@ -3873,7 +4195,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "tool-sander",
@@ -3885,7 +4208,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "tool-tb-460",
@@ -3897,7 +4221,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "tool-jigsaw",
@@ -3909,7 +4234,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "tool-grinder",
@@ -3921,7 +4247,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "tool-tb-garden",
@@ -3933,7 +4260,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "tool-tb-power",
@@ -3945,7 +4273,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "car-jeep-12v",
@@ -3957,7 +4286,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "car-audi-24v",
@@ -3969,7 +4299,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "car-bmw-24v",
@@ -3981,7 +4312,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "car-quad-kids",
@@ -3993,7 +4325,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "car-benz-24v",
@@ -4005,7 +4338,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "aw-band-ml",
@@ -4017,7 +4351,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "aw-s8-41",
@@ -4029,7 +4364,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "aw-s8-45",
@@ -4041,7 +4377,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "aw-s9-41",
@@ -4053,7 +4390,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "aw-s9-45",
@@ -4065,7 +4403,8 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "aw-se2",
@@ -4077,7 +4416,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "aw-band-sp",
@@ -4089,7 +4429,8 @@
     "inStock": 1,
     "featured": 0,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   },
   {
     "id": "aw-ultra2",
@@ -4101,6 +4442,7 @@
     "inStock": 1,
     "featured": 1,
     "createdAt": "2026-08-15 13:02:32",
-    "updatedAt": "2026-08-15 13:02:32"
+    "updatedAt": "2026-08-15 13:02:32",
+    "originalPrice": ""
   }
 ]
