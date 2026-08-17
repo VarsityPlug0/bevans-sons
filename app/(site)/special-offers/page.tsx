@@ -64,7 +64,7 @@ export default async function SpecialOffersPage() {
             return (
               <Link key={p.id} href={`/shop/${p.id}`}
                 className="bg-[#111111] border border-[#1F1F1F] rounded-2xl overflow-hidden card-hover flex flex-col group">
-                <div className="relative h-48 bg-[#0f0f0f] overflow-hidden">
+                <div className="relative h-64 bg-[#0f0f0f] overflow-hidden">
                   {p.imageUrl ? (
                     <Image src={p.imageUrl} alt={p.name} fill
                       className="object-contain transition-transform duration-500 group-hover:scale-105"

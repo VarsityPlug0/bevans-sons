@@ -42,10 +42,10 @@ export default async function NewArrivalsPage() {
           {products.map((p) => (
             <Link key={p.id} href={`/shop/${p.id}`}
               className="bg-[#111111] border border-[#1F1F1F] rounded-2xl overflow-hidden card-hover flex flex-col group">
-              <div className="relative h-48 bg-[#0f0f0f] overflow-hidden">
+              <div className="relative h-64 bg-[#0f0f0f] overflow-hidden">
                 {p.imageUrl ? (
                   <Image src={p.imageUrl} alt={p.name} fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="object-contain transition-transform duration-500 group-hover:scale-105"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">

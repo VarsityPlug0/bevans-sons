@@ -150,7 +150,7 @@ function ProductCard({ product }: { product: ReturnType<typeof getProducts>[0] }
   return (
     <Link href={`/shop/${product.id}`}
       className="bg-[#111111] border border-[#1F1F1F] rounded-2xl overflow-hidden card-hover flex flex-col group">
-      <div className="relative h-52 bg-[#0f0f0f] overflow-hidden">
+      <div className="relative h-64 bg-[#0f0f0f] overflow-hidden">
         {product.imageUrl ? (
           <Image src={product.imageUrl} alt={product.name} fill
             className="object-contain transition-transform duration-500 group-hover:scale-105"

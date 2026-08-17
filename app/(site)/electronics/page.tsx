@@ -69,12 +69,12 @@ export default function Electronics() {
               {cat.items.map((item) => (
                 <div key={item.name} className="bg-[#111111] border border-[#1F1F1F] rounded-2xl overflow-hidden card-hover flex flex-col group">
                   {/* Image */}
-                  <div className="relative h-44 bg-[#0f0f0f] overflow-hidden">
+                  <div className="relative h-64 bg-[#0f0f0f] overflow-hidden">
                     <Image
                       src={item.img}
                       alt={item.name}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-contain transition-transform duration-500 group-hover:scale-105"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#111111]/70 to-transparent" />
