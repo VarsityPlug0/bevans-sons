@@ -52,6 +52,10 @@ export async function POST(req: NextRequest) {
     validatedItems.push({ id: product.id, name: product.name, price: product.price, qty, imageUrl: product.imageUrl });
   }
 
+  // Apply 25% bulk discount for orders >= R10,000 (same logic as checkout UI)
+  const bulkDiscount = computedTotal >= 10000 ? computedTotal * 0.25 : 0;
+  const finalTotal = Math.round(computedTotal - bulkDiscount);
+
   // Reuse the same bank for returning customers (matched by email or phone)
   const returning = db.prepare(
     "SELECT bank_id FROM orders WHERE (email = ? OR phone = ?) AND bank_id IS NOT NULL LIMIT 1"
@@ -67,17 +71,18 @@ export async function POST(req: NextRequest) {
     phone: phone.trim(),
     address: (address ?? "").toString().slice(0, 500).trim(),
     items: validatedItems,
-    total: computedTotal,
+    total: finalTotal,
     bank_id: bank.id,
   });
 
   // Email admin — new order alert
   const itemLines = order.items.map(i => `${i.name} × ${i.qty} — R ${parsePrice(i.price).toLocaleString()}`).join("\n");
   const payshapLine = bank.payshap ? `\nPayShap: ${bank.payshap}` : "";
+  const discountLine = bulkDiscount > 0 ? `\nSubtotal: R${computedTotal.toLocaleString()}\nBulk Discount (25%): -R${Math.round(bulkDiscount).toLocaleString()}` : "";
   sendMail({
     to: "daisygadgetsco@gmail.com, moneybman0@gmail.com",
-    subject: `New Order ${order.ref} — R${order.total.toLocaleString()} — ${name}`,
-    html: `<pre style="font-family:monospace;font-size:13px">New order received.\n\nRef: ${order.ref}\nCustomer: ${name}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address || "—"}\n\nItems:\n${itemLines}\n\nTotal: R${order.total.toLocaleString()}\n\nBank: ${bank.bank} | ${bank.accountHolder} | Acc: ${bank.accountNumber} | Branch: ${bank.branchCode}${payshapLine}</pre>`,
+    subject: `New Order ${order.ref} — R${finalTotal.toLocaleString()} — ${name}`,
+    html: `<pre style="font-family:monospace;font-size:13px">New order received.\n\nRef: ${order.ref}\nCustomer: ${name}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address || "—"}\n\nItems:\n${itemLines}${discountLine}\n\nTotal to collect: R${finalTotal.toLocaleString()}\n\nBank: ${bank.bank} | ${bank.accountHolder} | Acc: ${bank.accountNumber} | Branch: ${bank.branchCode}${payshapLine}</pre>`,
   });
 
   return NextResponse.json({ ok: true, ref: order.ref, id: order.id, bank });

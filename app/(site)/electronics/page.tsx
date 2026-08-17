@@ -84,7 +84,10 @@ export default function Electronics() {
                   <div className="p-4 flex flex-col flex-1">
                     <p className="text-xs text-[#D4AF37] uppercase tracking-wider mb-1.5">{cat.name}</p>
                     <p className="font-semibold text-white text-sm leading-snug mb-2 flex-1">{item.name}</p>
-                    <p className="text-[#D4AF37] font-bold text-lg mb-3">{item.price}</p>
+                    <div className="flex items-center gap-2 mb-3">
+                      <p className="text-[#D4AF37] font-bold text-lg">{item.price}</p>
+                      <p className="text-gray-600 text-sm line-through">From R {Math.round((parseFloat(item.price.replace(/[^0-9.]/g, "")) || 0) / 0.7).toLocaleString()}</p>
+                    </div>
                     <ChatButton
                       message={`Hi, I'm interested in the ${item.name} (${item.price}). Can you help me?`}
                       className="btn-gold w-full py-3 rounded-xl text-sm font-bold"

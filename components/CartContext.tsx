@@ -162,7 +162,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                   <div className="flex-1 min-w-0">
                     <p className="text-white text-sm font-medium leading-snug truncate">{item.name}</p>
                     <p className="text-gray-500 text-xs mb-2">{item.category}</p>
-                    <p className="text-[#D4AF37] font-bold text-sm">{item.price}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-[#D4AF37] font-bold text-sm">{item.price}</p>
+                      <p className="text-gray-600 text-xs line-through">R {Math.round((parsePrice(item.price)) / 0.7).toLocaleString()}</p>
+                    </div>
                     {/* Qty controls */}
                     <div className="flex items-center gap-2 mt-2">
                       <button
