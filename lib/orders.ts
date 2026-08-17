@@ -97,6 +97,14 @@ export function updateOrder(id: string, data: Partial<Pick<Order, "status" | "pr
   return getOrder(id);
 }
 
+export function generateTrackingNumber(): string {
+  const db = getDb();
+  const date = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+  const prefix = `DGC-${date}-`;
+  const row = db.prepare("SELECT COUNT(*) as n FROM orders WHERE tracking_number LIKE ?").get(`${prefix}%`) as { n: number };
+  return `${prefix}${String((row?.n ?? 0) + 1).padStart(4, "0")}`;
+}
+
 function deserialize(row: Record<string, unknown>): Order {
   return {
     ...row,

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getOrder, updateOrder } from "@/lib/orders";
+import { getOrder, updateOrder, generateTrackingNumber } from "@/lib/orders";
 import { isAuthenticated } from "@/lib/auth";
 import { sendStatusUpdate, sendOrderConfirmation, sendRejectionEmail } from "@/lib/mailer";
 import { getBankById } from "@/lib/bankDetails";
@@ -31,6 +31,14 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if (body.proof_url !== undefined)       update.proof_url       = String(body.proof_url).slice(0, 1000);
   if (body.eft_reference !== undefined)   update.eft_reference   = String(body.eft_reference).slice(0, 200);
   if (body.tracking_number !== undefined) update.tracking_number = String(body.tracking_number).slice(0, 200);
+
+  // Auto-generate tracking number when marking as shipped (if none exists)
+  if (body.status === "shipped" && !update.tracking_number) {
+    const existing = getOrder(id);
+    if (existing && !existing.tracking_number) {
+      update.tracking_number = generateTrackingNumber();
+    }
+  }
 
   const order = updateOrder(id, update);
   if (!order) return NextResponse.json({ error: "Not found" }, { status: 404 });

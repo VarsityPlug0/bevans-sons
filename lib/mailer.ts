@@ -423,18 +423,24 @@ const STATUS_CONTENT: Record<string, { pill: [string, string]; title: string; bo
   shipped: {
     pill: ["Shipped", "#3b82f6"],
     icon: "📦",
-    title: "Your order is on its way!",
-    body: "Your order has been handed over to the courier and is heading your way. Delivery typically takes 2–5 business days within South Africa.",
+    title: "Your order has been shipped!",
+    body: "We are pleased to inform you that your order has been successfully packed, processed and shipped.\n\nYour parcel is now in transit to the selected delivery destination. Please keep your contact number available in case our delivery team needs to contact you regarding your order.\n\nWe will notify you again when your order moves to Out for Delivery.",
     cta: ["💬 Track via WhatsApp", `https://wa.me/${WA_NUM}`],
   },
   delivered: {
     pill: ["Delivered", GOLD],
     icon: "🎁",
     title: "Your order has been delivered!",
-    body: "We hope you love your new purchase! If you have any issues at all, please reach out immediately and we will make it right.",
+    body: "We are delighted to confirm that your Daisy Gadgets Co. order has been successfully delivered.\n\nThank you for trusting Daisy Gadgets Co. with your purchase. We hope you are completely satisfied with your order. If you experience any issue with the product or require assistance after delivery, please contact our customer support team and we will be happy to assist.\n\nWe would also appreciate your feedback about your shopping experience with us.\n\nThank you for choosing Daisy Gadgets Co. — Smart Tech. Better Living.",
     cta: ["⭐ Leave a Review", `${SITE}/reviews`],
   },
 };
+
+function bodyParagraphs(text: string): string {
+  return text.split("\n\n")
+    .map(p => `<p style="margin:0 0 14px;color:#9ca3af;font-size:15px;line-height:1.7">${p}</p>`)
+    .join("");
+}
 
 export async function sendStatusUpdate(data: { name: string; email: string; ref: string; status: string; notes?: string | null; tracking_number?: string | null }) {
   const content = STATUS_CONTENT[data.status];
@@ -447,11 +453,33 @@ export async function sendStatusUpdate(data: { name: string; email: string; ref:
        </div>`
     : "";
 
+  const trackingHtml = data.status === "shipped" && data.tracking_number
+    ? `<div style="background:${DARK2};border:1px solid #3b82f644;border-left:3px solid #3b82f6;border-radius:0 12px 12px 0;padding:16px 20px;margin:4px 0 20px">
+        <p style="margin:0 0 4px;color:${MUTED};font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Your Tracking Number</p>
+        <p style="margin:0;color:#93c5fd;font-size:20px;font-weight:700;font-family:monospace;letter-spacing:0.08em">${data.tracking_number}</p>
+       </div>`
+    : "";
+
+  const deliveredInfoHtml = data.status === "delivered"
+    ? `<div style="background:${DARK2};border:1px solid ${GOLD}33;border-radius:12px;padding:16px 20px;margin:4px 0 20px">
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="color:${MUTED};font-size:13px">Delivery Status</td>
+            <td style="color:#10b981;font-size:13px;font-weight:700;text-align:right">Successfully Delivered</td>
+          </tr>
+          <tr>
+            <td style="color:${MUTED};font-size:13px;padding-top:8px">Delivery Date</td>
+            <td style="color:#e5e7eb;font-size:13px;font-weight:600;text-align:right;padding-top:8px">${new Date().toLocaleDateString("en-ZA", { day: "numeric", month: "long", year: "numeric" })}</td>
+          </tr>
+        </table>
+       </div>`
+    : "";
+
   const subjects: Record<string, string> = {
-    approved: `Payment Approved — ${data.ref} | Daisy Gadgets Co.`,
-    rejected: `Action Required — ${data.ref} | Daisy Gadgets Co.`,
-    shipped:  `Your Order Has Shipped — ${data.ref} | Daisy Gadgets Co.`,
-    delivered: `Order Delivered — ${data.ref} | Daisy Gadgets Co.`,
+    approved:  `Payment Approved — ${data.ref} | Daisy Gadgets Co.`,
+    rejected:  `Action Required — ${data.ref} | Daisy Gadgets Co.`,
+    shipped:   `Your Order Has Been Shipped – #${data.ref}`,
+    delivered: `Order Successfully Delivered – #${data.ref}`,
   };
 
   const html = layout(`
@@ -460,14 +488,12 @@ export async function sendStatusUpdate(data: { name: string; email: string; ref:
     <h1 style="margin:0 0 6px;color:#f9fafb;font-size:26px;font-weight:900">${content.title}</h1>
     <p style="margin:0 0 4px;color:${MUTED};font-size:13px">Order: <strong style="color:${GOLD}">${data.ref}</strong></p>
     ${divider()}
-    <p style="margin:0 0 16px;color:#9ca3af;font-size:15px;line-height:1.7">Hi ${data.name.split(" ")[0]}, ${content.body}</p>
-    ${data.status === "shipped" && data.tracking_number ? `
-    <div style="background:${DARK2};border:1px solid #3b82f644;border-left:3px solid #3b82f6;border-radius:0 12px 12px 0;padding:16px 20px;margin:16px 0 20px">
-      <p style="margin:0 0 4px;color:${MUTED};font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Tracking Number</p>
-      <p style="margin:0;color:#93c5fd;font-size:18px;font-weight:700;font-family:monospace;letter-spacing:0.06em">${data.tracking_number}</p>
-    </div>` : ""}
+    <p style="margin:0 0 14px;color:#9ca3af;font-size:15px">Dear ${data.name.split(" ")[0]},</p>
+    ${deliveredInfoHtml}
+    ${trackingHtml}
+    ${bodyParagraphs(content.body)}
     ${notesHtml}
-    ${content.cta ? `<div style="margin-top:24px">${btn(content.cta[0], content.cta[1])}&nbsp;&nbsp;${btn("WhatsApp Us", `https://wa.me/${WA_NUM}?text=Hi%2C%20re%20order%20${data.ref}`, "#25D366", "#fff")}</div>` : ""}
+    ${content.cta ? `<div style="margin-top:24px">${btn(content.cta[0], content.cta[1])}&nbsp;&nbsp;${btn("💬 WhatsApp Us", `https://wa.me/${WA_NUM}?text=Hi%2C%20re%20order%20${data.ref}`, "#25D366", "#fff")}</div>` : ""}
   `);
 
   await sendMail({ to: data.email, subject: subjects[data.status] ?? `Order Update — ${data.ref}`, html });
@@ -476,41 +502,40 @@ export async function sendStatusUpdate(data: { name: string; email: string; ref:
 // ─── 5. Tracking / Progress Update ───────────────────────────────────────────
 export const TRACKING_TEMPLATES: Record<string, {
   icon: string; pillText: string; pillColor: string;
-  title: string; defaultMessage: string; stage: number;
+  title: string; subject: string; defaultMessage: string; stage: number;
 }> = {
   processing: {
-    icon: "⚙️", pillText: "Processing", pillColor: "#8b5cf6",
-    title: "Your order is being processed",
-    defaultMessage: "We're preparing your order for packaging. This usually takes 1–2 business days.",
+    icon: "⚙️", pillText: "Being Prepared", pillColor: "#8b5cf6",
+    title: "Your order is being prepared",
+    subject: "Your Order Is Being Prepared – Daisy Gadgets Co.",
+    defaultMessage: "We are pleased to confirm that your order has been successfully confirmed and is now being prepared by our fulfilment team.\n\nOur team is carefully preparing your order to ensure everything is correct before it moves to the next stage.\n\nWe will notify you as soon as your order is ready for packing.",
     stage: 2,
   },
   packed: {
-    icon: "📦", pillText: "Packed & Ready", pillColor: "#3b82f6",
-    title: "Your order is packed and ready!",
-    defaultMessage: "Your order has been carefully packed and is ready to be handed to our courier.",
+    icon: "📦", pillText: "Being Packed", pillColor: "#3b82f6",
+    title: "Your order is being packed",
+    subject: "Your Order Is Being Packed – Daisy Gadgets Co.",
+    defaultMessage: "Your order has successfully moved to the packing stage.\n\nOur fulfilment team is currently checking and securely packaging your order to ensure that it is properly prepared for transportation.\n\nOnce packing and final quality checks are completed, your order will proceed to shipping. You will receive another notification when your order has been dispatched.",
     stage: 3,
-  },
-  dispatched: {
-    icon: "🚚", pillText: "Dispatched", pillColor: "#3b82f6",
-    title: "Your order has been dispatched!",
-    defaultMessage: "Great news! Your order has been dispatched and is heading your way. Delivery typically takes 2–5 business days.",
-    stage: 4,
   },
   out_for_delivery: {
     icon: "🏠", pillText: "Out for Delivery", pillColor: "#10b981",
     title: "Your order is out for delivery today!",
-    defaultMessage: "Your order is out for delivery and should arrive today. Please ensure someone is available to receive it.",
+    subject: "Your Order Is Out for Delivery Today",
+    defaultMessage: "Great news. Your Daisy Gadgets Co. order is now out for delivery.\n\nYour assigned delivery driver is currently completing the delivery route and will contact you directly when they are approaching your location.\n\nKindly keep your phone available and ensure that someone is available to receive the order.\n\nPlease note: Delivery times may vary depending on the driver's route, traffic and other scheduled deliveries.\n\nWe appreciate your patience and look forward to completing your delivery successfully.",
     stage: 5,
   },
   delayed: {
     icon: "⏳", pillText: "Slight Delay", pillColor: "#f59e0b",
     title: "A small update on your order",
-    defaultMessage: "We're experiencing a slight delay but your order is on its way. We apologise for any inconvenience and will keep you updated.",
+    subject: "Update on Your Order – Daisy Gadgets Co.",
+    defaultMessage: "We would like to inform you that there has been a slight delay with your order. We sincerely apologise for any inconvenience this may cause.\n\nOur team is working to resolve this as quickly as possible and your order will be on its way shortly. We will keep you updated with any further changes.",
     stage: -1,
   },
   custom: {
     icon: "📬", pillText: "Update", pillColor: GOLD,
     title: "An update on your order",
+    subject: "Update on Your Order – Daisy Gadgets Co.",
     defaultMessage: "",
     stage: -1,
   },
@@ -554,17 +579,16 @@ export async function sendTrackingUpdate(data: {
 }) {
   const tmpl = TRACKING_TEMPLATES[data.templateId] ?? TRACKING_TEMPLATES.custom;
 
-  const msgHtml = data.message
-    ? `<div style="background:${DARK2};border-left:3px solid ${tmpl.pillColor};border-radius:0 12px 12px 0;padding:16px 20px;margin:20px 0">
-        <p style="margin:0 0 4px;color:${MUTED};font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Message from our team</p>
-        <p style="margin:0;color:#d1d5db;font-size:14px;line-height:1.7">${data.message.replace(/\n/g, "<br>")}</p>
-       </div>`
+  const bodyHtml = data.message
+    ? data.message.split("\n\n").map(p =>
+        `<p style="margin:0 0 14px;color:#9ca3af;font-size:15px;line-height:1.7">${p}</p>`
+      ).join("")
     : "";
 
   const trackingHtml = data.tracking_number
-    ? `<div style="background:${DARK2};border:1px solid #3b82f644;border-left:3px solid #3b82f6;border-radius:0 12px 12px 0;padding:16px 20px;margin:16px 0">
-        <p style="margin:0 0 4px;color:${MUTED};font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Tracking Number</p>
-        <p style="margin:0;color:#93c5fd;font-size:18px;font-weight:700;font-family:monospace;letter-spacing:0.06em">${data.tracking_number}</p>
+    ? `<div style="background:${DARK2};border:1px solid #3b82f644;border-left:3px solid #3b82f6;border-radius:0 12px 12px 0;padding:16px 20px;margin:16px 0 20px">
+        <p style="margin:0 0 4px;color:${MUTED};font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Your Tracking Number</p>
+        <p style="margin:0;color:#93c5fd;font-size:20px;font-weight:700;font-family:monospace;letter-spacing:0.08em">${data.tracking_number}</p>
        </div>`
     : "";
 
@@ -574,16 +598,16 @@ export async function sendTrackingUpdate(data: {
     <h1 style="margin:0 0 6px;color:#f9fafb;font-size:26px;font-weight:900">${tmpl.title}</h1>
     <p style="margin:0 0 4px;color:${MUTED};font-size:13px">Order: <strong style="color:${GOLD}">${data.ref}</strong></p>
     ${divider()}
-    <p style="margin:0 0 4px;color:#9ca3af;font-size:15px">Hi ${data.name.split(" ")[0]},</p>
+    <p style="margin:0 0 14px;color:#9ca3af;font-size:15px">Dear ${data.name.split(" ")[0]},</p>
     ${tmpl.stage > 0 ? progressBar(tmpl.stage) : ""}
-    ${msgHtml}
     ${trackingHtml}
-    <div style="margin-top:24px">
+    ${bodyHtml}
+    <div style="margin-top:8px">
       ${btn("💬 Chat on WhatsApp", `https://wa.me/${WA_NUM}?text=Hi%2C%20checking%20on%20order%20${data.ref}`, "#25D366", "#fff")}
     </div>
   `);
 
-  await sendMail({ to: data.email, subject: `Order Update — ${data.ref} | Daisy Gadgets Co.`, html });
+  await sendMail({ to: data.email, subject: tmpl.subject, html });
 }
 
 // ─── 4. Quote Reply ───────────────────────────────────────────────────────────

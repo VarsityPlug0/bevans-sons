@@ -219,6 +219,12 @@
       "namedRegex": "^/api/admin/site\\-images(?:/)?$"
     },
     {
+      "page": "/api/admin/test-email",
+      "regex": "^/api/admin/test\\-email(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/test\\-email(?:/)?$"
+    },
+    {
       "page": "/api/admin/upload",
       "regex": "^/api/admin/upload(?:/)?$",
       "routeKeys": {},

@@ -42,12 +42,20 @@ const BANK_LABELS: Record<string, { label: string; color: string }> = {
 };
 
 const NOTIFY_TEMPLATES = [
-  { id: "processing",       label: "Processing",       color: "#8b5cf6", default: "We're preparing your order for packaging. This usually takes 1–2 business days." },
-  { id: "packed",           label: "Packed & Ready",   color: "#3b82f6", default: "Your order has been carefully packed and is ready to be handed to our courier." },
-  { id: "dispatched",       label: "Dispatched",       color: "#3b82f6", default: "Great news! Your order has been dispatched and is heading your way. Delivery typically takes 2–5 business days." },
-  { id: "out_for_delivery", label: "Out for Delivery", color: "#10b981", default: "Your order is out for delivery and should arrive today. Please ensure someone is available to receive it." },
-  { id: "delayed",          label: "Delayed",          color: "#f59e0b", default: "We're experiencing a slight delay but your order is on its way. We apologise for any inconvenience and will keep you updated." },
+  { id: "processing",       label: "Being Prepared",   color: "#8b5cf6", default: "We are pleased to confirm that your order has been successfully confirmed and is now being prepared by our fulfilment team.\n\nOur team is carefully preparing your order to ensure everything is correct before it moves to the next stage.\n\nWe will notify you as soon as your order is ready for packing." },
+  { id: "packed",           label: "Being Packed",     color: "#3b82f6", default: "Your order has successfully moved to the packing stage.\n\nOur fulfilment team is currently checking and securely packaging your order to ensure that it is properly prepared for transportation.\n\nOnce packing and final quality checks are completed, your order will proceed to shipping. You will receive another notification when your order has been dispatched." },
+  { id: "out_for_delivery", label: "Out for Delivery", color: "#10b981", default: "Great news. Your Daisy Gadgets Co. order is now out for delivery.\n\nYour assigned delivery driver is currently completing the delivery route and will contact you directly when they are approaching your location.\n\nKindly keep your phone available and ensure that someone is available to receive the order.\n\nPlease note: Delivery times may vary depending on the driver's route, traffic and other scheduled deliveries.\n\nWe appreciate your patience and look forward to completing your delivery successfully." },
+  { id: "delayed",          label: "Delayed",          color: "#f59e0b", default: "We would like to inform you that there has been a slight delay with your order. We sincerely apologise for any inconvenience this may cause.\n\nOur team is working to resolve this as quickly as possible and your order will be on its way shortly. We will keep you updated with any further changes." },
   { id: "custom",           label: "Custom",           color: "#D4AF37", default: "" },
+];
+
+const TEST_TEMPLATES = [
+  { id: "processing",       label: "Being Prepared" },
+  { id: "packed",           label: "Being Packed" },
+  { id: "shipped",          label: "Shipped (auto)" },
+  { id: "out_for_delivery", label: "Out for Delivery" },
+  { id: "delivered",        label: "Delivered (auto)" },
+  { id: "delayed",          label: "Delayed" },
 ];
 
 const STATUSES = ["pending", "proof_submitted", "approved", "shipped", "delivered", "rejected"];
@@ -97,6 +105,10 @@ export default function AdminOrdersPage() {
   const [notifyMessage,  setNotifyMessage]  = useState("");
   const [sendingNotify,  setSendingNotify]  = useState(false);
   const [notifySent,     setNotifySent]     = useState(false);
+  const [showTestPanel,  setShowTestPanel]  = useState(false);
+  const [testEmail,      setTestEmail]      = useState("");
+  const [testingId,      setTestingId]      = useState<string | null>(null);
+  const [testSent,       setTestSent]       = useState<string | null>(null);
   const proofInputRef  = useRef<HTMLInputElement>(null);
   const ordersRef      = useRef<Order[]>([]);
 
@@ -310,6 +322,21 @@ export default function AdminOrdersPage() {
     }
   }
 
+  async function sendTestEmail(templateId: string) {
+    if (!testEmail.trim()) return;
+    setTestingId(templateId);
+    const res = await fetch("/api/admin/test-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ templateId, email: testEmail.trim() }),
+    });
+    setTestingId(null);
+    if (res.ok) {
+      setTestSent(templateId);
+      setTimeout(() => setTestSent(null), 3000);
+    }
+  }
+
   async function sendNotify() {
     if (!selected || !notifyTemplate || !notifyMessage.trim()) return;
     setSendingNotify(true);
@@ -402,11 +429,49 @@ export default function AdminOrdersPage() {
           className="text-gray-400 hover:text-white transition-colors">
           {notifEnabled ? <Bell size={15} className="text-[#D4AF37]" /> : <BellOff size={15} />}
         </button>
+        <button
+          onClick={() => setShowTestPanel(p => !p)}
+          className="flex items-center gap-1.5 text-gray-400 hover:text-[#D4AF37] text-xs transition-colors">
+          Test Emails
+        </button>
         <button onClick={fetchOrders}
           className="flex items-center gap-1.5 text-gray-400 hover:text-white text-xs transition-colors">
           <RefreshCw size={13} /> Refresh
         </button>
       </header>
+
+      {/* Test email panel */}
+      {showTestPanel && (
+        <div className="bg-[#111] border-b border-[#1F1F1F] px-4 sm:px-6 py-4">
+          <div className="max-w-7xl mx-auto">
+            <p className="text-[#D4AF37] text-xs font-bold uppercase tracking-wider mb-3">Send Test Emails</p>
+            <div className="flex gap-2 mb-3 flex-wrap">
+              <input
+                type="email"
+                value={testEmail}
+                onChange={e => setTestEmail(e.target.value)}
+                placeholder="Your email address…"
+                className="bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-2 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]/50 transition-colors w-64"
+              />
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {TEST_TEMPLATES.map(t => (
+                <button
+                  key={t.id}
+                  onClick={() => sendTestEmail(t.id)}
+                  disabled={!testEmail.trim() || testingId === t.id}
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold disabled:opacity-40 transition-all"
+                  style={testSent === t.id
+                    ? { background: "#10b98120", color: "#10b981", border: "1px solid #10b98140" }
+                    : { background: "#1F1F1F", color: "#9ca3af", border: "1px solid #2a2a2a" }}>
+                  {testingId === t.id ? "Sending…" : testSent === t.id ? `✓ ${t.label} Sent` : `Send: ${t.label}`}
+                </button>
+              ))}
+            </div>
+            <p className="text-gray-600 text-[10px] mt-2">Uses a dummy order (DC-TEST01) so you can preview each template.</p>
+          </div>
+        </div>
+      )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
 
