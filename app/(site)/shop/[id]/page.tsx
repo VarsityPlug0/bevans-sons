@@ -130,7 +130,10 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
         <div className="flex flex-col justify-center">
           <p className="text-[#D4AF37] text-xs uppercase tracking-widest mb-3">{product.category}</p>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white mb-3 leading-tight">{product.name}</h1>
-          <p className="text-3xl font-bold text-[#D4AF37] mb-4">{product.price}</p>
+          <div className="flex items-center gap-3 mb-4">
+            <p className="text-3xl font-bold text-[#D4AF37]">{product.price}</p>
+            <p className="text-gray-500 text-lg line-through">R {Math.round((parseFloat(product.price.replace(/[^0-9.]/g, "")) || 0) / 0.7).toLocaleString()}</p>
+          </div>
 
           {product.description && (
             <p className="text-gray-400 text-sm leading-relaxed mb-6">{product.description}</p>

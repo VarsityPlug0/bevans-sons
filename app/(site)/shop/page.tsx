@@ -171,7 +171,10 @@ function ProductCard({ product }: { product: ReturnType<typeof getProducts>[0] }
         {product.description && (
           <p className="text-gray-500 text-sm leading-relaxed mb-3 line-clamp-2">{product.description}</p>
         )}
-        <p className="text-[#D4AF37] font-bold text-xl mb-3">{product.price}</p>
+        <div className="flex items-center gap-2 mb-3">
+          <p className="text-[#D4AF37] font-bold text-xl">{product.price}</p>
+          <p className="text-gray-600 text-sm line-through">R {Math.round((parseFloat(product.price.replace(/[^0-9.]/g, "")) || 0) / 0.7).toLocaleString()}</p>
+        </div>
         <div className="flex flex-col gap-2">
           <div className="w-full py-2.5 rounded-xl text-sm font-semibold text-center text-white border border-[#2a2a2a] group-hover:border-[#D4AF37]/50 transition-colors">
             View Details
