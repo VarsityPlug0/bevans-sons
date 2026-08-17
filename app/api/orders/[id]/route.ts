@@ -27,9 +27,10 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     if (!VALID_STATUSES.has(body.status)) return NextResponse.json({ error: "Invalid status" }, { status: 400 });
     update.status = body.status;
   }
-  if (body.notes !== undefined) update.notes = String(body.notes).slice(0, 2000);
-  if (body.proof_url !== undefined) update.proof_url = String(body.proof_url).slice(0, 1000);
-  if (body.eft_reference !== undefined) update.eft_reference = String(body.eft_reference).slice(0, 200);
+  if (body.notes !== undefined)           update.notes           = String(body.notes).slice(0, 2000);
+  if (body.proof_url !== undefined)       update.proof_url       = String(body.proof_url).slice(0, 1000);
+  if (body.eft_reference !== undefined)   update.eft_reference   = String(body.eft_reference).slice(0, 200);
+  if (body.tracking_number !== undefined) update.tracking_number = String(body.tracking_number).slice(0, 200);
 
   const order = updateOrder(id, update);
   if (!order) return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -58,7 +59,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
         bank: order.bank_id ? getBankById(order.bank_id) : undefined,
       });
     } else {
-      sendStatusUpdate({ name: order.name, email: order.email, ref: order.ref, status: body.status, notes: order.notes });
+      sendStatusUpdate({ name: order.name, email: order.email, ref: order.ref, status: body.status, notes: order.notes, tracking_number: order.tracking_number });
     }
   }
 

@@ -24,6 +24,7 @@ export interface Order {
   eft_reference: string | null;
   notes: string | null;
   bank_id: string | null;
+  tracking_number: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -78,7 +79,7 @@ export function listOrders(): Order[] {
   return rows.map(deserialize);
 }
 
-export function updateOrder(id: string, data: Partial<Pick<Order, "status" | "proof_url" | "notes" | "eft_reference">>): Order | null {
+export function updateOrder(id: string, data: Partial<Pick<Order, "status" | "proof_url" | "notes" | "eft_reference" | "tracking_number">>): Order | null {
   const db = getDb();
   const sets: string[] = [];
   const params: Record<string, unknown> = { id, now: new Date().toISOString() };
@@ -86,7 +87,8 @@ export function updateOrder(id: string, data: Partial<Pick<Order, "status" | "pr
   if (data.status !== undefined)       { sets.push("status = @status");             params.status = data.status; }
   if (data.proof_url !== undefined)    { sets.push("proof_url = @proof_url");        params.proof_url = data.proof_url; }
   if (data.notes !== undefined)        { sets.push("notes = @notes");               params.notes = data.notes; }
-  if (data.eft_reference !== undefined){ sets.push("eft_reference = @eft_reference"); params.eft_reference = data.eft_reference; }
+  if (data.eft_reference !== undefined)   { sets.push("eft_reference = @eft_reference");     params.eft_reference = data.eft_reference; }
+  if (data.tracking_number !== undefined) { sets.push("tracking_number = @tracking_number"); params.tracking_number = data.tracking_number; }
 
   if (!sets.length) return getOrder(id);
   sets.push("updatedAt = @now");

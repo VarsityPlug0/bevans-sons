@@ -436,7 +436,7 @@ const STATUS_CONTENT: Record<string, { pill: [string, string]; title: string; bo
   },
 };
 
-export async function sendStatusUpdate(data: { name: string; email: string; ref: string; status: string; notes?: string | null }) {
+export async function sendStatusUpdate(data: { name: string; email: string; ref: string; status: string; notes?: string | null; tracking_number?: string | null }) {
   const content = STATUS_CONTENT[data.status];
   if (!content) return;
 
@@ -461,6 +461,11 @@ export async function sendStatusUpdate(data: { name: string; email: string; ref:
     <p style="margin:0 0 4px;color:${MUTED};font-size:13px">Order: <strong style="color:${GOLD}">${data.ref}</strong></p>
     ${divider()}
     <p style="margin:0 0 16px;color:#9ca3af;font-size:15px;line-height:1.7">Hi ${data.name.split(" ")[0]}, ${content.body}</p>
+    ${data.status === "shipped" && data.tracking_number ? `
+    <div style="background:${DARK2};border:1px solid #3b82f644;border-left:3px solid #3b82f6;border-radius:0 12px 12px 0;padding:16px 20px;margin:16px 0 20px">
+      <p style="margin:0 0 4px;color:${MUTED};font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Tracking Number</p>
+      <p style="margin:0;color:#93c5fd;font-size:18px;font-weight:700;font-family:monospace;letter-spacing:0.06em">${data.tracking_number}</p>
+    </div>` : ""}
     ${notesHtml}
     ${content.cta ? `<div style="margin-top:24px">${btn(content.cta[0], content.cta[1])}&nbsp;&nbsp;${btn("WhatsApp Us", `https://wa.me/${WA_NUM}?text=Hi%2C%20re%20order%20${data.ref}`, "#25D366", "#fff")}</div>` : ""}
   `);

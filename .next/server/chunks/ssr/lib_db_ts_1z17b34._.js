@@ -57,6 +57,7 @@ module.exports=[66879,a=>{"use strict";var b=a.i(85148),c=a.i(14747),d=a.i(22734
       eft_reference  TEXT,
       notes          TEXT,
       bank_id        TEXT,
+      tracking_number TEXT,
       createdAt      TEXT NOT NULL,
       updatedAt      TEXT NOT NULL
     );
@@ -109,7 +110,7 @@ module.exports=[66879,a=>{"use strict";var b=a.i(85148),c=a.i(14747),d=a.i(22734
     CREATE TABLE IF NOT EXISTS migrations (
       name TEXT PRIMARY KEY
     );
-  `);try{a.exec("ALTER TABLE orders ADD COLUMN bank_id TEXT")}catch{}}(h),function(a){if(!a.prepare("SELECT name FROM migrations WHERE name = ?").get("json_import_gadgets_v1")){for(let b of g)if((0,d.existsSync)(b))try{let c=JSON.parse((0,d.readFileSync)(b,"utf-8"));if(Array.isArray(c)&&c.length>0){a.prepare("DELETE FROM products").run();let b=a.prepare(`
+  `);try{a.exec("ALTER TABLE orders ADD COLUMN bank_id TEXT")}catch{}try{a.exec("ALTER TABLE orders ADD COLUMN tracking_number TEXT")}catch{}}(h),function(a){if(!a.prepare("SELECT name FROM migrations WHERE name = ?").get("json_import_gadgets_v1")){for(let b of g)if((0,d.existsSync)(b))try{let c=JSON.parse((0,d.readFileSync)(b,"utf-8"));if(Array.isArray(c)&&c.length>0){a.prepare("DELETE FROM products").run();let b=a.prepare(`
           INSERT OR REPLACE INTO products
             (id, name, price, category, description, imageUrl, inStock, featured, createdAt, updatedAt)
           VALUES

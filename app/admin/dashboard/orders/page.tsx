@@ -2,7 +2,10 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { CheckCircle, XCircle, Clock, Truck, Package, ArrowLeft, RefreshCw } from "lucide-react";
+import {
+  CheckCircle, XCircle, Clock, Truck, Package,
+  ArrowLeft, RefreshCw, Search, Copy, MessageCircle, Save,
+} from "lucide-react";
 
 interface Order {
   id: string;
@@ -18,6 +21,8 @@ interface Order {
   proof_url: string | null;
   eft_reference: string | null;
   notes: string | null;
+  bank_id: string | null;
+  tracking_number: string | null;
   createdAt: string;
 }
 
@@ -30,16 +35,32 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.
   delivered:       { label: "Delivered",       color: "#D4AF37", icon: <CheckCircle size={13} /> },
 };
 
+const BANK_LABELS: Record<string, { label: string; color: string }> = {
+  fnb:      { label: "FNB",      color: "#10b981" },
+  tymebank: { label: "TymeBank", color: "#8b5cf6" },
+};
+
 const STATUSES = ["pending", "proof_submitted", "approved", "shipped", "delivered", "rejected"];
 
+function toWaPhone(phone: string) {
+  const clean = phone.replace(/[\s\-()]/g, "");
+  if (clean.startsWith("+")) return clean.slice(1);
+  if (clean.startsWith("0")) return "27" + clean.slice(1);
+  return clean;
+}
+
 export default function AdminOrdersPage() {
-  const [orders, setOrders]     = useState<Order[]>([]);
-  const [selected, setSelected] = useState<Order | null>(null);
-  const [loading, setLoading]   = useState(true);
-  const [updating, setUpdating] = useState(false);
-  const [notes, setNotes]       = useState("");
-  const [filter, setFilter]     = useState("all");
+  const [orders, setOrders]         = useState<Order[]>([]);
+  const [selected, setSelected]     = useState<Order | null>(null);
+  const [loading, setLoading]       = useState(true);
+  const [updating, setUpdating]     = useState(false);
+  const [notes, setNotes]           = useState("");
+  const [tracking, setTracking]     = useState("");
+  const [savingTracking, setSavingTracking] = useState(false);
+  const [filter, setFilter]         = useState("all");
+  const [search, setSearch]         = useState("");
   const [showDetail, setShowDetail] = useState(false);
+  const [copied, setCopied]         = useState<string | null>(null);
 
   useEffect(() => { fetchOrders(); }, []);
 
@@ -66,13 +87,45 @@ export default function AdminOrdersPage() {
     setUpdating(false);
   }
 
+  async function saveTracking() {
+    if (!selected) return;
+    setSavingTracking(true);
+    const res = await fetch(`/api/orders/${selected.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tracking_number: tracking.trim() || null }),
+    });
+    if (res.ok) {
+      const updated = await res.json();
+      setOrders(o => o.map(x => x.id === selected.id ? updated : x));
+      setSelected(updated);
+    }
+    setSavingTracking(false);
+  }
+
+  function copyField(text: string, key: string) {
+    navigator.clipboard.writeText(text);
+    setCopied(key);
+    setTimeout(() => setCopied(null), 2000);
+  }
+
   function selectOrder(order: Order) {
     setSelected(order);
     setNotes(order.notes ?? "");
+    setTracking(order.tracking_number ?? "");
     setShowDetail(true);
   }
 
-  const filtered = filter === "all" ? orders : orders.filter(o => o.status === filter);
+  const q = search.trim().toLowerCase();
+  const statusFiltered = filter === "all" ? orders : orders.filter(o => o.status === filter);
+  const visible = q
+    ? statusFiltered.filter(o =>
+        o.ref.toLowerCase().includes(q) ||
+        o.name.toLowerCase().includes(q) ||
+        o.email.toLowerCase().includes(q) ||
+        o.phone.replace(/\s/g, "").includes(q.replace(/\s/g, ""))
+      )
+    : statusFiltered;
 
   const revenue = orders
     .filter(o => o.status === "delivered" || o.status === "approved" || o.status === "shipped")
@@ -120,7 +173,7 @@ export default function AdminOrdersPage() {
         </div>
 
         {/* Filter tabs */}
-        <div className="flex gap-2 mb-5 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
+        <div className="flex gap-2 mb-3 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
           {["all", ...STATUSES].map(f => (
             <button key={f} onClick={() => setFilter(f)}
               className="flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors"
@@ -133,7 +186,19 @@ export default function AdminOrdersPage() {
           ))}
         </div>
 
-        {/* Mobile back button */}
+        {/* Search */}
+        <div className="relative mb-5">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search by ref, name, email or phone…"
+            className="w-full bg-[#111] border border-[#1F1F1F] rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]/50 transition-colors"
+          />
+        </div>
+
+        {/* Mobile back */}
         {showDetail && selected && (
           <button onClick={() => setShowDetail(false)}
             className="flex xl:hidden items-center gap-1.5 text-gray-400 hover:text-white text-sm mb-4">
@@ -147,9 +212,9 @@ export default function AdminOrdersPage() {
           <div className={`xl:col-span-1 space-y-2.5 ${showDetail && selected ? "hidden xl:block" : "block"}`}>
             {loading ? (
               <p className="text-gray-500 text-sm py-10 text-center">Loading…</p>
-            ) : filtered.length === 0 ? (
-              <p className="text-gray-500 text-sm py-10 text-center">No orders here</p>
-            ) : filtered.map(order => {
+            ) : visible.length === 0 ? (
+              <p className="text-gray-500 text-sm py-10 text-center">No orders found</p>
+            ) : visible.map(order => {
               const cfg = STATUS_CONFIG[order.status] ?? STATUS_CONFIG.pending;
               return (
                 <button key={order.id} onClick={() => selectOrder(order)}
@@ -185,7 +250,7 @@ export default function AdminOrdersPage() {
               <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-4 sm:p-6 space-y-5">
 
                 {/* Order header */}
-                <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start justify-between gap-3 flex-wrap">
                   <div>
                     <p className="text-[#D4AF37] font-bold text-lg">{selected.ref}</p>
                     <p className="text-gray-500 text-xs mt-0.5">{new Date(selected.createdAt).toLocaleString("en-ZA")}</p>
@@ -195,30 +260,77 @@ export default function AdminOrdersPage() {
                       </p>
                     )}
                   </div>
-                  <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium shrink-0"
-                    style={{
-                      color: STATUS_CONFIG[selected.status]?.color,
-                      background: (STATUS_CONFIG[selected.status]?.color ?? "#6b7280") + "18",
-                    }}>
-                    {STATUS_CONFIG[selected.status]?.icon}
-                    {STATUS_CONFIG[selected.status]?.label ?? selected.status}
-                  </span>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {/* Bank badge */}
+                    {selected.bank_id && BANK_LABELS[selected.bank_id] && (
+                      <span className="px-2.5 py-1 rounded-full text-xs font-bold"
+                        style={{
+                          color: BANK_LABELS[selected.bank_id].color,
+                          background: BANK_LABELS[selected.bank_id].color + "18",
+                          border: `1px solid ${BANK_LABELS[selected.bank_id].color}44`,
+                        }}>
+                        {BANK_LABELS[selected.bank_id].label}
+                      </span>
+                    )}
+                    {/* Status badge */}
+                    <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
+                      style={{
+                        color: STATUS_CONFIG[selected.status]?.color,
+                        background: (STATUS_CONFIG[selected.status]?.color ?? "#6b7280") + "18",
+                        border: `1px solid ${(STATUS_CONFIG[selected.status]?.color ?? "#6b7280")}44`,
+                      }}>
+                      {STATUS_CONFIG[selected.status]?.icon}
+                      {STATUS_CONFIG[selected.status]?.label ?? selected.status}
+                    </span>
+                  </div>
                 </div>
 
                 {/* Customer info */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-[#0f0f0f] rounded-xl p-4">
-                  {[
-                    ["Customer", selected.name],
-                    ["Email",    selected.email],
-                    ["Phone",    selected.phone],
-                    ["Address",  selected.address || "Not provided"],
-                  ].map(([l, v]) => (
-                    <div key={l}>
-                      <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-0.5">{l}</p>
-                      <p className="text-sm text-white break-words">{v}</p>
+                <div className="bg-[#0f0f0f] rounded-xl p-4 space-y-3">
+                  {([
+                    ["Customer", selected.name,    "name"],
+                    ["Email",    selected.email,   "email"],
+                    ["Phone",    selected.phone,   "phone"],
+                    ["Address",  selected.address || "Not provided", "address"],
+                  ] as [string, string, string][]).map(([label, value, key]) => (
+                    <div key={label} className="flex items-start justify-between gap-3">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-0.5">{label}</p>
+                        <p className="text-sm text-white break-words">{value}</p>
+                      </div>
+                      <div className="flex gap-1.5 shrink-0 mt-3">
+                        {/* Copy */}
+                        <button
+                          onClick={() => copyField(value, key)}
+                          title={`Copy ${label}`}
+                          className="p-1.5 rounded-lg text-gray-500 hover:text-white hover:bg-white/10 transition-colors">
+                          {copied === key
+                            ? <CheckCircle size={13} color="#22c55e" />
+                            : <Copy size={13} />}
+                        </button>
+                        {/* WhatsApp (phone only) */}
+                        {label === "Phone" && selected.phone && (
+                          <a
+                            href={`https://wa.me/${toWaPhone(selected.phone)}?text=${encodeURIComponent(`Hi ${selected.name.split(" ")[0]}, this is Daisy Gadgets regarding your order ${selected.ref}.`)}`}
+                            target="_blank" rel="noopener noreferrer"
+                            title="Open WhatsApp"
+                            className="p-1.5 rounded-lg text-gray-500 hover:text-[#25D366] hover:bg-[#25D366]/10 transition-colors">
+                            <MessageCircle size={13} />
+                          </a>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>
+
+                {/* WhatsApp quick action */}
+                <a
+                  href={`https://wa.me/${toWaPhone(selected.phone)}?text=${encodeURIComponent(`Hi ${selected.name.split(" ")[0]}, this is Daisy Gadgets Co. regarding your order ${selected.ref}. `)}`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-semibold transition-colors"
+                  style={{ background: "#25D36620", color: "#25D366", border: "1px solid #25D36640" }}>
+                  <MessageCircle size={15} /> WhatsApp {selected.name.split(" ")[0]}
+                </a>
 
                 {/* Items */}
                 <div>
@@ -236,7 +348,7 @@ export default function AdminOrdersPage() {
                           <p className="text-xs text-gray-500">× {item.qty}</p>
                         </div>
                         <p className="text-sm font-bold text-[#D4AF37] shrink-0">
-                          R {(Number(item.price) * item.qty).toLocaleString()}
+                          R {(parseFloat(String(item.price).replace(/[^0-9.]/g, "")) * item.qty).toLocaleString()}
                         </p>
                       </div>
                     ))}
@@ -254,6 +366,33 @@ export default function AdminOrdersPage() {
                     <p className="text-white text-sm font-mono">{selected.eft_reference}</p>
                   </div>
                 )}
+
+                {/* Tracking number */}
+                <div>
+                  <label className="text-[10px] text-gray-500 uppercase tracking-wider block mb-2">
+                    Courier Tracking Number
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={tracking}
+                      onChange={e => setTracking(e.target.value)}
+                      onKeyDown={e => e.key === "Enter" && saveTracking()}
+                      placeholder="e.g. CL123456789ZA"
+                      className="flex-1 bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-2.5 text-white text-sm placeholder-gray-600 font-mono focus:outline-none focus:border-[#D4AF37]/50 transition-colors"
+                    />
+                    <button
+                      onClick={saveTracking}
+                      disabled={savingTracking || tracking === (selected.tracking_number ?? "")}
+                      className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-semibold disabled:opacity-40 transition-opacity"
+                      style={{ background: "#3b82f620", color: "#3b82f6", border: "1px solid #3b82f640" }}>
+                      <Save size={13} /> {savingTracking ? "Saving…" : "Save"}
+                    </button>
+                  </div>
+                  {selected.tracking_number && (
+                    <p className="text-xs text-gray-500 mt-1.5 font-mono">Saved: {selected.tracking_number}</p>
+                  )}
+                </div>
 
                 {/* Proof of payment */}
                 {selected.proof_url && (
@@ -277,7 +416,7 @@ export default function AdminOrdersPage() {
                   <label className="text-[10px] text-gray-500 uppercase tracking-wider block mb-2">Admin Notes</label>
                   <textarea value={notes} onChange={e => setNotes(e.target.value)}
                     rows={2} placeholder="Add internal notes…"
-                    className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 resize-none focus:outline-none" />
+                    className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 resize-none focus:outline-none focus:border-[#D4AF37]/50 transition-colors" />
                 </div>
 
                 {/* Status actions */}
@@ -295,11 +434,12 @@ export default function AdminOrdersPage() {
                         disabled={updating || selected.status === status}
                         className="px-4 py-2.5 rounded-xl text-sm font-semibold disabled:opacity-40 transition-opacity"
                         style={{ background: color + "20", color, border: `1px solid ${color}40` }}>
-                        {label}
+                        {updating ? "…" : label}
                       </button>
                     ))}
                   </div>
                 </div>
+
               </div>
             )}
           </div>

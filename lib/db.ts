@@ -96,6 +96,7 @@ function initSchema(db: Database.Database) {
       eft_reference  TEXT,
       notes          TEXT,
       bank_id        TEXT,
+      tracking_number TEXT,
       createdAt      TEXT NOT NULL,
       updatedAt      TEXT NOT NULL
     );
@@ -150,8 +151,9 @@ function initSchema(db: Database.Database) {
     );
   `);
 
-  // Migrate existing orders tables that predate bank_id column
-  try { db.exec("ALTER TABLE orders ADD COLUMN bank_id TEXT"); } catch { /* column already exists */ }
+  // Migrate existing orders tables that predate bank_id / tracking_number columns
+  try { db.exec("ALTER TABLE orders ADD COLUMN bank_id TEXT"); } catch { /* already exists */ }
+  try { db.exec("ALTER TABLE orders ADD COLUMN tracking_number TEXT"); } catch { /* already exists */ }
 }
 
 function migrateFromJson(db: Database.Database) {

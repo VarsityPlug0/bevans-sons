@@ -17,13 +17,13 @@
   },
   {
     "route": "/checkout",
-    "firstLoadUncompressedJsBytes": 549381,
+    "firstLoadUncompressedJsBytes": 549438,
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\3eg3dkxe3vyaj.js",
       ".next\\static\\chunks\\189i_nau2kz-l.js",
       ".next\\static\\chunks\\2y368pkhts2lw.js",
-      ".next\\static\\chunks\\40i5nzexai3ts.js",
+      ".next\\static\\chunks\\0pqz5ftfs1_ct.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
       ".next\\static\\chunks\\36lm--m0zwqtj.js",
@@ -387,11 +387,11 @@
   },
   {
     "route": "/admin/dashboard/orders",
-    "firstLoadUncompressedJsBytes": 494689,
+    "firstLoadUncompressedJsBytes": 499804,
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
-      ".next\\static\\chunks\\11k3qro-d8pcb.js",
-      ".next\\static\\chunks\\0al7d_f8pj5ob.js",
+      ".next\\static\\chunks\\0q6-j5tot3yfq.js",
+      ".next\\static\\chunks\\0lp8yi556_19k.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
       ".next\\static\\chunks\\36lm--m0zwqtj.js",

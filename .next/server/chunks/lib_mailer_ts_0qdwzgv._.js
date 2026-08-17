@@ -240,6 +240,11 @@ module.exports=[67010,33464,e=>{"use strict";var t=e.i(84423),o=e.i(14747),i=e.i
     <p style="margin:0 0 4px;color:${x};font-size:13px">Order: <strong style="color:${s}">${e.ref}</strong></p>
     ${w()}
     <p style="margin:0 0 16px;color:#9ca3af;font-size:15px;line-height:1.7">Hi ${e.name.split(" ")[0]}, ${t.body}</p>
+    ${"shipped"===e.status&&e.tracking_number?`
+    <div style="background:${c};border:1px solid #3b82f644;border-left:3px solid #3b82f6;border-radius:0 12px 12px 0;padding:16px 20px;margin:16px 0 20px">
+      <p style="margin:0 0 4px;color:${x};font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Tracking Number</p>
+      <p style="margin:0;color:#93c5fd;font-size:18px;font-weight:700;font-family:monospace;letter-spacing:0.06em">${e.tracking_number}</p>
+    </div>`:""}
     ${o}
     ${t.cta?`<div style="margin-top:24px">${v(t.cta[0],t.cta[1])}&nbsp;&nbsp;${v("WhatsApp Us",`https://wa.me/${f}?text=Hi%2C%20re%20order%20${e.ref}`,"#25D366","#fff")}</div>`:""}
   `);await h({to:e.email,subject:i[e.status]??`Order Update — ${e.ref}`,html:r})}async function R(e){let t=b(`
