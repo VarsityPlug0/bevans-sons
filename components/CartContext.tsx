@@ -2,7 +2,7 @@
 import { createContext, useContext, useReducer, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { X, ShoppingCart, Trash2, Plus, Minus, MessageCircle } from "lucide-react";
+import { X, ShoppingCart, Trash2, Plus, Minus } from "lucide-react";
 
 export interface CartItem {
   id: string;
@@ -199,19 +199,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         {items.length > 0 && (
           <div className="px-4 py-5 border-t border-[#1A1A1A] space-y-3">
             <p className="text-xs text-gray-600 text-center mb-2">{count} item{count !== 1 ? "s" : ""} in your enquiry list</p>
-            <button
-              onClick={() => {
-                setOpen(false);
-                const msg = "Hi Daisy Gadgets Co., I would like to enquire about the following products:\n\n" +
-                  items.map(i => `- ${i.name} (${i.price}) × ${i.qty}`).join("\n") +
-                  "\n\nPlease send me pricing and availability.";
-                window.dispatchEvent(new CustomEvent("openDaisyChat", { detail: { message: msg } }));
-              }}
-              className="btn-gold w-full py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2"
-            >
-              <MessageCircle size={16} />
-              Enquire via Chat
-            </button>
             <Link href="/checkout" onClick={() => setOpen(false)}
               className="btn-outline w-full py-3 rounded-xl font-bold text-sm text-center block">
               Checkout

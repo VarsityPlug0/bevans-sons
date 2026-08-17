@@ -18,7 +18,7 @@ export default function CheckoutPage() {
   const [step, setStep] = useState<"details" | "payment" | "done">("details");
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
   const [addr, setAddr] = useState({ line1: "", line2: "", suburb: "", city: "", province: "", postal: "" });
-  const [order, setOrder] = useState<{ id: string; ref: string } | null>(null);
+  const [order, setOrder] = useState<{ id: string; ref: string; total: number } | null>(null);
   const [selectedBank, setSelectedBank] = useState<BankDetails | null>(null);
   const [proof, setProof] = useState<File | null>(null);
   const [proofPreview, setProofPreview] = useState<string | null>(null);
@@ -55,7 +55,7 @@ export default function CheckoutPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Order failed");
-      setOrder({ id: data.id, ref: data.ref });
+      setOrder({ id: data.id, ref: data.ref, total: data.total });
       setSelectedBank(data.bank);
       setStep("payment");
     } catch (e: unknown) {
@@ -289,7 +289,7 @@ export default function CheckoutPage() {
                     ["Branch Code",    selectedBank.branchCode,    false],
                     ...(selectedBank.payshap ? [["PayShap", selectedBank.payshap, true]] : []),
                     ["Reference",      order.ref,                  true],
-                    ["Amount",         `R ${finalTotal.toLocaleString()}`, false],
+                    ["Amount",         `R ${order.total.toLocaleString()}`, false],
                   ] as [string, string, boolean][]).map(([label, value, copyable]) => (
                     <div key={label as string} className="flex items-center justify-between py-2.5 border-b border-[#1F1F1F] last:border-0">
                       <span className="text-gray-500 text-sm">{label as string}</span>
@@ -360,7 +360,7 @@ export default function CheckoutPage() {
                 </div>
                 <div className="border-t border-[#1F1F1F] pt-4 flex justify-between">
                   <span className="text-gray-400 text-sm">Total to pay</span>
-                  <span className="text-white font-bold">R {finalTotal.toLocaleString()}</span>
+                  <span className="text-white font-bold">R {order.total.toLocaleString()}</span>
                 </div>
                 <p className="text-xs text-gray-600 leading-relaxed">
                   We will review your proof of payment and confirm your order via email within 2–4 hours.

@@ -85,5 +85,5 @@ export async function POST(req: NextRequest) {
     html: `<pre style="font-family:monospace;font-size:13px">New order received.\n\nRef: ${order.ref}\nCustomer: ${name}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address || "—"}\n\nItems:\n${itemLines}${discountLine}\n\nTotal to collect: R${finalTotal.toLocaleString()}\n\nBank: ${bank.bank} | ${bank.accountHolder} | Acc: ${bank.accountNumber} | Branch: ${bank.branchCode}${payshapLine}</pre>`,
   });
 
-  return NextResponse.json({ ok: true, ref: order.ref, id: order.id, bank });
+  return NextResponse.json({ ok: true, ref: order.ref, id: order.id, bank, total: finalTotal });
 }
