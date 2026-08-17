@@ -110,7 +110,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
               src={product.imageUrl}
               alt={product.name}
               fill
-              className="object-contain"
+              className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"
               priority
             />

@@ -74,7 +74,7 @@ export default function Electronics() {
                       src={item.img}
                       alt={item.name}
                       fill
-                      className="object-contain transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#111111]/70 to-transparent" />
