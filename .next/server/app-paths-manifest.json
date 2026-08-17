@@ -40,6 +40,7 @@
   "/api/admin/chat/sessions/route": "app/api/admin/chat/sessions/route.js",
   "/api/admin/login/route": "app/api/admin/login/route.js",
   "/api/admin/logout/route": "app/api/admin/logout/route.js",
+  "/api/admin/orders/[id]/notify/route": "app/api/admin/orders/[id]/notify/route.js",
   "/api/admin/orders/[id]/proof/route": "app/api/admin/orders/[id]/proof/route.js",
   "/api/admin/products/[id]/route": "app/api/admin/products/[id]/route.js",
   "/api/admin/products/route": "app/api/admin/products/route.js",

@@ -473,6 +473,119 @@ export async function sendStatusUpdate(data: { name: string; email: string; ref:
   await sendMail({ to: data.email, subject: subjects[data.status] ?? `Order Update — ${data.ref}`, html });
 }
 
+// ─── 5. Tracking / Progress Update ───────────────────────────────────────────
+export const TRACKING_TEMPLATES: Record<string, {
+  icon: string; pillText: string; pillColor: string;
+  title: string; defaultMessage: string; stage: number;
+}> = {
+  processing: {
+    icon: "⚙️", pillText: "Processing", pillColor: "#8b5cf6",
+    title: "Your order is being processed",
+    defaultMessage: "We're preparing your order for packaging. This usually takes 1–2 business days.",
+    stage: 2,
+  },
+  packed: {
+    icon: "📦", pillText: "Packed & Ready", pillColor: "#3b82f6",
+    title: "Your order is packed and ready!",
+    defaultMessage: "Your order has been carefully packed and is ready to be handed to our courier.",
+    stage: 3,
+  },
+  dispatched: {
+    icon: "🚚", pillText: "Dispatched", pillColor: "#3b82f6",
+    title: "Your order has been dispatched!",
+    defaultMessage: "Great news! Your order has been dispatched and is heading your way. Delivery typically takes 2–5 business days.",
+    stage: 4,
+  },
+  out_for_delivery: {
+    icon: "🏠", pillText: "Out for Delivery", pillColor: "#10b981",
+    title: "Your order is out for delivery today!",
+    defaultMessage: "Your order is out for delivery and should arrive today. Please ensure someone is available to receive it.",
+    stage: 5,
+  },
+  delayed: {
+    icon: "⏳", pillText: "Slight Delay", pillColor: "#f59e0b",
+    title: "A small update on your order",
+    defaultMessage: "We're experiencing a slight delay but your order is on its way. We apologise for any inconvenience and will keep you updated.",
+    stage: -1,
+  },
+  custom: {
+    icon: "📬", pillText: "Update", pillColor: GOLD,
+    title: "An update on your order",
+    defaultMessage: "",
+    stage: -1,
+  },
+};
+
+function progressBar(activeStage: number): string {
+  const stages = ["Order Placed", "Processing", "Packed", "Dispatched", "Delivered"];
+  const dotCells: string[] = [];
+  const labelCells: string[] = [];
+
+  stages.forEach((name, i) => {
+    const s = i + 1;
+    const done = s < activeStage;
+    const active = s === activeStage;
+    const dotBg     = done ? "#10b981" : active ? GOLD : "#1a1a1a";
+    const dotColor  = done ? "#fff" : active ? BLACK : "#555";
+    const labelColor = active ? "#e5e7eb" : done ? "#9ca3af" : "#4b5563";
+
+    dotCells.push(
+      `<td align="center"><table cellpadding="0" cellspacing="0" style="margin:0 auto"><tr>` +
+      `<td align="center" width="28" height="28" style="width:28px;height:28px;border-radius:14px;background:${dotBg};border:2px solid ${done ? "#10b981" : active ? GOLD : "#2a2a2a"};text-align:center;vertical-align:middle;font-size:11px;font-weight:800;color:${dotColor};line-height:24px">` +
+      `${done ? "&#10003;" : s}</td></tr></table></td>`
+    );
+    labelCells.push(
+      `<td align="center" style="padding:6px 2px 0;vertical-align:top"><p style="margin:0;font-size:10px;color:${labelColor};font-weight:${active ? 700 : 400};line-height:1.4">${name}</p></td>`
+    );
+
+    if (i < stages.length - 1) {
+      const lineColor = i + 1 < activeStage ? "#10b981" : "#2a2a2a";
+      dotCells.push(`<td style="vertical-align:middle;padding-bottom:4px"><div style="height:2px;background:${lineColor}"></div></td>`);
+      labelCells.push(`<td></td>`);
+    }
+  });
+
+  return `<table width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0 8px"><tr>${dotCells.join("")}</tr><tr>${labelCells.join("")}</tr></table>`;
+}
+
+export async function sendTrackingUpdate(data: {
+  name: string; email: string; ref: string;
+  templateId: string; message: string; tracking_number?: string | null;
+}) {
+  const tmpl = TRACKING_TEMPLATES[data.templateId] ?? TRACKING_TEMPLATES.custom;
+
+  const msgHtml = data.message
+    ? `<div style="background:${DARK2};border-left:3px solid ${tmpl.pillColor};border-radius:0 12px 12px 0;padding:16px 20px;margin:20px 0">
+        <p style="margin:0 0 4px;color:${MUTED};font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Message from our team</p>
+        <p style="margin:0;color:#d1d5db;font-size:14px;line-height:1.7">${data.message.replace(/\n/g, "<br>")}</p>
+       </div>`
+    : "";
+
+  const trackingHtml = data.tracking_number
+    ? `<div style="background:${DARK2};border:1px solid #3b82f644;border-left:3px solid #3b82f6;border-radius:0 12px 12px 0;padding:16px 20px;margin:16px 0">
+        <p style="margin:0 0 4px;color:${MUTED};font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Tracking Number</p>
+        <p style="margin:0;color:#93c5fd;font-size:18px;font-weight:700;font-family:monospace;letter-spacing:0.06em">${data.tracking_number}</p>
+       </div>`
+    : "";
+
+  const html = layout(`
+    <div style="margin-bottom:16px">${statusPill(tmpl.pillText, tmpl.pillColor)}</div>
+    <div style="font-size:36px;margin-bottom:12px;line-height:1">${tmpl.icon}</div>
+    <h1 style="margin:0 0 6px;color:#f9fafb;font-size:26px;font-weight:900">${tmpl.title}</h1>
+    <p style="margin:0 0 4px;color:${MUTED};font-size:13px">Order: <strong style="color:${GOLD}">${data.ref}</strong></p>
+    ${divider()}
+    <p style="margin:0 0 4px;color:#9ca3af;font-size:15px">Hi ${data.name.split(" ")[0]},</p>
+    ${tmpl.stage > 0 ? progressBar(tmpl.stage) : ""}
+    ${msgHtml}
+    ${trackingHtml}
+    <div style="margin-top:24px">
+      ${btn("💬 Chat on WhatsApp", `https://wa.me/${WA_NUM}?text=Hi%2C%20checking%20on%20order%20${data.ref}`, "#25D366", "#fff")}
+    </div>
+  `);
+
+  await sendMail({ to: data.email, subject: `Order Update — ${data.ref} | Daisy Gadgets Co.`, html });
+}
+
 // ─── 4. Quote Reply ───────────────────────────────────────────────────────────
 export async function sendQuoteReply(data: { name: string; email: string; ref: string; package: string; price: string; message: string }) {
   const html = layout(`

@@ -387,10 +387,10 @@
   },
   {
     "route": "/admin/dashboard/orders",
-    "firstLoadUncompressedJsBytes": 509702,
+    "firstLoadUncompressedJsBytes": 512207,
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
-      ".next\\static\\chunks\\2xzeukf266_kk.js",
+      ".next\\static\\chunks\\0l0n899qzvzzt.js",
       ".next\\static\\chunks\\2ec83xp2m-2sw.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",

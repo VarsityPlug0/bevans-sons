@@ -41,6 +41,15 @@ const BANK_LABELS: Record<string, { label: string; color: string }> = {
   tymebank: { label: "TymeBank", color: "#8b5cf6" },
 };
 
+const NOTIFY_TEMPLATES = [
+  { id: "processing",       label: "Processing",       color: "#8b5cf6", default: "We're preparing your order for packaging. This usually takes 1–2 business days." },
+  { id: "packed",           label: "Packed & Ready",   color: "#3b82f6", default: "Your order has been carefully packed and is ready to be handed to our courier." },
+  { id: "dispatched",       label: "Dispatched",       color: "#3b82f6", default: "Great news! Your order has been dispatched and is heading your way. Delivery typically takes 2–5 business days." },
+  { id: "out_for_delivery", label: "Out for Delivery", color: "#10b981", default: "Your order is out for delivery and should arrive today. Please ensure someone is available to receive it." },
+  { id: "delayed",          label: "Delayed",          color: "#f59e0b", default: "We're experiencing a slight delay but your order is on its way. We apologise for any inconvenience and will keep you updated." },
+  { id: "custom",           label: "Custom",           color: "#D4AF37", default: "" },
+];
+
 const STATUSES = ["pending", "proof_submitted", "approved", "shipped", "delivered", "rejected"];
 
 function toWaPhone(phone: string) {
@@ -84,6 +93,10 @@ export default function AdminOrdersPage() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
   const [uploadingProof, setUploadingProof] = useState(false);
+  const [notifyTemplate, setNotifyTemplate] = useState<string | null>(null);
+  const [notifyMessage,  setNotifyMessage]  = useState("");
+  const [sendingNotify,  setSendingNotify]  = useState(false);
+  const [notifySent,     setNotifySent]     = useState(false);
   const proofInputRef  = useRef<HTMLInputElement>(null);
   const ordersRef      = useRef<Order[]>([]);
 
@@ -297,10 +310,28 @@ export default function AdminOrdersPage() {
     }
   }
 
+  async function sendNotify() {
+    if (!selected || !notifyTemplate || !notifyMessage.trim()) return;
+    setSendingNotify(true);
+    const res = await fetch(`/api/admin/orders/${selected.id}/notify`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ templateId: notifyTemplate, message: notifyMessage }),
+    });
+    setSendingNotify(false);
+    if (res.ok) {
+      setNotifySent(true);
+      setTimeout(() => setNotifySent(false), 3000);
+    }
+  }
+
   function selectOrder(order: Order) {
     setSelected(order);
     setNotes(order.notes ?? "");
     setTracking(order.tracking_number ?? "");
+    setNotifyTemplate(null);
+    setNotifyMessage("");
+    setNotifySent(false);
     setShowDetail(true);
   }
 
@@ -758,6 +789,49 @@ export default function AdminOrdersPage() {
                   <textarea value={notes} onChange={e => setNotes(e.target.value)}
                     rows={2} placeholder="Add internal notes…"
                     className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 resize-none focus:outline-none focus:border-[#D4AF37]/50 transition-colors" />
+                </div>
+
+                {/* Send customer update */}
+                <div>
+                  <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-3">Send Customer Update</p>
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    {NOTIFY_TEMPLATES.map(t => (
+                      <button
+                        key={t.id}
+                        onClick={() => {
+                          setNotifyTemplate(t.id);
+                          if (notifyTemplate !== t.id) setNotifyMessage(t.default);
+                        }}
+                        className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors"
+                        style={notifyTemplate === t.id
+                          ? { background: t.color, color: "#000" }
+                          : { background: t.color + "20", color: t.color, border: `1px solid ${t.color}40` }}>
+                        {t.label}
+                      </button>
+                    ))}
+                  </div>
+                  {notifyTemplate && (
+                    <div className="space-y-2">
+                      <textarea
+                        value={notifyMessage}
+                        onChange={e => setNotifyMessage(e.target.value)}
+                        rows={3}
+                        placeholder="Message to customer…"
+                        className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 resize-none focus:outline-none focus:border-[#D4AF37]/50 transition-colors"
+                      />
+                      <button
+                        onClick={sendNotify}
+                        disabled={sendingNotify || !notifyMessage.trim()}
+                        className="w-full py-2.5 rounded-xl text-sm font-semibold disabled:opacity-40 transition-all"
+                        style={{
+                          background: notifySent ? "#10b98120" : "#D4AF3720",
+                          color: notifySent ? "#10b981" : "#D4AF37",
+                          border: `1px solid ${notifySent ? "#10b98140" : "#D4AF3740"}`,
+                        }}>
+                        {sendingNotify ? "Sending…" : notifySent ? "✓ Email Sent!" : "Send Update Email"}
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* Status actions */}
