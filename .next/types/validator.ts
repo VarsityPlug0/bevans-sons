@@ -281,6 +281,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../app/admin/dashboard/customers/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/admin/dashboard/customers">> = Specific
+  const handler = {} as typeof import("../../app/admin/dashboard/customers/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/admin/dashboard/edit/[id]/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/admin/dashboard/edit/[id]">> = Specific

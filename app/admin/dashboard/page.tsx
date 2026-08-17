@@ -29,6 +29,49 @@ export default async function Dashboard() {
     { label: "Leads",          value: leads.length,    link: "/admin/dashboard/leads" },
   ];
 
+  // ── Analytics ──────────────────────────────────────────────────────────────
+  const PAID = new Set(["approved", "shipped", "delivered"]);
+  const paidOrders = orders.filter(o => PAID.has(o.status));
+  const totalRevenue = paidOrders.reduce((s, o) => s + o.total, 0);
+  const avgOrderValue = paidOrders.length ? Math.round(totalRevenue / paidOrders.length) : 0;
+
+  // Weekly revenue — last 8 weeks (oldest → newest)
+  const weeklyRevenue = Array.from({ length: 8 }, (_, wi) => {
+    const now = new Date();
+    const weekEnd = new Date(now);
+    weekEnd.setDate(now.getDate() - wi * 7);
+    weekEnd.setHours(23, 59, 59, 999);
+    const weekStart = new Date(weekEnd);
+    weekStart.setDate(weekEnd.getDate() - 6);
+    weekStart.setHours(0, 0, 0, 0);
+    const revenue = paidOrders
+      .filter(o => { const d = new Date(o.createdAt); return d >= weekStart && d <= weekEnd; })
+      .reduce((s, o) => s + o.total, 0);
+    const label = weekStart.toLocaleDateString("en-ZA", { month: "short", day: "numeric" });
+    return { label, revenue };
+  }).reverse();
+  const maxWeekRevenue = Math.max(...weeklyRevenue.map(w => w.revenue), 1);
+
+  // Top 5 products by units sold
+  const productStats = new Map<string, { name: string; qty: number; revenue: number }>();
+  for (const order of paidOrders) {
+    for (const item of order.items) {
+      const unitPrice = parseFloat(String(item.price).replace(/[^0-9.]/g, "")) || 0;
+      const prev = productStats.get(item.name) ?? { name: item.name, qty: 0, revenue: 0 };
+      prev.qty  += item.qty;
+      prev.revenue += unitPrice * item.qty;
+      productStats.set(item.name, prev);
+    }
+  }
+  const topProducts = [...productStats.values()].sort((a, b) => b.qty - a.qty).slice(0, 5);
+
+  // Conversion funnel
+  const totalOrders = orders.length;
+  const withProof   = orders.filter(o => o.status !== "pending").length;
+  const approvedN   = paidOrders.length;
+  const deliveredN  = orders.filter(o => o.status === "delivered").length;
+  const pct = (n: number) => totalOrders ? Math.round((n / totalOrders) * 100) : 0;
+
   return (
     <div className="min-h-screen bg-[#0A0A0A]">
       {/* Top bar */}
@@ -51,6 +94,7 @@ export default async function Dashboard() {
         <nav className="hidden sm:flex items-center gap-4">
           <Link href="/admin/dashboard/images" className="text-gray-400 hover:text-white text-sm transition-colors">Site Images</Link>
           <Link href="/admin/dashboard/orders" className="text-gray-400 hover:text-white text-sm transition-colors">Orders</Link>
+          <Link href="/admin/dashboard/customers" className="text-gray-400 hover:text-white text-sm transition-colors">Customers</Link>
           <Link href="/admin/dashboard/quotes" className="text-gray-400 hover:text-white text-sm transition-colors">Quotes</Link>
           <Link href="/admin/dashboard/leads" className="text-gray-400 hover:text-white text-sm transition-colors">Leads</Link>
           <Link href="/shop" target="_blank" className="text-gray-400 hover:text-white text-sm transition-colors">View Shop ↗</Link>
@@ -85,10 +129,95 @@ export default async function Dashboard() {
           ))}
         </div>
 
+        {/* ── Analytics ─────────────────────────────────────────────────── */}
+        <div className="grid lg:grid-cols-3 gap-4 mb-8">
+
+          {/* Revenue chart + avg order */}
+          <div className="lg:col-span-2 bg-[#111111] border border-[#1F1F1F] rounded-2xl p-5">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-sm font-bold text-white">Weekly Revenue</h2>
+              <p className="text-[#D4AF37] font-bold text-sm">R {totalRevenue.toLocaleString()}</p>
+            </div>
+            <div className="flex items-end gap-1.5 h-24">
+              {weeklyRevenue.map(({ label, revenue }) => (
+                <div key={label} className="flex-1 flex flex-col items-center gap-1 h-full justify-end">
+                  <div
+                    className="w-full rounded-t-sm"
+                    style={{
+                      height: revenue > 0 ? `${Math.max((revenue / maxWeekRevenue) * 100, 6)}%` : "3px",
+                      background: revenue > 0 ? "#D4AF37" : "#1F1F1F",
+                    }}
+                  />
+                  <span className="text-[8px] text-gray-600 whitespace-nowrap leading-none">{label}</span>
+                </div>
+              ))}
+            </div>
+            <div className="flex gap-6 mt-4 pt-3 border-t border-[#1F1F1F]">
+              <div>
+                <p className="text-[10px] text-gray-500 uppercase tracking-wider">Avg Order</p>
+                <p className="text-white font-bold text-sm">R {avgOrderValue.toLocaleString()}</p>
+              </div>
+              <div>
+                <p className="text-[10px] text-gray-500 uppercase tracking-wider">Paid Orders</p>
+                <p className="text-white font-bold text-sm">{paidOrders.length}</p>
+              </div>
+              <div>
+                <p className="text-[10px] text-gray-500 uppercase tracking-wider">Total Revenue</p>
+                <p className="text-[#D4AF37] font-bold text-sm">R {totalRevenue.toLocaleString()}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Conversion funnel */}
+          <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-5">
+            <h2 className="text-sm font-bold text-white mb-4">Conversion Funnel</h2>
+            <div className="space-y-3.5">
+              {([
+                { label: "Orders Placed",   value: totalOrders, p: 100,             color: "#9ca3af" },
+                { label: "Proof Submitted", value: withProof,   p: pct(withProof),  color: "#f59e0b" },
+                { label: "Approved",        value: approvedN,   p: pct(approvedN),  color: "#10b981" },
+                { label: "Delivered",       value: deliveredN,  p: pct(deliveredN), color: "#D4AF37" },
+              ] as { label: string; value: number; p: number; color: string }[]).map(({ label, value, p, color }) => (
+                <div key={label}>
+                  <div className="flex justify-between mb-1">
+                    <span className="text-xs text-gray-400">{label}</span>
+                    <span className="text-xs font-bold" style={{ color }}>
+                      {value} <span className="text-gray-600 font-normal">({p}%)</span>
+                    </span>
+                  </div>
+                  <div className="h-1.5 bg-[#1F1F1F] rounded-full overflow-hidden">
+                    <div className="h-full rounded-full" style={{ width: `${p}%`, background: color }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Top selling products */}
+        {topProducts.length > 0 && (
+          <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl overflow-hidden mb-8">
+            <div className="px-5 py-3.5 border-b border-[#1F1F1F]">
+              <h2 className="text-sm font-bold text-white">Top Selling Products</h2>
+            </div>
+            <div className="divide-y divide-[#1A1A1A]">
+              {topProducts.map((p, i) => (
+                <div key={p.name} className="flex items-center gap-4 px-5 py-3">
+                  <span className="text-gray-600 text-xs font-bold w-4 shrink-0">{i + 1}</span>
+                  <p className="text-white text-sm flex-1 truncate">{p.name}</p>
+                  <span className="text-gray-500 text-xs shrink-0">{p.qty} sold</span>
+                  <span className="text-[#D4AF37] font-bold text-sm shrink-0">R {Math.round(p.revenue).toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Mobile quick nav links */}
         <div className="flex sm:hidden gap-2 mb-6 flex-wrap">
           {[
             { label: "Site Images", href: "/admin/dashboard/images" },
+            { label: "Customers",   href: "/admin/dashboard/customers" },
             { label: "Quotes",      href: "/admin/dashboard/quotes" },
             { label: "Leads",       href: "/admin/dashboard/leads" },
             { label: "Chat",        href: "/admin/dashboard/chat" },
