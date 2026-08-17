@@ -24,7 +24,7 @@ const sections = [
       },
       {
         q: "What is the 30% August–December Special?",
-        a: "From August to December, all products on our site are discounted by 30%. This is applied automatically. No coupon code needed.",
+        a: "From August to December, selected product categories (Home Appliances, Tablets, and Watches) are discounted by 30%. This is applied automatically. No coupon code needed.",
       },
     ],
   },

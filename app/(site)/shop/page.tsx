@@ -10,7 +10,7 @@ import AddToEnquiry from "./AddToEnquiry";
 export const dynamic = "force-dynamic";
 
 const CAT_META: Record<string, { title: string; description: string }> = {
-  "Smartphones":                  { title: "Smartphones — iPhones & Android",         description: "Shop iPhones, Samsung Galaxy, and more. 30% OFF August to December. Fast delivery across South Africa." },
+  "Smartphones":                  { title: "Smartphones — iPhones & Android",         description: "Shop iPhones, Samsung Galaxy, and more. 100% authentic with full warranty. Fast delivery across South Africa." },
   "TVs":                          { title: "Smart TVs — Samsung, LG, Hisense",        description: "4K and OLED Smart TVs from Samsung, LG, Hisense and more. Great prices with free delivery in South Africa." },
   "Gaming Consoles":              { title: "Gaming Consoles — PS5, Xbox & More",      description: "Buy PS5, Xbox Series X/S and gaming accessories. 100% authentic with full warranty." },
   "Gaming PCs":                   { title: "Gaming PCs — High-Performance Rigs",      description: "Pre-built gaming PCs with RTX and AMD Ryzen. Ready to game out of the box." },

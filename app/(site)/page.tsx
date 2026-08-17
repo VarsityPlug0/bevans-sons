@@ -86,7 +86,7 @@ export default async function HomePage() {
           <div>
             <div className="inline-flex items-center gap-2 bg-[#D4AF37]/10 border border-[#D4AF37]/20 rounded-full px-4 py-2 mb-6">
               <Tag size={12} color="#D4AF37" />
-              <span style={{ fontSize: 11, fontFamily: "var(--font-outfit)", fontWeight: 700, color: "#D4AF37", letterSpacing: "0.08em" }}>30% OFF — AUG TO DEC SPECIAL</span>
+              <span style={{ fontSize: 11, fontFamily: "var(--font-outfit)", fontWeight: 700, color: "#D4AF37", letterSpacing: "0.08em" }}>SPECIAL OFFERS — AUG TO DEC</span>
             </div>
             <h1 style={{ fontFamily: "var(--font-outfit)", fontWeight: 900, fontSize: "clamp(2.4rem,5vw,4rem)", lineHeight: 1.08, color: "#fff", marginBottom: "1.5rem" }}>
               Premium Gadgets<br />
@@ -158,10 +158,10 @@ export default async function HomePage() {
           <div className="relative z-10">
             <p style={{ fontSize: 11, fontFamily: "var(--font-outfit)", fontWeight: 800, letterSpacing: "0.15em", color: "#0A0A0A", textTransform: "uppercase", marginBottom: 8 }}>Limited Time</p>
             <h2 style={{ fontFamily: "var(--font-outfit)", fontWeight: 900, fontSize: "clamp(2rem,5vw,3.5rem)", color: "#0A0A0A", lineHeight: 1.1, marginBottom: 12 }}>
-              30% OFF Everything
+              30% OFF Selected Products
             </h2>
             <p style={{ color: "#1a1a00", fontSize: 16, marginBottom: 28, fontWeight: 500 }}>
-              August to December Special — Orders over R10,000 get an extra 25% discount
+              Home Appliances · Tablets · Watches — Orders over R10,000 get an extra 25% discount
             </p>
             <Link href="/special-offers"
               className="inline-flex items-center gap-2 bg-[#0A0A0A] text-[#D4AF37] font-bold px-8 py-4 rounded-xl text-sm hover:bg-[#111] transition-colors">
