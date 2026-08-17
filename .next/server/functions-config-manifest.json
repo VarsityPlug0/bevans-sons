@@ -1,6 +1,7 @@
 {
   "version": 1,
   "functions": {
+    "/api/admin/orders/[id]/proof": {},
     "/api/admin/upload": {},
     "/api/upload-proof": {}
   }

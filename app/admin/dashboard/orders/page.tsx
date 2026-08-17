@@ -1,10 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  CheckCircle, XCircle, Clock, Truck, Package,
-  ArrowLeft, RefreshCw, Search, Copy, MessageCircle, Save,
+  CheckCircle, XCircle, Clock, Truck, Package, ArrowLeft, RefreshCw,
+  Search, Copy, MessageCircle, Save, Camera, Upload, X, Download,
 } from "lucide-react";
 
 interface Order {
@@ -49,18 +49,41 @@ function toWaPhone(phone: string) {
   return clean;
 }
 
+function exportCSV(rows: Order[], filename = "orders") {
+  const header = ["Ref", "Name", "Email", "Phone", "Address", "Items", "Total", "Status", "Bank", "Tracking", "Date"];
+  const lines = rows.map(o => [
+    o.ref, o.name, o.email, o.phone, o.address,
+    o.items.map(i => `${i.name} x${i.qty}`).join("; "),
+    o.total, o.status, o.bank_id ?? "", o.tracking_number ?? "",
+    new Date(o.createdAt).toLocaleDateString("en-ZA"),
+  ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(","));
+  const csv = [header.join(","), ...lines].join("\n");
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${filename}-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function AdminOrdersPage() {
-  const [orders, setOrders]         = useState<Order[]>([]);
-  const [selected, setSelected]     = useState<Order | null>(null);
-  const [loading, setLoading]       = useState(true);
-  const [updating, setUpdating]     = useState(false);
-  const [notes, setNotes]           = useState("");
-  const [tracking, setTracking]     = useState("");
+  const [orders, setOrders]           = useState<Order[]>([]);
+  const [selected, setSelected]       = useState<Order | null>(null);
+  const [loading, setLoading]         = useState(true);
+  const [updating, setUpdating]       = useState(false);
+  const [bulkUpdating, setBulkUpdating] = useState(false);
+  const [notes, setNotes]             = useState("");
+  const [tracking, setTracking]       = useState("");
   const [savingTracking, setSavingTracking] = useState(false);
-  const [filter, setFilter]         = useState("all");
-  const [search, setSearch]         = useState("");
-  const [showDetail, setShowDetail] = useState(false);
-  const [copied, setCopied]         = useState<string | null>(null);
+  const [filter, setFilter]           = useState("all");
+  const [search, setSearch]           = useState("");
+  const [showDetail, setShowDetail]   = useState(false);
+  const [copied, setCopied]           = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
+  const [uploadingProof, setUploadingProof] = useState(false);
+  const proofInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => { fetchOrders(); }, []);
 
@@ -87,6 +110,31 @@ export default function AdminOrdersPage() {
     setUpdating(false);
   }
 
+  async function bulkUpdateStatus(status: string) {
+    if (!selectedIds.size) return;
+    setBulkUpdating(true);
+    const results = await Promise.all(
+      [...selectedIds].map(id =>
+        fetch(`/api/orders/${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status }),
+        }).then(r => r.ok ? r.json() : null)
+      )
+    );
+    const updated = results.filter(Boolean) as Order[];
+    setOrders(prev => prev.map(o => {
+      const u = updated.find(x => x.id === o.id);
+      return u ?? o;
+    }));
+    if (selected && updated.find(x => x.id === selected.id)) {
+      const u = updated.find(x => x.id === selected.id)!;
+      setSelected(u);
+    }
+    setSelectedIds(new Set());
+    setBulkUpdating(false);
+  }
+
   async function saveTracking() {
     if (!selected) return;
     setSavingTracking(true);
@@ -103,10 +151,50 @@ export default function AdminOrdersPage() {
     setSavingTracking(false);
   }
 
+  async function handleProofUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file || !selected) return;
+    setUploadingProof(true);
+    const buf = await file.arrayBuffer();
+    const bytes = new Uint8Array(buf);
+    let binary = "";
+    for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+    const base64 = btoa(binary);
+    const res = await fetch(`/api/admin/orders/${selected.id}/proof`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ file: base64, mimeType: file.type, filename: file.name }),
+    });
+    if (res.ok) {
+      const updated = await res.json();
+      setOrders(o => o.map(x => x.id === selected.id ? updated : x));
+      setSelected(updated);
+    }
+    setUploadingProof(false);
+    e.target.value = "";
+  }
+
   function copyField(text: string, key: string) {
     navigator.clipboard.writeText(text);
     setCopied(key);
     setTimeout(() => setCopied(null), 2000);
+  }
+
+  function toggleSelect(id: string, e: React.MouseEvent) {
+    e.stopPropagation();
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
+
+  function toggleSelectAll() {
+    if (selectedIds.size === visible.length && visible.length > 0) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(visible.map(o => o.id)));
+    }
   }
 
   function selectOrder(order: Order) {
@@ -127,8 +215,10 @@ export default function AdminOrdersPage() {
       )
     : statusFiltered;
 
+  const allVisibleSelected = visible.length > 0 && visible.every(o => selectedIds.has(o.id));
+
   const revenue = orders
-    .filter(o => o.status === "delivered" || o.status === "approved" || o.status === "shipped")
+    .filter(o => ["approved", "shipped", "delivered"].includes(o.status))
     .reduce((s, o) => s + o.total, 0);
 
   const statCards = [
@@ -142,12 +232,38 @@ export default function AdminOrdersPage() {
 
   return (
     <div className="min-h-screen bg-[#0A0A0A]">
+
+      {/* Lightbox modal */}
+      {lightboxUrl && (
+        <div
+          className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
+          onClick={() => setLightboxUrl(null)}>
+          <button
+            onClick={() => setLightboxUrl(null)}
+            className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors">
+            <X size={24} />
+          </button>
+          <div className="relative max-w-4xl w-full" onClick={e => e.stopPropagation()}>
+            {lightboxUrl.match(/\.pdf$/i) ? (
+              <embed src={lightboxUrl} type="application/pdf" className="w-full h-[85vh] rounded-xl" />
+            ) : (
+              <img src={lightboxUrl} alt="Proof of payment" className="max-h-[90vh] max-w-full mx-auto rounded-xl object-contain" />
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <header className="bg-[#0f0f0f] border-b border-[#1A1A1A] px-4 sm:px-6 py-3 flex items-center gap-3">
         <Link href="/admin/dashboard" className="text-gray-500 hover:text-white transition-colors shrink-0">
           <ArrowLeft size={18} />
         </Link>
         <h1 className="text-white font-semibold text-sm flex-1">Orders</h1>
+        <button
+          onClick={() => exportCSV(visible, "orders")}
+          className="flex items-center gap-1.5 text-gray-400 hover:text-[#D4AF37] text-xs transition-colors mr-2">
+          <Download size={13} /> Export
+        </button>
         <button onClick={fetchOrders}
           className="flex items-center gap-1.5 text-gray-400 hover:text-white text-xs transition-colors">
           <RefreshCw size={13} /> Refresh
@@ -187,7 +303,7 @@ export default function AdminOrdersPage() {
         </div>
 
         {/* Search */}
-        <div className="relative mb-5">
+        <div className="relative mb-3">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
           <input
             type="text"
@@ -197,6 +313,38 @@ export default function AdminOrdersPage() {
             className="w-full bg-[#111] border border-[#1F1F1F] rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]/50 transition-colors"
           />
         </div>
+
+        {/* Bulk action bar */}
+        {selectedIds.size > 0 && (
+          <div className="bg-[#1a1a1a] border border-[#D4AF37]/30 rounded-xl px-4 py-3 mb-3 flex items-center gap-2 flex-wrap">
+            <span className="text-white text-sm font-semibold mr-1">{selectedIds.size} selected</span>
+            <button
+              onClick={() => bulkUpdateStatus("shipped")}
+              disabled={bulkUpdating}
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold disabled:opacity-50 transition-opacity"
+              style={{ background: "#3b82f620", color: "#3b82f6", border: "1px solid #3b82f640" }}>
+              {bulkUpdating ? "…" : "Mark Shipped"}
+            </button>
+            <button
+              onClick={() => bulkUpdateStatus("delivered")}
+              disabled={bulkUpdating}
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold disabled:opacity-50 transition-opacity"
+              style={{ background: "#D4AF3720", color: "#D4AF37", border: "1px solid #D4AF3740" }}>
+              {bulkUpdating ? "…" : "Mark Delivered"}
+            </button>
+            <button
+              onClick={() => exportCSV([...selectedIds].map(id => orders.find(o => o.id === id)!).filter(Boolean))}
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold"
+              style={{ background: "#10b98120", color: "#10b981", border: "1px solid #10b98140" }}>
+              Export Selected
+            </button>
+            <button
+              onClick={() => setSelectedIds(new Set())}
+              className="ml-auto text-gray-500 hover:text-white transition-colors">
+              <X size={15} />
+            </button>
+          </div>
+        )}
 
         {/* Mobile back */}
         {showDetail && selected && (
@@ -210,32 +358,67 @@ export default function AdminOrdersPage() {
 
           {/* Order list */}
           <div className={`xl:col-span-1 space-y-2.5 ${showDetail && selected ? "hidden xl:block" : "block"}`}>
+
+            {/* Select all row */}
+            {!loading && visible.length > 0 && (
+              <div className="flex items-center gap-2 px-1 pb-1">
+                <input
+                  type="checkbox"
+                  checked={allVisibleSelected}
+                  onChange={toggleSelectAll}
+                  className="w-4 h-4 accent-[#D4AF37] cursor-pointer"
+                />
+                <span className="text-gray-500 text-xs">Select all ({visible.length})</span>
+              </div>
+            )}
+
             {loading ? (
               <p className="text-gray-500 text-sm py-10 text-center">Loading…</p>
             ) : visible.length === 0 ? (
               <p className="text-gray-500 text-sm py-10 text-center">No orders found</p>
             ) : visible.map(order => {
-              const cfg = STATUS_CONFIG[order.status] ?? STATUS_CONFIG.pending;
+              const cfg    = STATUS_CONFIG[order.status] ?? STATUS_CONFIG.pending;
+              const isChecked = selectedIds.has(order.id);
               return (
-                <button key={order.id} onClick={() => selectOrder(order)}
-                  className="w-full text-left bg-[#111111] border rounded-xl p-4 transition-colors hover:border-[#2a2a2a]"
-                  style={{ borderColor: selected?.id === order.id ? "#D4AF37" : "#1F1F1F" }}>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-[#D4AF37] font-bold text-sm">{order.ref}</span>
-                    <span className="flex items-center gap-1 text-xs" style={{ color: cfg.color }}>
-                      {cfg.icon} {cfg.label}
-                    </span>
+                <div
+                  key={order.id}
+                  onClick={() => selectOrder(order)}
+                  className="w-full text-left bg-[#111111] border rounded-xl p-4 transition-colors hover:border-[#2a2a2a] cursor-pointer"
+                  style={{ borderColor: selected?.id === order.id ? "#D4AF37" : isChecked ? "#D4AF3766" : "#1F1F1F" }}>
+                  <div className="flex items-start gap-3">
+                    {/* Checkbox */}
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      onClick={e => toggleSelect(order.id, e)}
+                      onChange={() => {}}
+                      className="mt-0.5 w-4 h-4 accent-[#D4AF37] cursor-pointer shrink-0"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[#D4AF37] font-bold text-sm">{order.ref}</span>
+                        <div className="flex items-center gap-1.5">
+                          {/* Proof indicator */}
+                          {order.proof_url && (
+                            <Camera size={11} className="text-[#10b981]" />
+                          )}
+                          <span className="flex items-center gap-1 text-xs" style={{ color: cfg.color }}>
+                            {cfg.icon} {cfg.label}
+                          </span>
+                        </div>
+                      </div>
+                      <p className="text-white text-sm font-medium truncate">{order.name}</p>
+                      <p className="text-gray-500 text-xs truncate">{order.email}</p>
+                      <div className="flex justify-between mt-2">
+                        <span className="text-xs text-gray-600">
+                          {order.items.length} item{order.items.length !== 1 ? "s" : ""}
+                          {" · "}{new Date(order.createdAt).toLocaleDateString("en-ZA")}
+                        </span>
+                        <span className="text-sm font-bold text-white">R {order.total.toLocaleString()}</span>
+                      </div>
+                    </div>
                   </div>
-                  <p className="text-white text-sm font-medium truncate">{order.name}</p>
-                  <p className="text-gray-500 text-xs truncate">{order.email}</p>
-                  <div className="flex justify-between mt-2">
-                    <span className="text-xs text-gray-600">
-                      {order.items.length} item{order.items.length !== 1 ? "s" : ""}
-                      {" · "}{new Date(order.createdAt).toLocaleDateString("en-ZA")}
-                    </span>
-                    <span className="text-sm font-bold text-white">R {order.total.toLocaleString()}</span>
-                  </div>
-                </button>
+                </div>
               );
             })}
           </div>
@@ -261,7 +444,6 @@ export default function AdminOrdersPage() {
                     )}
                   </div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    {/* Bank badge */}
                     {selected.bank_id && BANK_LABELS[selected.bank_id] && (
                       <span className="px-2.5 py-1 rounded-full text-xs font-bold"
                         style={{
@@ -272,7 +454,6 @@ export default function AdminOrdersPage() {
                         {BANK_LABELS[selected.bank_id].label}
                       </span>
                     )}
-                    {/* Status badge */}
                     <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
                       style={{
                         color: STATUS_CONFIG[selected.status]?.color,
@@ -299,7 +480,6 @@ export default function AdminOrdersPage() {
                         <p className="text-sm text-white break-words">{value}</p>
                       </div>
                       <div className="flex gap-1.5 shrink-0 mt-3">
-                        {/* Copy */}
                         <button
                           onClick={() => copyField(value, key)}
                           title={`Copy ${label}`}
@@ -308,7 +488,6 @@ export default function AdminOrdersPage() {
                             ? <CheckCircle size={13} color="#22c55e" />
                             : <Copy size={13} />}
                         </button>
-                        {/* WhatsApp (phone only) */}
                         {label === "Phone" && selected.phone && (
                           <a
                             href={`https://wa.me/${toWaPhone(selected.phone)}?text=${encodeURIComponent(`Hi ${selected.name.split(" ")[0]}, this is Daisy Gadgets regarding your order ${selected.ref}.`)}`}
@@ -395,21 +574,54 @@ export default function AdminOrdersPage() {
                 </div>
 
                 {/* Proof of payment */}
-                {selected.proof_url && (
-                  <div>
-                    <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-3">Proof of Payment</p>
-                    {selected.proof_url.endsWith(".pdf") ? (
-                      <a href={selected.proof_url} target="_blank" rel="noopener noreferrer"
-                        className="text-[#D4AF37] text-sm underline">View PDF proof ↗</a>
-                    ) : (
-                      <a href={selected.proof_url} target="_blank" rel="noopener noreferrer">
-                        <div className="relative h-48 rounded-xl overflow-hidden border border-[#1F1F1F]">
-                          <Image src={selected.proof_url} alt="Proof" fill className="object-contain" />
-                        </div>
-                      </a>
-                    )}
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-[10px] text-gray-500 uppercase tracking-wider">Proof of Payment</p>
+                    {/* Admin upload/replace */}
+                    <button
+                      onClick={() => proofInputRef.current?.click()}
+                      disabled={uploadingProof}
+                      className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg disabled:opacity-50 transition-colors"
+                      style={{ background: "#1F1F1F", color: "#9ca3af" }}>
+                      <Upload size={11} />
+                      {uploadingProof ? "Uploading…" : selected.proof_url ? "Replace Proof" : "Upload Proof"}
+                    </button>
+                    <input
+                      ref={proofInputRef}
+                      type="file"
+                      accept="image/*,.pdf"
+                      className="hidden"
+                      onChange={handleProofUpload}
+                    />
                   </div>
-                )}
+
+                  {selected.proof_url ? (
+                    selected.proof_url.match(/\.pdf$/i) ? (
+                      <button
+                        onClick={() => setLightboxUrl(selected.proof_url!)}
+                        className="text-[#D4AF37] text-sm underline">
+                        View PDF proof ↗
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => setLightboxUrl(selected.proof_url!)}
+                        className="block w-full group">
+                        <div className="relative h-48 rounded-xl overflow-hidden border border-[#1F1F1F] group-hover:border-[#D4AF37]/40 transition-colors">
+                          <Image src={selected.proof_url} alt="Proof" fill className="object-contain" />
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 flex items-center justify-center transition-all">
+                            <span className="opacity-0 group-hover:opacity-100 text-white text-xs font-semibold bg-black/60 px-3 py-1.5 rounded-full transition-opacity">
+                              View full size
+                            </span>
+                          </div>
+                        </div>
+                      </button>
+                    )
+                  ) : (
+                    <div className="h-24 rounded-xl border border-dashed border-[#2a2a2a] flex items-center justify-center">
+                      <p className="text-gray-600 text-sm">No proof uploaded</p>
+                    </div>
+                  )}
+                </div>
 
                 {/* Admin notes */}
                 <div>
