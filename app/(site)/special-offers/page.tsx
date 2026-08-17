@@ -49,7 +49,7 @@ export default async function SpecialOffersPage() {
       </div>
 
       <div className="flex items-center gap-5 mb-8">
-        <h2 className="text-2xl font-bold text-white whitespace-nowrap">Home Appliances, Tablets & Watches on Sale</h2>
+        <h2 className="text-2xl font-bold text-white">Home Appliances, Tablets & Watches on Sale</h2>
         <div className="flex-1 h-px bg-[#1F1F1F]" />
         <span className="text-[#D4AF37] text-sm font-semibold">{products.length} products</span>
       </div>
