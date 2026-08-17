@@ -60,10 +60,9 @@ export default async function SpecialOffersPage() {
           <p className="text-gray-500">No products available right now. Check back soon!</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {products.map((p) => {
-            const discounted = parsePrice(p.price);
-            const original = Math.round(discounted / 0.7);
+            const original = Math.round(parsePrice(p.price) / 0.7);
             const originalDisplay = p.originalPrice || `R ${original.toLocaleString()}`;
             return (
               <Link key={p.id} href={`/shop/${p.id}`}
@@ -71,21 +70,28 @@ export default async function SpecialOffersPage() {
                 <div className="relative h-64 bg-[#0f0f0f] overflow-hidden">
                   {p.imageUrl ? (
                     <Image src={p.imageUrl} alt={p.name} fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-contain transition-transform duration-500 group-hover:scale-105"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <Package size={40} color="#2a2a2a" strokeWidth={1} />
+                      <Package size={48} color="#2a2a2a" strokeWidth={1} />
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#111111]/60 to-transparent" />
-                  <span className="absolute top-3 left-3 btn-gold text-[10px] font-bold px-2.5 py-1 rounded-full">30% OFF</span>
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#111111]/70 to-transparent" />
+                  <span className="absolute top-3 left-3 btn-gold text-[10px] font-bold px-3 py-1 rounded-full">30% OFF</span>
                 </div>
-                <div className="p-5 flex flex-col flex-1">
-                  <p className="text-[10px] text-[#D4AF37] uppercase tracking-wider mb-1.5">{p.category}</p>
-                  <p className="font-semibold text-white text-sm leading-snug mb-3 flex-1 line-clamp-2">{p.name}</p>
-                  <p className="text-[#D4AF37] font-bold text-lg mb-3">{originalDisplay}</p>
-                  <AddToEnquiry id={p.id} name={p.name} price={p.price} imageUrl={p.imageUrl} category={p.category} />
+                <div className="p-6 flex flex-col flex-1">
+                  <p className="text-xs text-[#D4AF37] uppercase tracking-wider mb-2">{p.category}</p>
+                  <p className="font-medium text-white text-sm leading-snug mb-2 flex-1">{p.name}</p>
+                  <div className="flex items-center gap-2 mb-3">
+                    <p className="text-[#D4AF37] font-bold text-xl">{originalDisplay}</p>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <div className="w-full py-2.5 rounded-xl text-sm font-semibold text-center text-white border border-[#2a2a2a] group-hover:border-[#D4AF37]/50 transition-colors">
+                      View Details
+                    </div>
+                    <AddToEnquiry id={p.id} name={p.name} price={p.price} imageUrl={p.imageUrl} category={p.category} />
+                  </div>
                 </div>
               </Link>
             );
