@@ -5,6 +5,7 @@ export interface Product {
   id: string;
   name: string;
   price: string;
+  originalPrice: string;
   category: string;
   description: string;
   imageUrl: string;
@@ -43,9 +44,9 @@ export function createProduct(data: Omit<Product, "id" | "createdAt" | "updatedA
   const now = new Date().toISOString();
   const id = `${Date.now()}`;
   db.prepare(`
-    INSERT INTO products (id, name, price, category, description, imageUrl, inStock, featured, createdAt, updatedAt)
-    VALUES (@id, @name, @price, @category, @description, @imageUrl, @inStock, @featured, @createdAt, @updatedAt)
-  `).run({ id, ...data, inStock: data.inStock ? 1 : 0, featured: data.featured ? 1 : 0, createdAt: now, updatedAt: now });
+    INSERT INTO products (id, name, price, originalPrice, category, description, imageUrl, inStock, featured, createdAt, updatedAt)
+    VALUES (@id, @name, @price, @originalPrice, @category, @description, @imageUrl, @inStock, @featured, @createdAt, @updatedAt)
+  `).run({ id, ...data, originalPrice: data.originalPrice ?? "", inStock: data.inStock ? 1 : 0, featured: data.featured ? 1 : 0, createdAt: now, updatedAt: now });
   return getProduct(id)!;
 }
 
@@ -56,6 +57,7 @@ export function updateProduct(id: string, data: Partial<Omit<Product, "id" | "cr
     UPDATE products SET
       name = COALESCE(@name, name),
       price = COALESCE(@price, price),
+      originalPrice = COALESCE(@originalPrice, originalPrice),
       category = COALESCE(@category, category),
       description = COALESCE(@description, description),
       imageUrl = COALESCE(@imageUrl, imageUrl),
@@ -68,6 +70,7 @@ export function updateProduct(id: string, data: Partial<Omit<Product, "id" | "cr
     updatedAt: now,
     name: data.name ?? null,
     price: data.price ?? null,
+    originalPrice: data.originalPrice ?? null,
     category: data.category ?? null,
     description: data.description ?? null,
     imageUrl: data.imageUrl ?? null,

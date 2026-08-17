@@ -20,6 +20,7 @@ export function getDb(): Database.Database {
   _db.pragma("journal_mode = WAL");
   _db.pragma("foreign_keys = ON");
   initSchema(_db);
+  addOriginalPriceColumn(_db);
   migrateFromJson(_db);
   seedDefaultProducts(_db);
   exportProductsJson(_db);
@@ -39,16 +40,17 @@ export function exportProductsJson(db?: Database.Database): void {
 function initSchema(db: Database.Database) {
   db.exec(`
     CREATE TABLE IF NOT EXISTS products (
-      id          TEXT PRIMARY KEY,
-      name        TEXT NOT NULL,
-      price       TEXT NOT NULL,
-      category    TEXT NOT NULL,
-      description TEXT NOT NULL DEFAULT '',
-      imageUrl    TEXT NOT NULL DEFAULT '',
-      inStock     INTEGER NOT NULL DEFAULT 1,
-      featured    INTEGER NOT NULL DEFAULT 0,
-      createdAt   TEXT NOT NULL,
-      updatedAt   TEXT NOT NULL
+      id            TEXT PRIMARY KEY,
+      name          TEXT NOT NULL,
+      price         TEXT NOT NULL,
+      originalPrice TEXT NOT NULL DEFAULT '',
+      category      TEXT NOT NULL,
+      description   TEXT NOT NULL DEFAULT '',
+      imageUrl      TEXT NOT NULL DEFAULT '',
+      inStock       INTEGER NOT NULL DEFAULT 1,
+      featured      INTEGER NOT NULL DEFAULT 0,
+      createdAt     TEXT NOT NULL,
+      updatedAt     TEXT NOT NULL
     );
 
     CREATE TABLE IF NOT EXISTS leads (
@@ -375,4 +377,10 @@ function seedDefaultProducts(db: Database.Database) {
   seedInsert(products);
 
   db.prepare("INSERT OR IGNORE INTO migrations (name) VALUES (?)").run("seed_products_v1");
+}
+
+function addOriginalPriceColumn(db: Database.Database) {
+  try {
+    db.exec("ALTER TABLE products ADD COLUMN originalPrice TEXT NOT NULL DEFAULT ''");
+  } catch { /* column already exists — ignore */ }
 }

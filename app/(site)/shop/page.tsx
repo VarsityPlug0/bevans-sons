@@ -173,7 +173,9 @@ function ProductCard({ product }: { product: ReturnType<typeof getProducts>[0] }
         )}
         <div className="flex items-center gap-2 mb-3">
           <p className="text-[#D4AF37] font-bold text-xl">{product.price}</p>
-          <p className="text-gray-600 text-sm line-through">R {Math.round((parseFloat(product.price.replace(/[^0-9.]/g, "")) || 0) / 0.7).toLocaleString()}</p>
+          {product.originalPrice && (
+            <p className="text-gray-600 text-sm line-through">{product.originalPrice}</p>
+          )}
         </div>
         <div className="flex flex-col gap-2">
           <div className="w-full py-2.5 rounded-xl text-sm font-semibold text-center text-white border border-[#2a2a2a] group-hover:border-[#D4AF37]/50 transition-colors">

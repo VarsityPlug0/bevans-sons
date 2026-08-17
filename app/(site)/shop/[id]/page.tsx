@@ -132,7 +132,9 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white mb-3 leading-tight">{product.name}</h1>
           <div className="flex items-center gap-3 mb-4">
             <p className="text-3xl font-bold text-[#D4AF37]">{product.price}</p>
-            <p className="text-gray-500 text-lg line-through">R {Math.round((parseFloat(product.price.replace(/[^0-9.]/g, "")) || 0) / 0.7).toLocaleString()}</p>
+            {product.originalPrice && (
+              <p className="text-gray-500 text-lg line-through">{product.originalPrice}</p>
+            )}
           </div>
 
           {product.description && (
@@ -158,9 +160,9 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
           <div className="flex flex-col gap-3">
             {/* Primary: Add to cart + Buy Now */}
             <div className="flex gap-3">
-              <BuyNowButton product={{ id: product.id, name: product.name, price: product.price, imageUrl: product.imageUrl ?? "", category: product.category }} />
+              <BuyNowButton product={{ id: product.id, name: product.name, price: product.price, originalPrice: product.originalPrice, imageUrl: product.imageUrl ?? "", category: product.category }} />
             </div>
-            <AddToEnquiry id={product.id} name={product.name} price={product.price} imageUrl={product.imageUrl ?? ""} category={product.category} />
+            <AddToEnquiry id={product.id} name={product.name} price={product.price} originalPrice={product.originalPrice} imageUrl={product.imageUrl ?? ""} category={product.category} />
           </div>
         </div>
       </div>

@@ -61,6 +61,7 @@ export default async function SpecialOffersPage() {
           {products.map((p) => {
             const discounted = parsePrice(p.price);
             const original = Math.round(discounted / 0.7);
+            const originalDisplay = p.originalPrice || `R ${original.toLocaleString()}`;
             return (
               <Link key={p.id} href={`/shop/${p.id}`}
                 className="bg-[#111111] border border-[#1F1F1F] rounded-2xl overflow-hidden card-hover flex flex-col group">
@@ -81,8 +82,8 @@ export default async function SpecialOffersPage() {
                   <p className="text-[10px] text-[#D4AF37] uppercase tracking-wider mb-1.5">{p.category}</p>
                   <p className="font-semibold text-white text-sm leading-snug mb-3 flex-1 line-clamp-2">{p.name}</p>
                   <div className="flex items-center gap-2 mb-3">
-                    <p className="text-[#D4AF37] font-bold text-lg">R {discounted.toLocaleString()}</p>
-                    <p className="text-gray-600 text-sm line-through">R {original.toLocaleString()}</p>
+                    <p className="text-[#D4AF37] font-bold text-lg">{p.price}</p>
+                    <p className="text-gray-600 text-sm line-through">{originalDisplay}</p>
                   </div>
                   <AddToEnquiry id={p.id} name={p.name} price={p.price} imageUrl={p.imageUrl} category={p.category} />
                 </div>

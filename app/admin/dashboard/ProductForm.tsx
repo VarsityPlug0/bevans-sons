@@ -17,6 +17,7 @@ export default function ProductForm({ product }: Props) {
   const [form, setForm] = useState({
     name: product?.name ?? "",
     price: product?.price ?? "",
+    originalPrice: product?.originalPrice ?? "",
     category: product?.category ?? CATEGORIES[0],
     description: product?.description ?? "",
     imageUrl: product?.imageUrl ?? "",
@@ -113,13 +114,24 @@ export default function ProductForm({ product }: Props) {
             />
           </div>
 
-          {/* Price */}
+          {/* Selling Price */}
           <div>
-            <label className="block text-sm text-gray-400 mb-2">Price *</label>
+            <label className="block text-sm text-gray-400 mb-2">Selling Price *</label>
             <input
               value={form.price}
               onChange={(e) => set("price", e.target.value)}
-              placeholder="e.g. R7,999 or From R5,500"
+              placeholder="e.g. R7,999"
+              className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none"
+            />
+          </div>
+
+          {/* Original Price */}
+          <div>
+            <label className="block text-sm text-gray-400 mb-2">Original Price <span className="text-gray-600 font-normal">(shown with strikethrough)</span></label>
+            <input
+              value={form.originalPrice}
+              onChange={(e) => set("originalPrice", e.target.value)}
+              placeholder="e.g. R11,999"
               className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none"
             />
           </div>

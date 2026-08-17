@@ -7,18 +7,19 @@ interface Props {
   id: string;
   name: string;
   price: string;
-  imageUrl: string;
+  originalPrice?: string;
+  imageUrl: string | undefined;
   category: string;
 }
 
-export default function AddToEnquiry({ id, name, price, imageUrl, category }: Props) {
+export default function AddToEnquiry({ id, name, price, originalPrice, imageUrl, category }: Props) {
   const { add, openCart } = useCart();
   const [added, setAdded] = useState(false);
 
   function handleAdd(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
-    add({ id, name, price, imageUrl, category });
+    add({ id, name, price, originalPrice, imageUrl: imageUrl ?? "", category });
     setAdded(true);
     openCart();
     setTimeout(() => setAdded(false), 2000);

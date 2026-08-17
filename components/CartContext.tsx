@@ -8,6 +8,7 @@ export interface CartItem {
   id: string;
   name: string;
   price: string;
+  originalPrice?: string;
   imageUrl: string;
   category: string;
   qty: number;
@@ -164,7 +165,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                     <p className="text-gray-500 text-xs mb-2">{item.category}</p>
                     <div className="flex items-center gap-2">
                       <p className="text-[#D4AF37] font-bold text-sm">{item.price}</p>
-                      <p className="text-gray-600 text-xs line-through">R {Math.round((parsePrice(item.price)) / 0.7).toLocaleString()}</p>
+                      {item.originalPrice && (
+                        <p className="text-gray-600 text-xs line-through">{item.originalPrice}</p>
+                      )}
                     </div>
                     {/* Qty controls */}
                     <div className="flex items-center gap-2 mt-2">

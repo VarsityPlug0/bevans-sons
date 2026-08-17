@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { ShoppingCart } from "lucide-react";
 
 interface Props {
-  product: { id: string; name: string; price: string; imageUrl: string; category: string };
+  product: { id: string; name: string; price: string; originalPrice?: string; imageUrl: string; category: string };
 }
 
 export default function BuyNowButton({ product }: Props) {
