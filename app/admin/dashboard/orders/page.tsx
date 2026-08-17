@@ -1,10 +1,11 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
   CheckCircle, XCircle, Clock, Truck, Package, ArrowLeft, RefreshCw,
   Search, Copy, MessageCircle, Save, Camera, Upload, X, Download,
+  Bell, BellOff,
 } from "lucide-react";
 
 interface Order {
@@ -83,7 +84,105 @@ export default function AdminOrdersPage() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
   const [uploadingProof, setUploadingProof] = useState(false);
-  const proofInputRef = useRef<HTMLInputElement>(null);
+  const proofInputRef  = useRef<HTMLInputElement>(null);
+  const ordersRef      = useRef<Order[]>([]);
+
+  // Notification / real-time state
+  const [alertOrders,   setAlertOrders]   = useState<Order[]>([]);
+  const [lastRefreshAt, setLastRefreshAt] = useState<Date>(new Date());
+  const [notifEnabled,  setNotifEnabled]  = useState(false);
+  const [, setTick]                       = useState(0); // drives "X ago" re-render
+
+  // ── Helpers ────────────────────────────────────────────────────────────────
+
+  function playBeep() {
+    try {
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(880, ctx.currentTime);
+      gain.gain.setValueAtTime(0.25, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.5);
+    } catch { /* AudioContext not available */ }
+  }
+
+  function timeSince(date: Date) {
+    const s = Math.floor((Date.now() - date.getTime()) / 1000);
+    if (s < 15) return "just now";
+    if (s < 60) return `${s}s ago`;
+    return `${Math.floor(s / 60)}m ago`;
+  }
+
+  function sendBrowserNotif(newOrders: Order[]) {
+    if (typeof window === "undefined" || !("Notification" in window)) return;
+    if (Notification.permission !== "granted") return;
+    new Notification("New Payment Proof — Daisy Gadgets", {
+      body: `${newOrders.length} new proof${newOrders.length > 1 ? "s" : ""} received: ${newOrders.map(o => o.ref).join(", ")}`,
+      icon: "/logo.jpg",
+    });
+  }
+
+  async function requestNotifications() {
+    if (typeof window === "undefined" || !("Notification" in window)) return;
+    const perm = await Notification.requestPermission();
+    setNotifEnabled(perm === "granted");
+  }
+
+  const silentRefresh = useCallback(async () => {
+    try {
+      const res  = await fetch("/api/orders");
+      const data = await res.json();
+      if (!Array.isArray(data)) return;
+
+      const knownIds = new Set(ordersRef.current.map(o => o.id));
+      const fresh    = (data as Order[]).filter(o => !knownIds.has(o.id) && o.status === "proof_submitted");
+
+      if (fresh.length > 0) {
+        setAlertOrders(prev => [...prev, ...fresh]);
+        playBeep();
+        sendBrowserNotif(fresh);
+      }
+
+      setOrders(data as Order[]);
+      setLastRefreshAt(new Date());
+    } catch { /* network hiccup — ignore */ }
+  }, []);
+
+  // ── Effects ────────────────────────────────────────────────────────────────
+
+  // Keep ref in sync with state so silentRefresh always sees current orders
+  useEffect(() => { ordersRef.current = orders; }, [orders]);
+
+  // Tab title badge — shows pending count
+  useEffect(() => {
+    const pending = orders.filter(o => o.status === "pending" || o.status === "proof_submitted").length;
+    document.title = pending > 0 ? `(${pending}) Orders — Daisy Admin` : "Orders — Daisy Admin";
+    return () => { document.title = "Daisy Gadgets Co."; };
+  }, [orders]);
+
+  // Auto-refresh every 60 s
+  useEffect(() => {
+    const interval = setInterval(silentRefresh, 60_000);
+    return () => clearInterval(interval);
+  }, [silentRefresh]);
+
+  // Tick every 15 s to keep "last updated X ago" fresh
+  useEffect(() => {
+    const t = setInterval(() => setTick(n => n + 1), 15_000);
+    return () => clearInterval(t);
+  }, []);
+
+  // Restore notification permission state on mount
+  useEffect(() => {
+    if (typeof window !== "undefined" && "Notification" in window) {
+      setNotifEnabled(Notification.permission === "granted");
+    }
+  }, []);
 
   useEffect(() => { fetchOrders(); }, []);
 
@@ -92,6 +191,7 @@ export default function AdminOrdersPage() {
     const res  = await fetch("/api/orders");
     const data = await res.json();
     setOrders(Array.isArray(data) ? data : []);
+    setLastRefreshAt(new Date());
     setLoading(false);
   }
 
@@ -259,10 +359,17 @@ export default function AdminOrdersPage() {
           <ArrowLeft size={18} />
         </Link>
         <h1 className="text-white font-semibold text-sm flex-1">Orders</h1>
+        <span className="hidden sm:block text-gray-600 text-[10px]">Updated {timeSince(lastRefreshAt)}</span>
         <button
           onClick={() => exportCSV(visible, "orders")}
-          className="flex items-center gap-1.5 text-gray-400 hover:text-[#D4AF37] text-xs transition-colors mr-2">
+          className="flex items-center gap-1.5 text-gray-400 hover:text-[#D4AF37] text-xs transition-colors">
           <Download size={13} /> Export
+        </button>
+        <button
+          onClick={notifEnabled ? undefined : requestNotifications}
+          title={notifEnabled ? "Browser notifications on" : "Enable browser notifications"}
+          className="text-gray-400 hover:text-white transition-colors">
+          {notifEnabled ? <Bell size={15} className="text-[#D4AF37]" /> : <BellOff size={15} />}
         </button>
         <button onClick={fetchOrders}
           className="flex items-center gap-1.5 text-gray-400 hover:text-white text-xs transition-colors">
@@ -313,6 +420,28 @@ export default function AdminOrdersPage() {
             className="w-full bg-[#111] border border-[#1F1F1F] rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]/50 transition-colors"
           />
         </div>
+
+        {/* New proof alert banner */}
+        {alertOrders.length > 0 && (
+          <div className="bg-[#f59e0b]/10 border border-[#f59e0b]/40 rounded-xl px-4 py-3 mb-3 flex items-center gap-3 animate-pulse-once">
+            <Package size={15} className="text-[#f59e0b] shrink-0" />
+            <p className="text-[#f59e0b] text-sm flex-1">
+              <span className="font-bold">{alertOrders.length} new proof{alertOrders.length > 1 ? "s" : ""} submitted</span>
+              {" — "}{alertOrders.map(o => o.ref).join(", ")}
+            </p>
+            <button
+              onClick={() => {
+                setFilter("proof_submitted");
+                setAlertOrders([]);
+              }}
+              className="text-[#f59e0b] text-xs font-semibold hover:text-white transition-colors shrink-0">
+              View
+            </button>
+            <button onClick={() => setAlertOrders([])} className="text-[#f59e0b]/50 hover:text-[#f59e0b] transition-colors">
+              <X size={14} />
+            </button>
+          </div>
+        )}
 
         {/* Bulk action bar */}
         {selectedIds.size > 0 && (
