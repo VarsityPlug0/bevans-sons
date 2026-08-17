@@ -23,6 +23,7 @@ export interface Order {
   proof_url: string | null;
   eft_reference: string | null;
   notes: string | null;
+  bank_id: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -39,6 +40,7 @@ export function createOrder(data: {
   items: OrderItem[];
   total: number;
   eft_reference?: string;
+  bank_id?: string;
 }): Order {
   const db = getDb();
   const now = new Date().toISOString();
@@ -46,8 +48,8 @@ export function createOrder(data: {
   const ref = genRef();
 
   db.prepare(`
-    INSERT INTO orders (id, ref, name, email, phone, address, items, total, status, payment_method, eft_reference, createdAt, updatedAt)
-    VALUES (@id, @ref, @name, @email, @phone, @address, @items, @total, 'pending', 'eft', @eft_reference, @now, @now)
+    INSERT INTO orders (id, ref, name, email, phone, address, items, total, status, payment_method, eft_reference, bank_id, createdAt, updatedAt)
+    VALUES (@id, @ref, @name, @email, @phone, @address, @items, @total, 'pending', 'eft', @eft_reference, @bank_id, @now, @now)
   `).run({
     id, ref,
     name: data.name,
@@ -57,6 +59,7 @@ export function createOrder(data: {
     items: JSON.stringify(data.items),
     total: data.total,
     eft_reference: data.eft_reference ?? null,
+    bank_id: data.bank_id ?? null,
     now,
   });
 

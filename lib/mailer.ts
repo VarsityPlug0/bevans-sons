@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import path from "path";
 import { existsSync } from "fs";
+import { getBankById, type BankDetails } from "./bankDetails";
 
 const LOGO_PATH = path.join(process.cwd(), "public", "logo.jpg");
 const LOGO_CID  = "logo@daisygadgets";
@@ -15,14 +16,6 @@ const MUTED       = "#6b7280";
 const WA_NUM      = "27848961782";
 const SITE        = "https://daisygadgetsco.com";
 
-const BANK = {
-  bank: "FNB / RMB",
-  accountHolder: "Daisy Gadgets Co.",
-  accountType: "Business Current",
-  accountNumber: "63211629332",
-  branchCode: "250655",
-  payshap: "+27848961782@FNB",
-};
 
 function createTransporter() {
   const apiKey = process.env.RESEND_API_KEY;
@@ -319,9 +312,11 @@ export interface RejectionEmailData {
   total: number;
   items: { name: string; price: string; qty: number; imageUrl?: string }[];
   reason?: string | null;
+  bank?: BankDetails | null;
 }
 
 export async function sendRejectionEmail(data: RejectionEmailData) {
+  const bank = data.bank ?? getBankById("fnb");
   const { attachments: imgAttachments, cidMap } = await buildProductAttachments(data.items);
 
   const itemRows = data.items.map(i => {
@@ -394,12 +389,12 @@ export async function sendRejectionEmail(data: RejectionEmailData) {
     <p style="margin:0 0 14px;color:#e5e7eb;font-size:15px;font-weight:700">✦ Payment Details (EFT)</p>
     <div style="background:${DARK2};border:1px solid ${BORDER};border-radius:12px;padding:4px 20px;margin-bottom:28px">
       <table width="100%" cellpadding="0" cellspacing="0">
-        ${infoRow("Bank", BANK.bank)}
-        ${infoRow("Account Holder", BANK.accountHolder)}
-        ${infoRow("Account Type", BANK.accountType)}
-        ${infoRow("Account Number", `<span style="font-family:monospace;font-size:15px;color:${GOLD};letter-spacing:0.06em">${BANK.accountNumber}</span>`)}
-        ${infoRow("Branch Code", BANK.branchCode)}
-        ${infoRow("PayShap", BANK.payshap)}
+        ${infoRow("Bank", bank.bank)}
+        ${infoRow("Account Holder", bank.accountHolder)}
+        ${infoRow("Account Type", bank.accountType)}
+        ${infoRow("Account Number", `<span style="font-family:monospace;font-size:15px;color:${GOLD};letter-spacing:0.06em">${bank.accountNumber}</span>`)}
+        ${infoRow("Branch Code", bank.branchCode)}
+        ${bank.payshap ? infoRow("PayShap", bank.payshap) : ""}
         ${infoRow("Reference", `<strong style="color:${GOLD};font-size:15px;font-family:monospace">${data.ref}</strong>`)}
         ${infoRow("Amount", `<strong style="color:${GOLD};font-size:15px">R ${data.total.toLocaleString("en-ZA")}</strong>`)}
       </table>

@@ -4,15 +4,7 @@ import { useCart } from "@/components/CartContext";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Upload, CheckCircle, Copy } from "lucide-react";
-
-const BANK = {
-  bank: "FNB / RMB",
-  accountHolder: "Daisy Gadgets Co.",
-  accountType: "Business",
-  accountNumber: "63211629332",
-  branchCode: "250655",
-  payshap: "+27848961782@FNB",
-};
+import type { BankDetails } from "@/lib/bankDetails";
 
 function parsePrice(p: string): number {
   return parseFloat(p.replace(/[^0-9.]/g, "")) || 0;
@@ -27,6 +19,7 @@ export default function CheckoutPage() {
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
   const [addr, setAddr] = useState({ line1: "", line2: "", suburb: "", city: "", province: "", postal: "" });
   const [order, setOrder] = useState<{ id: string; ref: string } | null>(null);
+  const [selectedBank, setSelectedBank] = useState<BankDetails | null>(null);
   const [proof, setProof] = useState<File | null>(null);
   const [proofPreview, setProofPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -63,6 +56,7 @@ export default function CheckoutPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Order failed");
       setOrder({ id: data.id, ref: data.ref });
+      setSelectedBank(data.bank);
       setStep("payment");
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Something went wrong");
@@ -278,7 +272,7 @@ export default function CheckoutPage() {
         )}
 
         {/* ── Step 2: EFT Payment ──────────────────────────────── */}
-        {step === "payment" && order && (
+        {step === "payment" && order && selectedBank && (
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
             <div className="lg:col-span-3 space-y-6">
               <div className="bg-[#111111] border border-[#D4AF37]/20 rounded-2xl p-7">
@@ -287,16 +281,16 @@ export default function CheckoutPage() {
                   Transfer the exact amount below to this account, then upload your proof of payment.
                 </p>
                 <div className="space-y-1">
-                  {[
-                    ["Bank",           BANK.bank,          false],
-                    ["Account Holder", BANK.accountHolder, false],
-                    ["Account Type",   BANK.accountType,   false],
-                    ["Account Number", BANK.accountNumber, true],
-                    ["Branch Code",    BANK.branchCode,    false],
-                    ["PayShap",        BANK.payshap,       true],
-                    ["Reference",      order.ref,          true],
+                  {([
+                    ["Bank",           selectedBank.bank,          false],
+                    ["Account Holder", selectedBank.accountHolder, false],
+                    ["Account Type",   selectedBank.accountType,   false],
+                    ["Account Number", selectedBank.accountNumber, true],
+                    ["Branch Code",    selectedBank.branchCode,    false],
+                    ...(selectedBank.payshap ? [["PayShap", selectedBank.payshap, true]] : []),
+                    ["Reference",      order.ref,                  true],
                     ["Amount",         `R ${finalTotal.toLocaleString()}`, false],
-                  ].map(([label, value, copyable]) => (
+                  ] as [string, string, boolean][]).map(([label, value, copyable]) => (
                     <div key={label as string} className="flex items-center justify-between py-2.5 border-b border-[#1F1F1F] last:border-0">
                       <span className="text-gray-500 text-sm">{label as string}</span>
                       <div className="flex items-center gap-2">

@@ -3,15 +3,7 @@ import { createOrder, listOrders } from "@/lib/orders";
 import { isAuthenticated } from "@/lib/auth";
 import { getProduct } from "@/lib/products";
 import { sendMail } from "@/lib/mailer";
-
-const BANK = {
-  bank: "FNB / RMB",
-  accountHolder: "Daisy Gadgets Co.",
-  accountType: "Business",
-  accountNumber: "63211629332",
-  branchCode: "250655",
-  payshap: "+27848961782@FNB",
-};
+import { getRotatingBank, getBankById } from "@/lib/bankDetails";
 
 export async function GET() {
   const ok = await isAuthenticated();
@@ -60,6 +52,15 @@ export async function POST(req: NextRequest) {
     validatedItems.push({ id: product.id, name: product.name, price: product.price, qty, imageUrl: product.imageUrl });
   }
 
+  // Reuse the same bank for returning customers (matched by email or phone)
+  const returning = db.prepare(
+    "SELECT bank_id FROM orders WHERE (email = ? OR phone = ?) AND bank_id IS NOT NULL LIMIT 1"
+  ).get(email.trim().toLowerCase(), phone.trim()) as { bank_id: string } | undefined;
+
+  const bank = returning?.bank_id
+    ? getBankById(returning.bank_id)
+    : getRotatingBank((db.prepare("SELECT COUNT(*) as c FROM orders").get() as { c: number }).c);
+
   const order = createOrder({
     name: name.trim(),
     email: email.trim().toLowerCase(),
@@ -67,15 +68,17 @@ export async function POST(req: NextRequest) {
     address: (address ?? "").toString().slice(0, 500).trim(),
     items: validatedItems,
     total: computedTotal,
+    bank_id: bank.id,
   });
 
   // Email admin — new order alert
   const itemLines = order.items.map(i => `${i.name} × ${i.qty} — R ${parsePrice(i.price).toLocaleString()}`).join("\n");
+  const payshapLine = bank.payshap ? `\nPayShap: ${bank.payshap}` : "";
   sendMail({
     to: "daisygadgetsco@gmail.com, moneybman0@gmail.com",
     subject: `New Order ${order.ref} — R${order.total.toLocaleString()} — ${name}`,
-    html: `<pre style="font-family:monospace;font-size:13px">New order received.\n\nRef: ${order.ref}\nCustomer: ${name}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address || "—"}\n\nItems:\n${itemLines}\n\nTotal: R${order.total.toLocaleString()}\n\nBank: ${BANK.bank} | ${BANK.accountHolder} | Acc: ${BANK.accountNumber} | Branch: ${BANK.branchCode} | PayShap: ${BANK.payshap}</pre>`,
+    html: `<pre style="font-family:monospace;font-size:13px">New order received.\n\nRef: ${order.ref}\nCustomer: ${name}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address || "—"}\n\nItems:\n${itemLines}\n\nTotal: R${order.total.toLocaleString()}\n\nBank: ${bank.bank} | ${bank.accountHolder} | Acc: ${bank.accountNumber} | Branch: ${bank.branchCode}${payshapLine}</pre>`,
   });
 
-  return NextResponse.json({ ok: true, ref: order.ref, id: order.id, bank: BANK });
+  return NextResponse.json({ ok: true, ref: order.ref, id: order.id, bank });
 }

@@ -1,21 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Copy } from "lucide-react";
+import { BANKS } from "@/lib/bankDetails";
 
 export const metadata: Metadata = {
   title: "Payment Options | Daisy Gadgets Co.",
   description: "We accept EFT, PayShap, Visa, Mastercard and all major South African bank payments. View our bank details and payment options.",
 };
-
-const bankDetails = [
-  ["Bank",           "FNB / RMB"],
-  ["Account Holder", "Daisy Gadgets Co."],
-  ["Account Type",   "Business Cheque Account"],
-  ["Account Number", "63211629332"],
-  ["Branch Code",    "250655"],
-  ["PayShap ID",     "+27848961782@FNB"],
-  ["Reference",      "Your Name & Surname"],
-];
 
 export default function PaymentOptionsPage() {
   return (
@@ -34,8 +24,8 @@ export default function PaymentOptionsPage() {
       {/* Payment methods */}
       <div className="grid sm:grid-cols-2 gap-5 mb-12">
         {[
-          { title: "EFT / Bank Transfer", desc: "Transfer directly to our FNB business account. Upload proof of payment and your order is processed within 2–4 hours.", badge: "Most Popular" },
-          { title: "PayShap", desc: "Instant payment via PayShap using our registered PayShap ID: +27848961782@FNB. Instant confirmation.", badge: "Instant" },
+          { title: "EFT / Bank Transfer", desc: "Transfer directly to our FNB or TymeBank business account. Upload proof of payment and your order is processed within 2–4 hours.", badge: "Most Popular" },
+          { title: "PayShap", desc: "Instant payment via PayShap using our FNB PayShap ID: +27848961782@FNB. Instant confirmation.", badge: "Instant" },
           { title: "Visa & Mastercard", desc: "Card payments accepted via secure payment gateway. Contact us on WhatsApp to process a card payment.", badge: null },
           { title: "All SA Banks", desc: "We accept payments from all major South African banks including Standard Bank, ABSA, Nedbank, Capitec, and more.", badge: null },
         ].map(({ title, desc, badge }) => (
@@ -50,20 +40,38 @@ export default function PaymentOptionsPage() {
       </div>
 
       {/* Bank details */}
-      <div className="bg-[#111111] border border-[#D4AF37]/20 rounded-2xl overflow-hidden mb-8">
-        <div className="px-6 py-5 border-b border-[#1F1F1F]">
-          <h2 className="text-lg font-bold text-white">Our Bank Details</h2>
-          <p className="text-gray-500 text-sm mt-1">Use these details for EFT and bank transfers</p>
-        </div>
-        <div className="divide-y divide-[#1F1F1F]">
-          {bankDetails.map(([label, value]) => (
-            <div key={label} className="flex items-center justify-between px-6 py-4">
-              <span className="text-gray-500 text-sm">{label}</span>
-              <span className={`text-sm font-semibold ${
-                label === "Account Number" || label === "PayShap ID" ? "text-[#D4AF37] font-mono" : "text-white"
-              }`}>{value}</span>
-            </div>
-          ))}
+      <div className="mb-8">
+        <h2 className="text-lg font-bold text-white mb-4">Our Bank Details</h2>
+        <p className="text-gray-500 text-sm mb-6">You may receive payment details for either of the accounts below when checking out.</p>
+        <div className="grid sm:grid-cols-2 gap-5">
+          {BANKS.map((bank) => {
+            const rows: [string, string][] = [
+              ["Bank",           bank.bank],
+              ["Account Holder", bank.accountHolder],
+              ["Account Type",   bank.accountType],
+              ["Account Number", bank.accountNumber],
+              ["Branch Code",    bank.branchCode],
+              ...(bank.payshap ? [["PayShap ID", bank.payshap] as [string, string]] : []),
+              ["Reference",      "Your Name & Surname"],
+            ];
+            return (
+              <div key={bank.id} className="bg-[#111111] border border-[#D4AF37]/20 rounded-2xl overflow-hidden">
+                <div className="px-6 py-4 border-b border-[#1F1F1F]">
+                  <h3 className="text-base font-bold text-white">{bank.bank}</h3>
+                </div>
+                <div className="divide-y divide-[#1F1F1F]">
+                  {rows.map(([label, value]) => (
+                    <div key={label} className="flex items-center justify-between px-6 py-3">
+                      <span className="text-gray-500 text-sm">{label}</span>
+                      <span className={`text-sm font-semibold ${
+                        label === "Account Number" || label === "PayShap ID" ? "text-[#D4AF37] font-mono" : "text-white"
+                      }`}>{value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -74,7 +82,7 @@ export default function PaymentOptionsPage() {
           {[
             ["Add to Cart",          "Browse our shop and add products to your cart."],
             ["Checkout",               "Enter your details and place your order to receive your unique order reference."],
-            ["Make Payment",         "Transfer the exact amount to our FNB account using your order reference as the payment reference."],
+            ["Make Payment",         "Transfer the exact amount to the bank account shown at checkout using your order reference as the payment reference."],
             ["Upload Proof",         "Upload your proof of payment on the checkout page. We verify and confirm within 2–4 hours."],
             ["We Confirm & Deliver", "Once payment is verified, we confirm your order and arrange delivery."],
           ].map(([step, desc], i) => (
