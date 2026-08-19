@@ -654,6 +654,148 @@ export async function sendQuoteReply(data: { name: string; email: string; ref: s
   await sendMail({ to: data.email, subject: `Your Quote — ${data.ref} | Daisy Gadgets Co.`, html });
 }
 
+// ─── Credit Emails ───────────────────────────────────────────────────────────
+
+export async function sendCreditOtp(data: { email: string; otp: string; purpose: "application" | "account" }) {
+  const purposeText = data.purpose === "application"
+    ? "complete your credit application"
+    : "access your credit account";
+  const html = layout(`
+    ${label("Verification Code")}
+    <h1 style="margin:6px 0 10px;color:#f9fafb;font-size:28px;font-weight:900">Your OTP</h1>
+    <p style="margin:0 0 24px;color:#9ca3af;font-size:15px;line-height:1.6">
+      Use the code below to ${purposeText}. It expires in <strong style="color:#e5e7eb">10 minutes</strong>.
+    </p>
+    <div style="background:#0A0A0A;border:1px solid ${GOLD}55;border-radius:14px;padding:32px;text-align:center;margin-bottom:28px">
+      <p style="margin:0;color:${GOLD};font-size:48px;font-weight:900;letter-spacing:0.3em;font-family:monospace">${data.otp}</p>
+    </div>
+    <p style="margin:0;color:#4b5563;font-size:13px">If you did not request this code, please ignore this email.</p>
+  `);
+  await sendMail({ to: data.email, subject: `Your OTP: ${data.otp} — Daisy Gadgets Co.`, html });
+}
+
+export async function sendCreditApplicationReceived(data: { name: string; email: string; ref: string; amount: number; term: number }) {
+  const html = layout(`
+    ${label("Credit Application")}
+    <h1 style="margin:6px 0 10px;color:#f9fafb;font-size:28px;font-weight:900">Application Received</h1>
+    <p style="margin:0 0 24px;color:#9ca3af;font-size:15px;line-height:1.6">
+      Hi ${data.name.split(" ")[0]}, we have received your credit application <strong style="color:${GOLD}">${data.ref}</strong>.
+      Our team will review your application and respond within <strong style="color:#e5e7eb">1–2 business days</strong>.
+    </p>
+    <div style="background:#161616;border:1px solid #1F1F1F;border-radius:12px;padding:20px 24px;margin-bottom:28px">
+      <table width="100%" cellpadding="0" cellspacing="0">
+        ${infoRow("Reference", data.ref)}
+        ${infoRow("Requested Amount", `R ${data.amount.toLocaleString("en-ZA")}`)}
+        ${infoRow("Repayment Term", `${data.term} months`)}
+        ${infoRow("Status", "Under Review")}
+      </table>
+    </div>
+    <p style="color:#9ca3af;font-size:14px;margin:0 0 20px">Questions? Contact us on WhatsApp.</p>
+    ${btn("Chat on WhatsApp", `https://wa.me/${WA_NUM}?text=Hi%2C%20checking%20on%20credit%20application%20${data.ref}`, "#25D366", "#fff")}
+  `);
+  await sendMail({ to: data.email, subject: `Credit Application Received — ${data.ref} | Daisy Gadgets Co.`, html });
+}
+
+export async function sendCreditApproved(data: { name: string; email: string; ref: string; creditLimit: number }) {
+  const html = layout(`
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="font-size:48px;line-height:1;margin-bottom:12px">🎉</div>
+      <h1 style="margin:0 0 8px;color:#f9fafb;font-size:26px;font-weight:900">Credit Approved!</h1>
+      <p style="margin:0;color:#9ca3af;font-size:14px">Hi ${data.name.split(" ")[0]}, your credit application has been approved.</p>
+    </div>
+    <div style="background:#161616;border:1px solid ${GOLD}44;border-radius:14px;padding:28px;text-align:center;margin-bottom:28px">
+      ${label("Your Credit Limit")}
+      <p style="margin:8px 0 0;color:${GOLD};font-size:38px;font-weight:900">R ${data.creditLimit.toLocaleString("en-ZA")}</p>
+    </div>
+    <div style="background:#161616;border:1px solid #1F1F1F;border-radius:12px;padding:20px 24px;margin-bottom:28px">
+      <p style="margin:0 0 12px;color:#e5e7eb;font-size:14px;font-weight:700">How it works:</p>
+      <p style="margin:0 0 8px;color:#9ca3af;font-size:14px;line-height:1.7">1. Shop as normal and select <strong style="color:#e5e7eb">Pay on Credit</strong> at checkout.</p>
+      <p style="margin:0 0 8px;color:#9ca3af;font-size:14px;line-height:1.7">2. Choose your repayment term (3, 6 or 12 months).</p>
+      <p style="margin:0;color:#9ca3af;font-size:14px;line-height:1.7">3. Upload your monthly instalment proof by the due date.</p>
+    </div>
+    <div style="text-align:center">
+      ${btn("View My Account", `${SITE}/credit/account`, GOLD, BLACK)}
+      &nbsp;&nbsp;
+      ${btn("Shop Now", `${SITE}/shop`, "#161616", GOLD)}
+    </div>
+  `);
+  await sendMail({ to: data.email, subject: `Your Credit is Approved — R${data.creditLimit.toLocaleString("en-ZA")} | Daisy Gadgets Co.`, html });
+}
+
+export async function sendCreditRejected(data: { name: string; email: string; ref: string; reason?: string }) {
+  const reasonHtml = data.reason
+    ? `<div style="background:#161616;border-left:3px solid #ef4444;border-radius:0 10px 10px 0;padding:16px 20px;margin-bottom:24px">
+        <p style="margin:0 0 4px;color:#ef4444;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">Reason</p>
+        <p style="margin:0;color:#fca5a5;font-size:14px;line-height:1.6">${data.reason}</p>
+       </div>`
+    : "";
+  const html = layout(`
+    ${label("Credit Application")}
+    <h1 style="margin:6px 0 10px;color:#f9fafb;font-size:28px;font-weight:900">Application Outcome</h1>
+    <p style="margin:0 0 20px;color:#9ca3af;font-size:15px;line-height:1.6">
+      Hi ${data.name.split(" ")[0]}, unfortunately we were unable to approve your credit application <strong style="color:${GOLD}">${data.ref}</strong> at this time.
+    </p>
+    ${reasonHtml}
+    <p style="margin:0 0 20px;color:#9ca3af;font-size:14px;line-height:1.7">
+      You are welcome to reapply in 3 months. In the meantime, you can shop using our EFT payment option.
+    </p>
+    ${btn("Shop Now", `${SITE}/shop`, GOLD, BLACK)}
+    &nbsp;&nbsp;
+    ${btn("Chat with Us", `https://wa.me/${WA_NUM}`, "#25D366", "#fff")}
+  `);
+  await sendMail({ to: data.email, subject: `Credit Application Update — ${data.ref} | Daisy Gadgets Co.`, html });
+}
+
+export async function sendCreditOrderConfirmed(data: {
+  name: string;
+  email: string;
+  orderRef: string;
+  creditOrderRef: string;
+  amount: number;
+  termMonths: number;
+  monthly: number;
+  total: number;
+  instalments: { instalment_number: number; due_date: string; amount: number }[];
+}) {
+  const scheduleRows = data.instalments.map(p =>
+    `<tr>
+      <td style="padding:8px 0;color:#6b7280;font-size:13px;border-bottom:1px solid #1F1F1F">Instalment ${p.instalment_number}</td>
+      <td style="padding:8px 0;color:#e5e7eb;font-size:13px;font-weight:600;border-bottom:1px solid #1F1F1F">${new Date(p.due_date).toLocaleDateString("en-ZA", { day: "numeric", month: "long", year: "numeric" })}</td>
+      <td style="padding:8px 0;color:${GOLD};font-size:13px;font-weight:700;text-align:right;border-bottom:1px solid #1F1F1F">R ${p.amount.toLocaleString("en-ZA")}</td>
+    </tr>`
+  ).join("");
+
+  const html = layout(`
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="font-size:48px;line-height:1;margin-bottom:12px">📋</div>
+      <h1 style="margin:0 0 8px;color:#f9fafb;font-size:26px;font-weight:900">Order on Credit Confirmed!</h1>
+      <p style="margin:0;color:#9ca3af;font-size:14px">Hi ${data.name.split(" ")[0]}, your order has been placed on your credit account.</p>
+    </div>
+    <div style="background:#161616;border:1px solid ${GOLD}44;border-radius:12px;padding:16px 20px;margin-bottom:24px">
+      <table width="100%" cellpadding="0" cellspacing="0">
+        ${infoRow("Order Ref", data.orderRef)}
+        ${infoRow("Credit Agreement", data.creditOrderRef)}
+        ${infoRow("Purchase Amount", `R ${data.amount.toLocaleString("en-ZA")}`)}
+        ${infoRow("Repayment Term", `${data.termMonths} months`)}
+        ${infoRow("Monthly Instalment", `R ${data.monthly.toLocaleString("en-ZA")}`)}
+        ${infoRow("Total Repayable", `R ${data.total.toLocaleString("en-ZA")}`)}
+      </table>
+    </div>
+    <p style="margin:0 0 12px;color:#e5e7eb;font-size:15px;font-weight:700">Repayment Schedule</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px">
+      ${scheduleRows}
+    </table>
+    <div style="background:#161616;border:1px solid #1F1F1F;border-radius:12px;padding:16px 20px;margin-bottom:28px">
+      <p style="margin:0;color:#9ca3af;font-size:13px;line-height:1.7">
+        Upload your monthly instalment proof of payment on your credit account portal by each due date.
+        Late payments may affect your credit standing.
+      </p>
+    </div>
+    ${btn("View My Account", `${SITE}/credit/account`, GOLD, BLACK)}
+  `);
+  await sendMail({ to: data.email, subject: `Credit Order Confirmed — ${data.orderRef} | Daisy Gadgets Co.`, html });
+}
+
 // ─── 5. Welcome / Discount Code ──────────────────────────────────────────────
 export async function sendWelcomeEmail(data: { name: string; email: string }) {
   const html = layout(`
@@ -678,4 +820,370 @@ export async function sendWelcomeEmail(data: { name: string; email: string }) {
   `);
 
   await sendMail({ to: data.email, subject: "✨ Your 25% Discount Code — Daisy Gadgets Co.", html });
+}
+
+// ─── Installment: Approval + Invoice ─────────────────────────────────────────
+export async function sendInstallmentApproval(data: {
+  name: string;
+  email: string;
+  ref: string;
+  product_name: string;
+  product_price: number;
+  deposit: number;
+  monthly_payment: number;
+  term_months: number;
+  total_repayable: number;
+  phone: string;
+}) {
+  const fmt = (n: number) => `R ${n.toLocaleString("en-ZA", { minimumFractionDigits: 2 })}`;
+  const waMsg = encodeURIComponent(
+    `Hi, I received approval for my installment application ${data.ref} for the ${data.product_name}. I'm ready to pay my deposit of ${fmt(data.deposit)}.`
+  );
+
+  const bankRows = `
+    <tr>
+      <td colspan="2" style="padding:10px 0 4px;color:${MUTED};font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;border-top:1px solid ${BORDER}">FNB / RMB</td>
+    </tr>
+    ${infoRow("Account Holder", "Daisy Gadgets Co.")}
+    ${infoRow("Account Type", "Business Cheque Account")}
+    ${infoRow("Account Number", "63211629332")}
+    ${infoRow("Branch Code", "250655")}
+    ${infoRow("PayShap", "+27848961782@FNB")}
+    <tr>
+      <td colspan="2" style="padding:18px 0 4px;color:${MUTED};font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;border-top:1px solid ${BORDER}">TymeBank / GoTymeBank</td>
+    </tr>
+    ${infoRow("Account Holder", "Daisy Gadgets Co.")}
+    ${infoRow("Account Type", "Business Account")}
+    ${infoRow("Account Number", "51072673949")}
+    ${infoRow("Branch Code", "678910")}
+  `;
+
+  const html = layout(`
+    <!-- Approved badge -->
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="display:inline-block;background:#10b98122;border:1px solid #10b98155;border-radius:50%;width:64px;height:64px;line-height:64px;font-size:28px;margin-bottom:12px">✅</div>
+      <h1 style="margin:0 0 8px;color:#fff;font-size:22px;font-weight:900">Application Approved!</h1>
+      <p style="margin:0;color:#9ca3af;font-size:14px">Hi ${data.name.split(" ")[0]}, your installment plan is confirmed.</p>
+    </div>
+
+    <!-- Ref + product -->
+    <div style="background:${BLACK};border:1px solid ${GOLD}44;border-radius:12px;padding:16px 20px;margin-bottom:24px">
+      ${label("Application Reference")}
+      <p style="margin:4px 0 12px;color:${GOLD};font-size:24px;font-weight:900;font-family:monospace;letter-spacing:0.1em">${data.ref}</p>
+      ${label("Product")}
+      <p style="margin:4px 0 0;color:#fff;font-size:15px;font-weight:700">${data.product_name}</p>
+    </div>
+
+    ${divider()}
+
+    <!-- Payment schedule -->
+    <p style="margin:0 0 12px;color:#fff;font-size:15px;font-weight:700">Your Payment Schedule</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px">
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid ${BORDER};color:${MUTED};font-size:13px">Deposit <span style="color:#f59e0b;font-size:11px;font-weight:700">(pay first)</span></td>
+        <td style="padding:10px 0;border-bottom:1px solid ${BORDER};color:#f59e0b;font-size:18px;font-weight:900;text-align:right">${fmt(data.deposit)}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid ${BORDER};color:${MUTED};font-size:13px">Monthly Payment × ${data.term_months} months</td>
+        <td style="padding:10px 0;border-bottom:1px solid ${BORDER};color:${GOLD};font-size:18px;font-weight:900;text-align:right">${fmt(data.monthly_payment)}/mo</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 0;color:${MUTED};font-size:13px">Total Repayable</td>
+        <td style="padding:10px 0;color:#e5e7eb;font-size:14px;font-weight:700;text-align:right">${fmt(data.total_repayable)}</td>
+      </tr>
+    </table>
+
+    <!-- How to start -->
+    <div style="background:#f59e0b11;border:1px solid #f59e0b44;border-radius:12px;padding:16px 20px;margin-bottom:24px">
+      <p style="margin:0 0 6px;color:#f59e0b;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em">⚡ Next Step — Pay Your Deposit</p>
+      <p style="margin:0;color:#d1d5db;font-size:13px;line-height:1.6">Transfer <strong style="color:#f59e0b">${fmt(data.deposit)}</strong> to one of our accounts below using <strong style="color:#fff">${data.ref}</strong> as your payment reference, then send proof of payment on WhatsApp to activate your plan.</p>
+    </div>
+
+    ${divider()}
+
+    <!-- Bank details -->
+    <p style="margin:0 0 12px;color:#fff;font-size:15px;font-weight:700">Payment Details</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px">
+      ${bankRows}
+    </table>
+
+    <!-- WhatsApp CTA -->
+    <div style="text-align:center;margin-bottom:8px">
+      ${btn("💬 Send Proof of Payment on WhatsApp", `https://wa.me/${WA_NUM}?text=${waMsg}`, "#25D366", "#fff")}
+    </div>
+    <p style="margin:12px 0 0;color:${MUTED};font-size:12px;text-align:center">Always use <strong style="color:#fff">${data.ref}</strong> as your payment reference.</p>
+  `);
+
+  await sendMail({
+    to: data.email,
+    subject: `✅ Installment Approved — ${data.ref} | Daisy Gadgets Co.`,
+    html,
+  });
+}
+
+// ─── Installment: Status Update Emails ───────────────────────────────────────
+
+interface InstallmentUpdateBase {
+  name: string;
+  email: string;
+  ref: string;
+  product_name: string;
+  deposit: number;
+  monthly_payment: number;
+  term_months: number;
+  total_repayable: number;
+  phone: string;
+  admin_notes?: string | null;
+}
+
+function installmentHeader(emoji: string, title: string, subtitle: string) {
+  return `
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="display:inline-block;background:#ffffff0f;border-radius:50%;width:64px;height:64px;line-height:64px;font-size:28px;margin-bottom:12px">${emoji}</div>
+      <h1 style="margin:0 0 8px;color:#fff;font-size:22px;font-weight:900">${title}</h1>
+      <p style="margin:0;color:#9ca3af;font-size:14px">${subtitle}</p>
+    </div>`;
+}
+
+function installmentRefCard(ref: string, product: string) {
+  return `
+    <div style="background:${BLACK};border:1px solid ${GOLD}44;border-radius:12px;padding:16px 20px;margin-bottom:24px">
+      ${label("Application Reference")}
+      <p style="margin:4px 0 12px;color:${GOLD};font-size:24px;font-weight:900;font-family:monospace;letter-spacing:0.1em">${ref}</p>
+      ${label("Product")}
+      <p style="margin:4px 0 0;color:#fff;font-size:15px;font-weight:700">${product}</p>
+    </div>`;
+}
+
+function installmentSummaryTable(deposit: number, monthly: number, term: number, total: number) {
+  const fmt = (n: number) => `R ${n.toLocaleString("en-ZA", { minimumFractionDigits: 2 })}`;
+  return `
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px">
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid ${BORDER};color:${MUTED};font-size:13px">Deposit</td>
+        <td style="padding:10px 0;border-bottom:1px solid ${BORDER};color:#f59e0b;font-size:16px;font-weight:900;text-align:right">${fmt(deposit)}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid ${BORDER};color:${MUTED};font-size:13px">Monthly x ${term} months</td>
+        <td style="padding:10px 0;border-bottom:1px solid ${BORDER};color:${GOLD};font-size:16px;font-weight:900;text-align:right">${fmt(monthly)}/mo</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 0;color:${MUTED};font-size:13px">Total Repayable</td>
+        <td style="padding:10px 0;color:#e5e7eb;font-size:14px;font-weight:700;text-align:right">${fmt(total)}</td>
+      </tr>
+    </table>`;
+}
+
+function bankDetailsBlock(ref: string) {
+  return `
+    <div style="background:#f59e0b0d;border:1px solid #f59e0b44;border-radius:12px;padding:16px 20px;margin-bottom:20px">
+      <p style="margin:0 0 6px;color:#f59e0b;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em">Deposit Payment Details</p>
+      <p style="margin:0 0 12px;color:#d1d5db;font-size:13px;line-height:1.6">Use <strong style="color:#fff">${ref}</strong> as your payment reference.</p>
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr><td colspan="2" style="padding:6px 0 2px;color:${MUTED};font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">FNB / RMB</td></tr>
+        ${infoRow("Account", "Daisy Gadgets Co.")}
+        ${infoRow("Account No.", "63211629332")}
+        ${infoRow("Branch", "250655")}
+        ${infoRow("PayShap", "+27848961782@FNB")}
+        <tr><td colspan="2" style="padding:14px 0 2px;color:${MUTED};font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">TymeBank</td></tr>
+        ${infoRow("Account", "Daisy Gadgets Co.")}
+        ${infoRow("Account No.", "51072673949")}
+        ${infoRow("Branch", "678910")}
+      </table>
+    </div>`;
+}
+
+export async function sendInstallmentReviewing(data: InstallmentUpdateBase) {
+  const waMsg = encodeURIComponent(`Hi, I am following up on my installment application ${data.ref} for the ${data.product_name}.`);
+
+  const html = layout(`
+    ${installmentHeader("🔍", "Application Under Review", `Hi ${data.name.split(" ")[0]}, we are looking into your application.`)}
+    ${installmentRefCard(data.ref, data.product_name)}
+
+    <p style="color:#9ca3af;font-size:14px;line-height:1.7;margin:0 0 20px">
+      Our team is currently reviewing your installment application. We will verify your details and get back to you as soon as possible — usually within <strong style="color:#fff">24 hours</strong>.
+    </p>
+
+    <div style="background:#3b82f611;border:1px solid #3b82f644;border-radius:12px;padding:16px 20px;margin-bottom:24px">
+      <p style="margin:0 0 8px;color:#3b82f6;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em">What Happens Next</p>
+      <p style="margin:0;color:#d1d5db;font-size:13px;line-height:1.8">
+        1. We verify your details<br>
+        2. We may reach out on WhatsApp to confirm information<br>
+        3. You will receive an approval email with your full payment plan
+      </p>
+    </div>
+
+    ${data.admin_notes ? `
+    <div style="background:${BLACK};border:1px solid ${BORDER};border-radius:12px;padding:16px 20px;margin-bottom:24px">
+      ${label("Note from our team")}
+      <p style="margin:6px 0 0;color:#d1d5db;font-size:14px;line-height:1.6">${data.admin_notes}</p>
+    </div>` : ""}
+
+    <div style="text-align:center">
+      ${btn("Message Us on WhatsApp", `https://wa.me/${WA_NUM}?text=${waMsg}`, "#25D366", "#fff")}
+    </div>
+  `);
+
+  await sendMail({
+    to: data.email,
+    subject: `Application Under Review — ${data.ref} | Daisy Gadgets Co.`,
+    html,
+  });
+}
+
+export async function sendInstallmentAwaitingPayment(data: InstallmentUpdateBase) {
+  const fmt = (n: number) => `R ${n.toLocaleString("en-ZA", { minimumFractionDigits: 2 })}`;
+  const waMsg = encodeURIComponent(`Hi, I am sending proof of payment for my installment deposit. Application: ${data.ref} — ${data.product_name}.`);
+
+  const html = layout(`
+    ${installmentHeader("💳", "Deposit Payment Required", `Hi ${data.name.split(" ")[0]}, one step away from activating your plan!`)}
+    ${installmentRefCard(data.ref, data.product_name)}
+
+    <p style="color:#9ca3af;font-size:14px;line-height:1.7;margin:0 0 20px">
+      Your application has been processed. To activate your installment plan, please pay the deposit of <strong style="color:#f59e0b;font-size:16px">${fmt(data.deposit)}</strong> to one of our accounts below.
+    </p>
+
+    ${installmentSummaryTable(data.deposit, data.monthly_payment, data.term_months, data.total_repayable)}
+    ${bankDetailsBlock(data.ref)}
+
+    ${data.admin_notes ? `
+    <div style="background:${BLACK};border:1px solid ${BORDER};border-radius:12px;padding:16px 20px;margin-bottom:24px">
+      ${label("Note from our team")}
+      <p style="margin:6px 0 0;color:#d1d5db;font-size:14px;line-height:1.6">${data.admin_notes}</p>
+    </div>` : ""}
+
+    <div style="text-align:center">
+      ${btn("Send Proof of Payment", `https://wa.me/${WA_NUM}?text=${waMsg}`, "#25D366", "#fff")}
+    </div>
+    <p style="margin:12px 0 0;color:${MUTED};font-size:12px;text-align:center">After we confirm receipt, your plan will be activated immediately.</p>
+  `);
+
+  await sendMail({
+    to: data.email,
+    subject: `Deposit Required — ${data.ref} | Daisy Gadgets Co.`,
+    html,
+  });
+}
+
+export async function sendInstallmentActive(data: InstallmentUpdateBase) {
+  const fmt = (n: number) => `R ${n.toLocaleString("en-ZA", { minimumFractionDigits: 2 })}`;
+  const waMsg = encodeURIComponent(`Hi, I would like to check on my active installment plan ${data.ref} for the ${data.product_name}.`);
+
+  const html = layout(`
+    ${installmentHeader("🟢", "Your Plan is Now Active!", `Hi ${data.name.split(" ")[0]}, welcome to your installment plan.`)}
+    ${installmentRefCard(data.ref, data.product_name)}
+
+    <p style="color:#9ca3af;font-size:14px;line-height:1.7;margin:0 0 20px">
+      Your deposit has been received and your installment plan is now <strong style="color:#10b981">active</strong>. Here is your monthly payment schedule:
+    </p>
+
+    <div style="background:#10b98111;border:1px solid #10b98144;border-radius:12px;padding:20px;margin-bottom:24px;text-align:center">
+      ${label("Your Monthly Payment")}
+      <p style="margin:8px 0 4px;color:#10b981;font-size:36px;font-weight:900">${fmt(data.monthly_payment)}<span style="font-size:16px;color:#9ca3af">/month</span></p>
+      <p style="margin:0;color:#9ca3af;font-size:13px">x ${data.term_months} months &nbsp;&middot;&nbsp; Total: ${fmt(data.total_repayable)}</p>
+    </div>
+
+    <div style="background:${BLACK};border:1px solid ${BORDER};border-radius:12px;padding:16px 20px;margin-bottom:24px">
+      <p style="margin:0 0 10px;color:#fff;font-size:14px;font-weight:700">Payment Instructions</p>
+      <p style="margin:0 0 8px;color:#d1d5db;font-size:13px;line-height:1.6">Make your monthly payment to the same bank account using <strong style="color:${GOLD}">${data.ref}</strong> as your reference.</p>
+      <p style="margin:0;color:#d1d5db;font-size:13px;line-height:1.6">Send proof of each monthly payment on WhatsApp to keep your account in good standing.</p>
+    </div>
+
+    ${data.admin_notes ? `
+    <div style="background:${BLACK};border:1px solid ${BORDER};border-radius:12px;padding:16px 20px;margin-bottom:24px">
+      ${label("Note from our team")}
+      <p style="margin:6px 0 0;color:#d1d5db;font-size:14px;line-height:1.6">${data.admin_notes}</p>
+    </div>` : ""}
+
+    <div style="text-align:center">
+      ${btn("Contact Us on WhatsApp", `https://wa.me/${WA_NUM}?text=${waMsg}`, "#25D366", "#fff")}
+    </div>
+  `);
+
+  await sendMail({
+    to: data.email,
+    subject: `Plan Activated — ${data.ref} | Daisy Gadgets Co.`,
+    html,
+  });
+}
+
+export async function sendInstallmentCompleted(data: InstallmentUpdateBase) {
+  const fmt = (n: number) => `R ${n.toLocaleString("en-ZA", { minimumFractionDigits: 2 })}`;
+  const waMsg = encodeURIComponent(`Hi, I would like to enquire about another product on installments. My previous plan was ${data.ref}.`);
+
+  const html = layout(`
+    ${installmentHeader("🏆", "Fully Paid — Congratulations!", `Hi ${data.name.split(" ")[0]}, you have completed your installment plan!`)}
+    ${installmentRefCard(data.ref, data.product_name)}
+
+    <p style="color:#9ca3af;font-size:14px;line-height:1.7;margin:0 0 20px">
+      You have successfully completed all payments on your installment plan. Thank you for trusting Daisy Gadgets Co. — we truly appreciate your commitment.
+    </p>
+
+    <div style="background:#D4AF3711;border:1px solid #D4AF3744;border-radius:12px;padding:20px;margin-bottom:24px;text-align:center">
+      ${label("Total Paid")}
+      <p style="margin:8px 0 4px;color:${GOLD};font-size:36px;font-weight:900">${fmt(data.total_repayable)}</p>
+      <p style="margin:0;color:#9ca3af;font-size:13px">${data.term_months} monthly payments &nbsp;&middot;&nbsp; Plan complete</p>
+    </div>
+
+    <div style="background:${BLACK};border:1px solid ${BORDER};border-radius:12px;padding:16px 20px;margin-bottom:24px">
+      <p style="margin:0 0 6px;color:#fff;font-size:14px;font-weight:700">Interested in another product?</p>
+      <p style="margin:0;color:#9ca3af;font-size:13px;line-height:1.6">As a returning customer, you may be eligible for priority approval on your next installment application. Message us on WhatsApp to get started.</p>
+    </div>
+
+    <div style="text-align:center">
+      ${btn("Shop Again", `${SITE}/shop`)}
+      &nbsp;&nbsp;
+      ${btn("WhatsApp Us", `https://wa.me/${WA_NUM}?text=${waMsg}`, "#25D366", "#fff")}
+    </div>
+  `);
+
+  await sendMail({
+    to: data.email,
+    subject: `Plan Complete — ${data.ref} | Daisy Gadgets Co.`,
+    html,
+  });
+}
+
+export async function sendInstallmentDeclined(data: InstallmentUpdateBase) {
+  const waMsg = encodeURIComponent(`Hi, I would like to discuss my declined installment application ${data.ref} for the ${data.product_name} and explore other options.`);
+
+  const html = layout(`
+    ${installmentHeader("📋", "Application Update", `Hi ${data.name.split(" ")[0]}, regarding your application ${data.ref}.`)}
+
+    <p style="color:#9ca3af;font-size:14px;line-height:1.7;margin:0 0 20px">
+      Thank you for applying for an installment plan on the <strong style="color:#fff">${data.product_name}</strong>. After reviewing your application, we are unfortunately unable to approve it at this time.
+    </p>
+
+    ${data.admin_notes ? `
+    <div style="background:${BLACK};border:1px solid ${BORDER};border-radius:12px;padding:16px 20px;margin-bottom:24px">
+      ${label("Reason")}
+      <p style="margin:6px 0 0;color:#d1d5db;font-size:14px;line-height:1.6">${data.admin_notes}</p>
+    </div>` : ""}
+
+    <div style="background:#3b82f611;border:1px solid #3b82f644;border-radius:12px;padding:16px 20px;margin-bottom:24px">
+      <p style="margin:0 0 8px;color:#3b82f6;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em">Other Options Available</p>
+      <p style="margin:0;color:#d1d5db;font-size:13px;line-height:1.8">
+        Pay via EFT / bank transfer and get the product immediately<br>
+        Enquire about a higher deposit arrangement<br>
+        Re-apply in 3 months with updated information<br>
+        Contact us to discuss a custom payment plan
+      </p>
+    </div>
+
+    <p style="color:#9ca3af;font-size:14px;line-height:1.7;margin:0 0 24px">
+      We are happy to explore other ways to help you get the product you want. Do not hesitate to reach out.
+    </p>
+
+    <div style="text-align:center">
+      ${btn("Discuss Options on WhatsApp", `https://wa.me/${WA_NUM}?text=${waMsg}`, "#25D366", "#fff")}
+      <br><br>
+      ${btn("Browse Other Products", `${SITE}/shop`)}
+    </div>
+  `);
+
+  await sendMail({
+    to: data.email,
+    subject: `Application Update — ${data.ref} | Daisy Gadgets Co.`,
+    html,
+  });
 }

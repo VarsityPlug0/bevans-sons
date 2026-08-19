@@ -55,6 +55,22 @@
       "namedRegex": "^/admin/dashboard/edit/(?<nxtPid>[^/]+?)(?:/)?$"
     },
     {
+      "page": "/api/admin/installments/settings/[productId]",
+      "regex": "^/api/admin/installments/settings/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPproductId": "nxtPproductId"
+      },
+      "namedRegex": "^/api/admin/installments/settings/(?<nxtPproductId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/admin/installments/[id]",
+      "regex": "^/api/admin/installments/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/admin/installments/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
       "page": "/api/admin/orders/[id]/notify",
       "regex": "^/api/admin/orders/([^/]+?)/notify(?:/)?$",
       "routeKeys": {
@@ -85,6 +101,14 @@
         "nxtPid": "nxtPid"
       },
       "namedRegex": "^/api/admin/quotes/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/installments/settings/[productId]",
+      "regex": "^/api/installments/settings/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPproductId": "nxtPproductId"
+      },
+      "namedRegex": "^/api/installments/settings/(?<nxtPproductId>[^/]+?)(?:/)?$"
     },
     {
       "page": "/api/orders/[id]",
@@ -159,6 +183,12 @@
       "namedRegex": "^/admin/dashboard/images(?:/)?$"
     },
     {
+      "page": "/admin/dashboard/installments",
+      "regex": "^/admin/dashboard/installments(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/dashboard/installments(?:/)?$"
+    },
+    {
       "page": "/admin/dashboard/leads",
       "regex": "^/admin/dashboard/leads(?:/)?$",
       "routeKeys": {},
@@ -193,6 +223,12 @@
       "regex": "^/api/admin/chat/sessions(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/api/admin/chat/sessions(?:/)?$"
+    },
+    {
+      "page": "/api/admin/installments",
+      "regex": "^/api/admin/installments(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/installments(?:/)?$"
     },
     {
       "page": "/api/admin/login",
@@ -253,6 +289,18 @@
       "regex": "^/api/contact(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/api/contact(?:/)?$"
+    },
+    {
+      "page": "/api/installments/apply",
+      "regex": "^/api/installments/apply(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/installments/apply(?:/)?$"
+    },
+    {
+      "page": "/api/installments/events",
+      "regex": "^/api/installments/events(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/installments/events(?:/)?$"
     },
     {
       "page": "/api/orders",

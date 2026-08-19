@@ -1,41 +1,46 @@
 import { getProducts, getLeads } from "@/lib/products";
 import { getQuotes } from "@/lib/quotes";
 import { listOrders } from "@/lib/orders";
+import { listApplications as listInstallmentApps } from "@/lib/installments";
 import Link from "next/link";
-import AdminLogoutButton from "./LogoutButton";
 import DeleteButton from "./DeleteButton";
 
 export const dynamic = "force-dynamic";
 
+// Section card config
+const GOLD  = "#D4AF37";
+const GREEN = "#10b981";
+const BLUE  = "#3b82f6";
+const AMBER = "#f59e0b";
+const PURPLE = "#a855f7";
+const TEAL  = "#14b8a6";
+const PINK  = "#ec4899";
+const ORANGE = "#f97316";
+
 export default async function Dashboard() {
-  const products = getProducts();
-  const leads = getLeads() as {
+  const products   = getProducts();
+  const leads      = getLeads() as {
     id: string; name?: string; email?: string; phone?: string;
     message?: string; productInterest?: string; createdAt: string;
   }[];
-  const quotes = getQuotes();
-  const newQuotes = quotes.filter((q) => q.status === "new").length;
-  const orders = listOrders();
-  const pendingOrders = orders.filter(o => o.status === "pending" || o.status === "proof_submitted").length;
-  const featured = products.filter((p) => p.featured).length;
-  const inStock = products.filter((p) => p.inStock).length;
+  const quotes     = getQuotes();
+  const orders     = listOrders();
+  const installmentApps = listInstallmentApps();
 
-  const stats = [
-    { label: "Products",       value: products.length, link: null },
-    { label: "In Stock",       value: inStock,         link: null },
-    { label: "Featured",       value: featured,        link: null },
-    { label: "New Quotes",     value: newQuotes,       link: "/admin/dashboard/quotes" },
-    { label: "Pending Orders", value: pendingOrders,   link: "/admin/dashboard/orders" },
-    { label: "Leads",          value: leads.length,    link: "/admin/dashboard/leads" },
-  ];
+  // Derived counts
+  const newQuotes         = quotes.filter((q) => q.status === "new").length;
+  const pendingOrders     = orders.filter(o => o.status === "pending" || o.status === "proof_submitted").length;
+  const newInstallments   = installmentApps.filter(a => a.status === "new").length;
+  const featured          = products.filter((p) => p.featured).length;
+  const inStock           = products.filter((p) => p.inStock).length;
+  const uniqueCustomers   = new Set(orders.map(o => o.email?.toLowerCase()).filter(Boolean)).size;
 
   // ── Analytics ──────────────────────────────────────────────────────────────
   const PAID = new Set(["approved", "shipped", "delivered"]);
-  const paidOrders = orders.filter(o => PAID.has(o.status));
-  const totalRevenue = paidOrders.reduce((s, o) => s + o.total, 0);
+  const paidOrders    = orders.filter(o => PAID.has(o.status));
+  const totalRevenue  = paidOrders.reduce((s, o) => s + o.total, 0);
   const avgOrderValue = paidOrders.length ? Math.round(totalRevenue / paidOrders.length) : 0;
 
-  // Weekly revenue — last 8 weeks (oldest → newest)
   const weeklyRevenue = Array.from({ length: 8 }, (_, wi) => {
     const now = new Date();
     const weekEnd = new Date(now);
@@ -52,20 +57,18 @@ export default async function Dashboard() {
   }).reverse();
   const maxWeekRevenue = Math.max(...weeklyRevenue.map(w => w.revenue), 1);
 
-  // Top 5 products by units sold
   const productStats = new Map<string, { name: string; qty: number; revenue: number }>();
   for (const order of paidOrders) {
     for (const item of order.items) {
       const unitPrice = parseFloat(String(item.price).replace(/[^0-9.]/g, "")) || 0;
       const prev = productStats.get(item.name) ?? { name: item.name, qty: 0, revenue: 0 };
-      prev.qty  += item.qty;
+      prev.qty += item.qty;
       prev.revenue += unitPrice * item.qty;
       productStats.set(item.name, prev);
     }
   }
   const topProducts = [...productStats.values()].sort((a, b) => b.qty - a.qty).slice(0, 5);
 
-  // Conversion funnel
   const totalOrders = orders.length;
   const withProof   = orders.filter(o => o.status !== "pending").length;
   const approvedN   = paidOrders.length;
@@ -73,208 +76,336 @@ export default async function Dashboard() {
   const pct = (n: number) => totalOrders ? Math.round((n / totalOrders) * 100) : 0;
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A]">
-      {/* Top bar */}
-      <header className="bg-[#0f0f0f] border-b border-[#1A1A1A] px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5 shrink-0">
-          <svg width="28" height="28" viewBox="0 0 100 100" fill="none">
-            {[0,45,90,135,180,225,270,315].map((deg) => (
-              <ellipse key={deg} cx="50" cy="22" rx="9" ry="18" fill="#D4AF37" transform={`rotate(${deg} 50 50)`} />
-            ))}
-            <circle cx="50" cy="50" r="14" fill="#D4AF37" />
-            <circle cx="50" cy="50" r="8" fill="#0A0A0A" />
-          </svg>
-          <div>
-            <p style={{ fontFamily: "var(--font-outfit)", fontWeight: 700, color: "#D4AF37", fontSize: 14 }}>Daisy &amp; Co.</p>
-            <p className="text-gray-600 text-[10px]">Staff Dashboard</p>
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+
+      {/* Page title */}
+      <div className="mb-6">
+        <h1 className="text-xl font-bold text-white">Overview</h1>
+        <p className="text-gray-500 text-sm mt-0.5">Welcome back — here&apos;s what&apos;s happening.</p>
+      </div>
+
+      {/* ── Stat strip ───────────────────────────────────────────────────────── */}
+      <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 mb-8">
+        {[
+          { label: "Products",    value: products.length },
+          { label: "In Stock",    value: inStock },
+          { label: "Featured",    value: featured },
+          { label: "Pending Orders", value: pendingOrders, gold: pendingOrders > 0 },
+          { label: "New Quotes",  value: newQuotes,      gold: newQuotes > 0 },
+          { label: "New Install. Apps", value: newInstallments, gold: newInstallments > 0 },
+        ].map((s) => (
+          <div key={s.label}
+            className={`bg-[#111111] border rounded-xl p-3 text-center ${s.gold ? "border-[#D4AF37]/40" : "border-[#1F1F1F]"}`}>
+            <p className={`text-2xl font-bold mb-0.5 ${s.gold ? "text-[#D4AF37]" : "text-white"}`}>{s.value}</p>
+            <p className="text-gray-500 text-[10px] leading-tight">{s.label}</p>
           </div>
-        </div>
+        ))}
+      </div>
 
-        {/* Desktop nav */}
-        <nav className="hidden sm:flex items-center gap-4">
-          <Link href="/admin/dashboard/images" className="text-gray-400 hover:text-white text-sm transition-colors">Site Images</Link>
-          <Link href="/admin/dashboard/orders" className="text-gray-400 hover:text-white text-sm transition-colors">Orders</Link>
-          <Link href="/admin/dashboard/customers" className="text-gray-400 hover:text-white text-sm transition-colors">Customers</Link>
-          <Link href="/admin/dashboard/quotes" className="text-gray-400 hover:text-white text-sm transition-colors">Quotes</Link>
-          <Link href="/admin/dashboard/leads" className="text-gray-400 hover:text-white text-sm transition-colors">Leads</Link>
-          <Link href="/shop" target="_blank" className="text-gray-400 hover:text-white text-sm transition-colors">View Shop ↗</Link>
-          <AdminLogoutButton />
-        </nav>
+      {/* ── Section cards ────────────────────────────────────────────────────── */}
+      <div className="mb-8">
+        <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-4">Manage</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
 
-        {/* Mobile: just orders + logout */}
-        <div className="flex sm:hidden items-center gap-2">
-          <Link href="/admin/dashboard/orders" className="text-gray-400 hover:text-white text-xs px-2.5 py-1.5 rounded-lg bg-white/5 transition-colors">Orders</Link>
-          <AdminLogoutButton />
-        </div>
-      </header>
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
-
-        {/* Stats — 3 cols mobile, 6 cols desktop */}
-        <div className="grid grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
-          {stats.map((s) => (
-            <div key={s.label} className={`bg-[#111111] border rounded-xl p-3 sm:p-4 text-center ${s.link && s.value > 0 ? "border-[#D4AF37]/40" : "border-[#1F1F1F]"}`}>
-              {s.link ? (
-                <Link href={s.link} className="block">
-                  <p className="text-2xl sm:text-3xl font-bold text-[#D4AF37] mb-0.5">{s.value}</p>
-                  <p className="text-gray-400 text-[10px] sm:text-xs leading-tight">{s.label}</p>
-                </Link>
-              ) : (
-                <>
-                  <p className="text-2xl sm:text-3xl font-bold text-[#D4AF37] mb-0.5">{s.value}</p>
-                  <p className="text-gray-400 text-[10px] sm:text-xs leading-tight">{s.label}</p>
-                </>
+          {/* Orders */}
+          <Link href="/admin/dashboard/orders"
+            className="group bg-[#111111] border border-[#1F1F1F] hover:border-[#D4AF37]/40 rounded-2xl p-4 transition-all hover:bg-[#141414]">
+            <div className="flex items-start justify-between mb-3">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${AMBER}18` }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={AMBER} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+                </svg>
+              </div>
+              {pendingOrders > 0 && (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: `${AMBER}20`, color: AMBER }}>
+                  {pendingOrders} pending
+                </span>
               )}
             </div>
-          ))}
+            <p className="text-white font-semibold text-sm">Orders</p>
+            <p className="text-gray-500 text-xs mt-0.5">{orders.length} total</p>
+          </Link>
+
+          {/* Quotes */}
+          <Link href="/admin/dashboard/quotes"
+            className="group bg-[#111111] border border-[#1F1F1F] hover:border-[#D4AF37]/40 rounded-2xl p-4 transition-all hover:bg-[#141414]">
+            <div className="flex items-start justify-between mb-3">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${BLUE}18` }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={BLUE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/>
+                </svg>
+              </div>
+              {newQuotes > 0 && (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: `${BLUE}20`, color: BLUE }}>
+                  {newQuotes} new
+                </span>
+              )}
+            </div>
+            <p className="text-white font-semibold text-sm">Quotes</p>
+            <p className="text-gray-500 text-xs mt-0.5">{quotes.length} total</p>
+          </Link>
+
+          {/* Installments */}
+          <Link href="/admin/dashboard/installments"
+            className="group bg-[#111111] border border-[#1F1F1F] hover:border-[#D4AF37]/40 rounded-2xl p-4 transition-all hover:bg-[#141414]">
+            <div className="flex items-start justify-between mb-3">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${GREEN}18` }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={GREEN} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+                </svg>
+              </div>
+              {newInstallments > 0 && (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: `${GREEN}20`, color: GREEN }}>
+                  {newInstallments} new
+                </span>
+              )}
+            </div>
+            <p className="text-white font-semibold text-sm">Installments</p>
+            <p className="text-gray-500 text-xs mt-0.5">{installmentApps.length} total apps</p>
+          </Link>
+
+          {/* Leads */}
+          <Link href="/admin/dashboard/leads"
+            className="group bg-[#111111] border border-[#1F1F1F] hover:border-[#D4AF37]/40 rounded-2xl p-4 transition-all hover:bg-[#141414]">
+            <div className="flex items-start justify-between mb-3">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${PURPLE}18` }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={PURPLE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+                </svg>
+              </div>
+              {leads.length > 0 && (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: `${PURPLE}20`, color: PURPLE }}>
+                  {leads.length}
+                </span>
+              )}
+            </div>
+            <p className="text-white font-semibold text-sm">Leads</p>
+            <p className="text-gray-500 text-xs mt-0.5">Contact submissions</p>
+          </Link>
+
+          {/* Customers */}
+          <Link href="/admin/dashboard/customers"
+            className="group bg-[#111111] border border-[#1F1F1F] hover:border-[#D4AF37]/40 rounded-2xl p-4 transition-all hover:bg-[#141414]">
+            <div className="flex items-start justify-between mb-3">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${TEAL}18` }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={TEAL} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/><polyline points="16,11 18,13 22,9"/>
+                </svg>
+              </div>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: `${TEAL}20`, color: TEAL }}>
+                {uniqueCustomers}
+              </span>
+            </div>
+            <p className="text-white font-semibold text-sm">Customers</p>
+            <p className="text-gray-500 text-xs mt-0.5">Unique buyers</p>
+          </Link>
+
+          {/* Site Images */}
+          <Link href="/admin/dashboard/images"
+            className="group bg-[#111111] border border-[#1F1F1F] hover:border-[#D4AF37]/40 rounded-2xl p-4 transition-all hover:bg-[#141414]">
+            <div className="flex items-start justify-between mb-3">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${ORANGE}18` }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/>
+                </svg>
+              </div>
+            </div>
+            <p className="text-white font-semibold text-sm">Site Images</p>
+            <p className="text-gray-500 text-xs mt-0.5">Hero &amp; banners</p>
+          </Link>
+
+          {/* Chat */}
+          <Link href="/admin/dashboard/chat"
+            className="group bg-[#111111] border border-[#1F1F1F] hover:border-[#D4AF37]/40 rounded-2xl p-4 transition-all hover:bg-[#141414]">
+            <div className="flex items-start justify-between mb-3">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${PINK}18` }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={PINK} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                </svg>
+              </div>
+            </div>
+            <p className="text-white font-semibold text-sm">Chat</p>
+            <p className="text-gray-500 text-xs mt-0.5">Customer messages</p>
+          </Link>
+
+          {/* Add product CTA */}
+          <Link href="/admin/dashboard/new"
+            className="group bg-[#D4AF37]/5 border border-[#D4AF37]/20 hover:border-[#D4AF37]/50 rounded-2xl p-4 transition-all hover:bg-[#D4AF37]/10 flex flex-col justify-between">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-[#D4AF37]/15 mb-3">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="2.5" strokeLinecap="round">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </div>
+            <p className="text-[#D4AF37] font-semibold text-sm">Add Product</p>
+            <p className="text-gray-500 text-xs mt-0.5">List a new item</p>
+          </Link>
+
         </div>
+      </div>
 
-        {/* ── Analytics ─────────────────────────────────────────────────── */}
-        <div className="grid lg:grid-cols-3 gap-4 mb-8">
+      {/* ── Analytics ────────────────────────────────────────────────────────── */}
+      <div className="grid lg:grid-cols-3 gap-4 mb-8">
 
-          {/* Revenue chart + avg order */}
-          <div className="lg:col-span-2 bg-[#111111] border border-[#1F1F1F] rounded-2xl p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-bold text-white">Weekly Revenue</h2>
+        <div className="lg:col-span-2 bg-[#111111] border border-[#1F1F1F] rounded-2xl p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-bold text-white">Weekly Revenue</h2>
+            <p className="text-[#D4AF37] font-bold text-sm">R {totalRevenue.toLocaleString()}</p>
+          </div>
+          <div className="flex items-end gap-1.5 h-24">
+            {weeklyRevenue.map(({ label, revenue }) => (
+              <div key={label} className="flex-1 flex flex-col items-center gap-1 h-full justify-end">
+                <div
+                  className="w-full rounded-t-sm"
+                  style={{
+                    height: revenue > 0 ? `${Math.max((revenue / maxWeekRevenue) * 100, 6)}%` : "3px",
+                    background: revenue > 0 ? "#D4AF37" : "#1F1F1F",
+                  }}
+                />
+                <span className="text-[8px] text-gray-600 whitespace-nowrap leading-none">{label}</span>
+              </div>
+            ))}
+          </div>
+          <div className="flex gap-6 mt-4 pt-3 border-t border-[#1F1F1F]">
+            <div>
+              <p className="text-[10px] text-gray-500 uppercase tracking-wider">Avg Order</p>
+              <p className="text-white font-bold text-sm">R {avgOrderValue.toLocaleString()}</p>
+            </div>
+            <div>
+              <p className="text-[10px] text-gray-500 uppercase tracking-wider">Paid Orders</p>
+              <p className="text-white font-bold text-sm">{paidOrders.length}</p>
+            </div>
+            <div>
+              <p className="text-[10px] text-gray-500 uppercase tracking-wider">Total Revenue</p>
               <p className="text-[#D4AF37] font-bold text-sm">R {totalRevenue.toLocaleString()}</p>
             </div>
-            <div className="flex items-end gap-1.5 h-24">
-              {weeklyRevenue.map(({ label, revenue }) => (
-                <div key={label} className="flex-1 flex flex-col items-center gap-1 h-full justify-end">
-                  <div
-                    className="w-full rounded-t-sm"
-                    style={{
-                      height: revenue > 0 ? `${Math.max((revenue / maxWeekRevenue) * 100, 6)}%` : "3px",
-                      background: revenue > 0 ? "#D4AF37" : "#1F1F1F",
-                    }}
-                  />
-                  <span className="text-[8px] text-gray-600 whitespace-nowrap leading-none">{label}</span>
-                </div>
-              ))}
-            </div>
-            <div className="flex gap-6 mt-4 pt-3 border-t border-[#1F1F1F]">
-              <div>
-                <p className="text-[10px] text-gray-500 uppercase tracking-wider">Avg Order</p>
-                <p className="text-white font-bold text-sm">R {avgOrderValue.toLocaleString()}</p>
-              </div>
-              <div>
-                <p className="text-[10px] text-gray-500 uppercase tracking-wider">Paid Orders</p>
-                <p className="text-white font-bold text-sm">{paidOrders.length}</p>
-              </div>
-              <div>
-                <p className="text-[10px] text-gray-500 uppercase tracking-wider">Total Revenue</p>
-                <p className="text-[#D4AF37] font-bold text-sm">R {totalRevenue.toLocaleString()}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Conversion funnel */}
-          <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-5">
-            <h2 className="text-sm font-bold text-white mb-4">Conversion Funnel</h2>
-            <div className="space-y-3.5">
-              {([
-                { label: "Orders Placed",   value: totalOrders, p: 100,             color: "#9ca3af" },
-                { label: "Proof Submitted", value: withProof,   p: pct(withProof),  color: "#f59e0b" },
-                { label: "Approved",        value: approvedN,   p: pct(approvedN),  color: "#10b981" },
-                { label: "Delivered",       value: deliveredN,  p: pct(deliveredN), color: "#D4AF37" },
-              ] as { label: string; value: number; p: number; color: string }[]).map(({ label, value, p, color }) => (
-                <div key={label}>
-                  <div className="flex justify-between mb-1">
-                    <span className="text-xs text-gray-400">{label}</span>
-                    <span className="text-xs font-bold" style={{ color }}>
-                      {value} <span className="text-gray-600 font-normal">({p}%)</span>
-                    </span>
-                  </div>
-                  <div className="h-1.5 bg-[#1F1F1F] rounded-full overflow-hidden">
-                    <div className="h-full rounded-full" style={{ width: `${p}%`, background: color }} />
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
 
-        {/* Top selling products */}
-        {topProducts.length > 0 && (
-          <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl overflow-hidden mb-8">
-            <div className="px-5 py-3.5 border-b border-[#1F1F1F]">
-              <h2 className="text-sm font-bold text-white">Top Selling Products</h2>
-            </div>
-            <div className="divide-y divide-[#1A1A1A]">
-              {topProducts.map((p, i) => (
-                <div key={p.name} className="flex items-center gap-4 px-5 py-3">
-                  <span className="text-gray-600 text-xs font-bold w-4 shrink-0">{i + 1}</span>
-                  <p className="text-white text-sm flex-1 truncate">{p.name}</p>
-                  <span className="text-gray-500 text-xs shrink-0">{p.qty} sold</span>
-                  <span className="text-[#D4AF37] font-bold text-sm shrink-0">R {Math.round(p.revenue).toLocaleString()}</span>
+        <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-5">
+          <h2 className="text-sm font-bold text-white mb-4">Conversion Funnel</h2>
+          <div className="space-y-3.5">
+            {([
+              { label: "Orders Placed",   value: totalOrders, p: 100,             color: "#9ca3af" },
+              { label: "Proof Submitted", value: withProof,   p: pct(withProof),  color: "#f59e0b" },
+              { label: "Approved",        value: approvedN,   p: pct(approvedN),  color: "#10b981" },
+              { label: "Delivered",       value: deliveredN,  p: pct(deliveredN), color: "#D4AF37" },
+            ] as { label: string; value: number; p: number; color: string }[]).map(({ label, value, p, color }) => (
+              <div key={label}>
+                <div className="flex justify-between mb-1">
+                  <span className="text-xs text-gray-400">{label}</span>
+                  <span className="text-xs font-bold" style={{ color }}>
+                    {value} <span className="text-gray-600 font-normal">({p}%)</span>
+                  </span>
                 </div>
+                <div className="h-1.5 bg-[#1F1F1F] rounded-full overflow-hidden">
+                  <div className="h-full rounded-full" style={{ width: `${p}%`, background: color }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Top selling products */}
+      {topProducts.length > 0 && (
+        <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl overflow-hidden mb-8">
+          <div className="px-5 py-3.5 border-b border-[#1F1F1F]">
+            <h2 className="text-sm font-bold text-white">Top Selling Products</h2>
+          </div>
+          <div className="divide-y divide-[#1A1A1A]">
+            {topProducts.map((p, i) => (
+              <div key={p.name} className="flex items-center gap-4 px-5 py-3">
+                <span className="text-gray-600 text-xs font-bold w-4 shrink-0">{i + 1}</span>
+                <p className="text-white text-sm flex-1 truncate">{p.name}</p>
+                <span className="text-gray-500 text-xs shrink-0">{p.qty} sold</span>
+                <span className="text-[#D4AF37] font-bold text-sm shrink-0">R {Math.round(p.revenue).toLocaleString()}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── Products ─────────────────────────────────────────────────────────── */}
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-bold text-white">Products ({products.length})</h2>
+        <Link href="/admin/dashboard/new" className="btn-gold px-4 py-2 rounded-xl text-xs font-bold">
+          + Add Product
+        </Link>
+      </div>
+
+      {products.length === 0 ? (
+        <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-12 text-center">
+          <p className="text-gray-500 text-lg mb-6">No products yet.</p>
+          <Link href="/admin/dashboard/new" className="btn-gold px-8 py-3 rounded-xl font-bold">Add Your First Product</Link>
+        </div>
+      ) : (
+        <>
+          {/* Desktop table */}
+          <div className="hidden md:block bg-[#111111] border border-[#1F1F1F] rounded-2xl overflow-hidden">
+            <div className="grid grid-cols-[52px_1fr_130px_155px_105px_100px] gap-3 px-5 py-3 border-b border-[#1F1F1F]">
+              {["", "Product", "Price", "Category", "Status", "Actions"].map((h) => (
+                <p key={h} className="text-[11px] text-gray-500 uppercase tracking-wider font-medium">{h}</p>
               ))}
             </div>
-          </div>
-        )}
-
-        {/* Mobile quick nav links */}
-        <div className="flex sm:hidden gap-2 mb-6 flex-wrap">
-          {[
-            { label: "Site Images", href: "/admin/dashboard/images" },
-            { label: "Customers",   href: "/admin/dashboard/customers" },
-            { label: "Quotes",      href: "/admin/dashboard/quotes" },
-            { label: "Leads",       href: "/admin/dashboard/leads" },
-            { label: "Chat",        href: "/admin/dashboard/chat" },
-            { label: "View Shop",   href: "/shop" },
-          ].map((l) => (
-            <Link key={l.href} href={l.href} target={l.href === "/shop" ? "_blank" : undefined}
-              className="text-gray-400 text-xs px-3 py-1.5 rounded-lg bg-[#111] border border-[#1F1F1F] hover:text-white transition-colors">
-              {l.label}{l.href === "/shop" ? " ↗" : ""}
-            </Link>
-          ))}
-        </div>
-
-        {/* Products header */}
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="text-lg sm:text-xl font-bold text-white">Products ({products.length})</h1>
-          <Link href="/admin/dashboard/new" className="btn-gold px-4 py-2 rounded-xl text-xs sm:text-sm font-bold">
-            + Add Product
-          </Link>
-        </div>
-
-        {products.length === 0 ? (
-          <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-12 text-center">
-            <p className="text-gray-500 text-lg mb-6">No products yet.</p>
-            <Link href="/admin/dashboard/new" className="btn-gold px-8 py-3 rounded-xl font-bold">Add Your First Product</Link>
-          </div>
-        ) : (
-          <>
-            {/* Desktop table */}
-            <div className="hidden md:block bg-[#111111] border border-[#1F1F1F] rounded-2xl overflow-hidden">
-              <div className="grid grid-cols-[52px_1fr_130px_155px_105px_100px] gap-3 px-5 py-3 border-b border-[#1F1F1F]">
-                {["", "Product", "Price", "Category", "Status", "Actions"].map((h) => (
-                  <p key={h} className="text-[11px] text-gray-500 uppercase tracking-wider font-medium">{h}</p>
-                ))}
+            {products.map((p) => (
+              <div key={p.id}
+                className="grid grid-cols-[52px_1fr_130px_155px_105px_100px] gap-3 items-center px-5 py-3.5 border-b border-[#1A1A1A] last:border-0 hover:bg-white/[0.02] transition-colors">
+                <div className="w-11 h-11 rounded-lg overflow-hidden bg-[#0A0A0A] shrink-0">
+                  {p.imageUrl
+                    ? <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover" />
+                    : <div className="w-full h-full flex items-center justify-center text-gray-700 text-xs">–</div>}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-white font-medium text-sm truncate">{p.name}</p>
+                  {p.description && <p className="text-gray-500 text-xs truncate mt-0.5">{p.description}</p>}
+                </div>
+                <p className="text-[#D4AF37] font-bold text-sm">{p.price}</p>
+                <p className="text-gray-400 text-sm truncate">{p.category}</p>
+                <div className="flex gap-1 flex-wrap">
+                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${p.inStock ? "bg-green-400/10 text-green-400" : "bg-red-400/10 text-red-400"}`}>
+                    {p.inStock ? "In Stock" : "Out"}
+                  </span>
+                  {p.featured && (
+                    <span className="text-[10px] px-2 py-0.5 rounded-full font-medium bg-[#D4AF37]/10 text-[#D4AF37]">Featured</span>
+                  )}
+                </div>
+                <div className="flex gap-1.5">
+                  <Link href={`/admin/dashboard/edit/${p.id}`}
+                    className="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 transition-colors">
+                    Edit
+                  </Link>
+                  <DeleteButton id={p.id} />
+                </div>
               </div>
-              {products.map((p) => (
-                <div key={p.id}
-                  className="grid grid-cols-[52px_1fr_130px_155px_105px_100px] gap-3 items-center px-5 py-3.5 border-b border-[#1A1A1A] last:border-0 hover:bg-white/[0.02] transition-colors">
-                  <div className="w-11 h-11 rounded-lg overflow-hidden bg-[#0A0A0A] shrink-0">
+            ))}
+          </div>
+
+          {/* Mobile cards */}
+          <div className="md:hidden space-y-3">
+            {products.map((p) => (
+              <div key={p.id} className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-4">
+                <div className="flex gap-3">
+                  <div className="w-16 h-16 rounded-xl overflow-hidden bg-[#0A0A0A] shrink-0">
                     {p.imageUrl
                       ? <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover" />
                       : <div className="w-full h-full flex items-center justify-center text-gray-700 text-xs">–</div>}
                   </div>
-                  <div className="min-w-0">
-                    <p className="text-white font-medium text-sm truncate">{p.name}</p>
-                    {p.description && <p className="text-gray-500 text-xs truncate mt-0.5">{p.description}</p>}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white font-semibold text-sm leading-snug">{p.name}</p>
+                    <p className="text-[#D4AF37] font-bold text-sm mt-0.5">{p.price}</p>
+                    <p className="text-gray-500 text-xs mt-0.5 truncate">{p.category}</p>
                   </div>
-                  <p className="text-[#D4AF37] font-bold text-sm">{p.price}</p>
-                  <p className="text-gray-400 text-sm truncate">{p.category}</p>
-                  <div className="flex gap-1 flex-wrap">
+                </div>
+                <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#1A1A1A]">
+                  <div className="flex gap-1.5 flex-wrap">
                     <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${p.inStock ? "bg-green-400/10 text-green-400" : "bg-red-400/10 text-red-400"}`}>
-                      {p.inStock ? "In Stock" : "Out"}
+                      {p.inStock ? "In Stock" : "Out of Stock"}
                     </span>
                     {p.featured && (
                       <span className="text-[10px] px-2 py-0.5 rounded-full font-medium bg-[#D4AF37]/10 text-[#D4AF37]">Featured</span>
                     )}
                   </div>
-                  <div className="flex gap-1.5">
+                  <div className="flex gap-2">
                     <Link href={`/admin/dashboard/edit/${p.id}`}
                       className="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 transition-colors">
                       Edit
@@ -282,96 +413,11 @@ export default async function Dashboard() {
                     <DeleteButton id={p.id} />
                   </div>
                 </div>
-              ))}
-            </div>
-
-            {/* Mobile cards */}
-            <div className="md:hidden space-y-3">
-              {products.map((p) => (
-                <div key={p.id} className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-4">
-                  <div className="flex gap-3">
-                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-[#0A0A0A] shrink-0">
-                      {p.imageUrl
-                        ? <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover" />
-                        : <div className="w-full h-full flex items-center justify-center text-gray-700 text-xs">–</div>}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-white font-semibold text-sm leading-snug">{p.name}</p>
-                      <p className="text-[#D4AF37] font-bold text-sm mt-0.5">{p.price}</p>
-                      <p className="text-gray-500 text-xs mt-0.5 truncate">{p.category}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#1A1A1A]">
-                    <div className="flex gap-1.5 flex-wrap">
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${p.inStock ? "bg-green-400/10 text-green-400" : "bg-red-400/10 text-red-400"}`}>
-                        {p.inStock ? "In Stock" : "Out of Stock"}
-                      </span>
-                      {p.featured && (
-                        <span className="text-[10px] px-2 py-0.5 rounded-full font-medium bg-[#D4AF37]/10 text-[#D4AF37]">Featured</span>
-                      )}
-                    </div>
-                    <div className="flex gap-2">
-                      <Link href={`/admin/dashboard/edit/${p.id}`}
-                        className="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 transition-colors">
-                        Edit
-                      </Link>
-                      <DeleteButton id={p.id} />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </>
-        )}
-
-        {/* Leads */}
-        <div className="mt-12">
-          <h2 className="text-lg sm:text-xl font-bold text-white mb-4">Leads &amp; Quote Requests ({leads.length})</h2>
-          {leads.length === 0 ? (
-            <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-10 text-center text-gray-500 text-sm">
-              No leads yet. They appear here when someone submits the contact form.
-            </div>
-          ) : (
-            <>
-              {/* Desktop */}
-              <div className="hidden md:block bg-[#111111] border border-[#1F1F1F] rounded-2xl overflow-hidden">
-                <div className="grid grid-cols-[1fr_160px_130px_1fr_100px] gap-4 px-5 py-3 border-b border-[#1F1F1F]">
-                  {["Name", "Email", "Phone", "Message", "Date"].map((h) => (
-                    <p key={h} className="text-[11px] text-gray-500 uppercase tracking-wider font-medium">{h}</p>
-                  ))}
-                </div>
-                {leads.map((lead) => (
-                  <div key={lead.id}
-                    className="grid grid-cols-[1fr_160px_130px_1fr_100px] gap-4 items-start px-5 py-4 border-b border-[#1A1A1A] last:border-0 hover:bg-white/[0.02] transition-colors">
-                    <p className="text-white text-sm font-medium truncate">{lead.name || "—"}</p>
-                    <p className="text-gray-400 text-sm truncate">{lead.email || "—"}</p>
-                    <p className="text-gray-400 text-sm truncate">{lead.phone || "—"}</p>
-                    <p className="text-gray-400 text-sm line-clamp-2 leading-snug">{lead.message || lead.productInterest || "—"}</p>
-                    <p className="text-gray-600 text-xs">{new Date(lead.createdAt).toLocaleDateString("en-ZA")}</p>
-                  </div>
-                ))}
               </div>
-
-              {/* Mobile cards */}
-              <div className="md:hidden space-y-3">
-                {leads.map((lead) => (
-                  <div key={lead.id} className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-4 space-y-1.5">
-                    <div className="flex items-start justify-between gap-2">
-                      <p className="text-white text-sm font-semibold">{lead.name || "—"}</p>
-                      <p className="text-gray-600 text-[10px] shrink-0">{new Date(lead.createdAt).toLocaleDateString("en-ZA")}</p>
-                    </div>
-                    {lead.email && <p className="text-gray-400 text-xs">{lead.email}</p>}
-                    {lead.phone && <p className="text-gray-400 text-xs">{lead.phone}</p>}
-                    {(lead.message || lead.productInterest) && (
-                      <p className="text-gray-500 text-xs leading-snug line-clamp-3">{lead.message || lead.productInterest}</p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }

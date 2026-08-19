@@ -167,49 +167,26 @@ export default function CheckoutPage() {
                 <div>
                   <label className="block text-sm text-gray-400 mb-1.5">Delivery Address</label>
                   <div className="space-y-2">
-                    <input
-                      type="text"
-                      placeholder="Street address or PO Box *"
-                      value={addr.line1}
+                    <input type="text" placeholder="Street address or PO Box *" value={addr.line1}
                       onChange={e => setAddr(a => ({ ...a, line1: e.target.value }))}
-                      className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#D4AF37] transition-colors"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Apartment, unit, complex (optional)"
-                      value={addr.line2}
+                      className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#D4AF37] transition-colors" />
+                    <input type="text" placeholder="Apartment, unit, complex (optional)" value={addr.line2}
                       onChange={e => setAddr(a => ({ ...a, line2: e.target.value }))}
-                      className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#D4AF37] transition-colors"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Suburb"
-                      value={addr.suburb}
+                      className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#D4AF37] transition-colors" />
+                    <input type="text" placeholder="Suburb" value={addr.suburb}
                       onChange={e => setAddr(a => ({ ...a, suburb: e.target.value }))}
-                      className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#D4AF37] transition-colors"
-                    />
+                      className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#D4AF37] transition-colors" />
                     <div className="grid grid-cols-2 gap-2">
-                      <input
-                        type="text"
-                        placeholder="City / Town"
-                        value={addr.city}
+                      <input type="text" placeholder="City / Town" value={addr.city}
                         onChange={e => setAddr(a => ({ ...a, city: e.target.value }))}
-                        className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#D4AF37] transition-colors"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Postal code"
-                        value={addr.postal}
+                        className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#D4AF37] transition-colors" />
+                      <input type="text" placeholder="Postal code" value={addr.postal}
                         onChange={e => setAddr(a => ({ ...a, postal: e.target.value }))}
-                        className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#D4AF37] transition-colors"
-                      />
+                        className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#D4AF37] transition-colors" />
                     </div>
-                    <select
-                      value={addr.province}
-                      onChange={e => setAddr(a => ({ ...a, province: e.target.value }))}
+                    <select value={addr.province} onChange={e => setAddr(a => ({ ...a, province: e.target.value }))}
                       className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#D4AF37] transition-colors appearance-none"
-                      style={{ color: addr.province ? "#fff" : "#4b5563" }}
-                    >
+                      style={{ color: addr.province ? "#fff" : "#4b5563" }}>
                       <option value="" disabled>Province</option>
                       {["Eastern Cape","Free State","Gauteng","KwaZulu-Natal","Limpopo","Mpumalanga","Northern Cape","North West","Western Cape"].map(p => (
                         <option key={p} value={p} style={{ color: "#fff", background: "#0A0A0A" }}>{p}</option>
@@ -334,11 +311,8 @@ export default function CheckoutPage() {
                   <input type="file" accept="image/*,.pdf" onChange={handleFileChange} className="hidden" />
                 </label>
                 {error && <p className="text-red-400 text-sm mt-3">{error}</p>}
-                <button
-                  onClick={submitProof}
-                  disabled={!proof || uploading}
-                  className="btn-gold w-full py-4 rounded-xl font-bold text-base mt-5 disabled:opacity-50"
-                >
+                <button onClick={submitProof} disabled={!proof || uploading}
+                  className="btn-gold w-full py-4 rounded-xl font-bold text-base mt-5 disabled:opacity-50">
                   {uploading ? "Uploading…" : "Submit Proof of Payment"}
                 </button>
                 <p className="text-center text-gray-600 text-xs mt-3">

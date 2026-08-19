@@ -6,6 +6,8 @@ import Link from "next/link";
 import { ArrowLeft, Check, Package, Truck, ShieldCheck, MessageCircle } from "lucide-react";
 import AddToEnquiry from "@/app/(site)/shop/AddToEnquiry";
 import BuyNowButton from "./BuyNowButton";
+import InstallmentSection from "@/app/(site)/shop/InstallmentSection";
+import { getSettings } from "@/lib/installments";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +46,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   const product = getProduct(id);
   if (!product) notFound();
 
+  const installmentSettings = getSettings(id);
   const related = getRelated(id, product.category);
   const waMessage = encodeURIComponent(`Hi, I'm interested in the ${product.name} (${product.price}). Please send me more details.`);
 
@@ -163,6 +166,19 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
               <BuyNowButton product={{ id: product.id, name: product.name, price: product.price, originalPrice: product.originalPrice, imageUrl: product.imageUrl ?? "", category: product.category }} />
             </div>
             <AddToEnquiry id={product.id} name={product.name} price={product.price} originalPrice={product.originalPrice} imageUrl={product.imageUrl ?? ""} category={product.category} />
+
+            {/* Installment option */}
+            {installmentSettings && (
+              <InstallmentSection
+                product={{ id: product.id, name: product.name, price: product.price }}
+                settings={{
+                  min_deposit_pct: installmentSettings.min_deposit_pct,
+                  eligible_terms: installmentSettings.eligible_terms,
+                  monthly_rate: installmentSettings.monthly_rate,
+                  admin_fee: installmentSettings.admin_fee,
+                }}
+              />
+            )}
           </div>
         </div>
       </div>

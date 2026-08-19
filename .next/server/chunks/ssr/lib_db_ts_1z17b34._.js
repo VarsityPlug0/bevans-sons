@@ -111,7 +111,51 @@ module.exports=[66879,a=>{"use strict";var b=a.i(85148),c=a.i(14747),d=a.i(22734
     CREATE TABLE IF NOT EXISTS migrations (
       name TEXT PRIMARY KEY
     );
-  `);try{a.exec("ALTER TABLE orders ADD COLUMN bank_id TEXT")}catch{}try{a.exec("ALTER TABLE orders ADD COLUMN tracking_number TEXT")}catch{}}(h),function(a){try{a.exec("ALTER TABLE products ADD COLUMN originalPrice TEXT NOT NULL DEFAULT ''")}catch{}}(h),function(a){if(!a.prepare("SELECT name FROM migrations WHERE name = ?").get("json_import_gadgets_v1")){for(let b of g)if((0,d.existsSync)(b))try{let c=JSON.parse((0,d.readFileSync)(b,"utf-8"));if(Array.isArray(c)&&c.length>0){a.prepare("DELETE FROM products").run();let b=a.prepare(`
+
+    CREATE TABLE IF NOT EXISTS installment_settings (
+      id               TEXT PRIMARY KEY,
+      product_id       TEXT UNIQUE NOT NULL,
+      min_deposit_pct  REAL NOT NULL DEFAULT 10,
+      eligible_terms   TEXT NOT NULL DEFAULT '[6,12,18,24]',
+      monthly_rate     REAL NOT NULL DEFAULT 0,
+      admin_fee        REAL NOT NULL DEFAULT 0,
+      active           INTEGER NOT NULL DEFAULT 1,
+      createdAt        TEXT NOT NULL,
+      updatedAt        TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS installment_applications (
+      id               TEXT PRIMARY KEY,
+      ref              TEXT UNIQUE NOT NULL,
+      product_id       TEXT NOT NULL,
+      product_name     TEXT NOT NULL,
+      product_price    REAL NOT NULL,
+      term_months      INTEGER NOT NULL,
+      monthly_payment  REAL NOT NULL,
+      deposit          REAL NOT NULL,
+      total_repayable  REAL NOT NULL,
+      name             TEXT NOT NULL,
+      phone            TEXT NOT NULL,
+      email            TEXT NOT NULL,
+      id_number        TEXT NOT NULL,
+      address          TEXT NOT NULL,
+      status           TEXT NOT NULL DEFAULT 'new',
+      whatsapp_clicked INTEGER NOT NULL DEFAULT 0,
+      admin_notes      TEXT,
+      createdAt        TEXT NOT NULL,
+      updatedAt        TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS installment_events (
+      id          TEXT PRIMARY KEY,
+      event       TEXT NOT NULL,
+      product_id  TEXT,
+      ref         TEXT,
+      term_months INTEGER,
+      metadata    TEXT,
+      createdAt   TEXT NOT NULL
+    );
+  `);try{a.exec("ALTER TABLE orders ADD COLUMN bank_id TEXT")}catch{}try{a.exec("ALTER TABLE orders ADD COLUMN tracking_number TEXT")}catch{}try{a.exec("ALTER TABLE installment_applications ADD COLUMN product_imageUrl TEXT")}catch{}}(h),function(a){try{a.exec("ALTER TABLE products ADD COLUMN originalPrice TEXT NOT NULL DEFAULT ''")}catch{}}(h),function(a){if(!a.prepare("SELECT name FROM migrations WHERE name = ?").get("json_import_gadgets_v1")){for(let b of g)if((0,d.existsSync)(b))try{let c=JSON.parse((0,d.readFileSync)(b,"utf-8"));if(Array.isArray(c)&&c.length>0){a.prepare("DELETE FROM products").run();let b=a.prepare(`
           INSERT OR REPLACE INTO products
             (id, name, price, category, description, imageUrl, inStock, featured, createdAt, updatedAt)
           VALUES
