@@ -121,7 +121,7 @@ export default function AdminChatPage() {
   const totalUnread = openSessions.reduce((s, x) => s + x.unreadAdmin, 0);
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] flex flex-col" style={{ height: "100dvh" }}>
+    <div className="h-full flex flex-col bg-[#0A0A0A]">
       {/* Top bar */}
       <header className="bg-[#0f0f0f] border-b border-[#1A1A1A] px-4 py-3 flex items-center justify-between gap-3 shrink-0">
         <div className="flex items-center gap-3">
