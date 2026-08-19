@@ -139,7 +139,7 @@ export default function InstallmentModal({ product, settings, onClose }: Props) 
     <div
       ref={overlayRef}
       onClick={handleOverlayClick}
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm p-0 sm:p-4"
+      className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm p-0 sm:p-4"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
       <div className="relative w-full sm:max-w-lg bg-[#111111] border border-[#1F1F1F] rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden max-h-[85dvh] flex flex-col">
