@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowLeft, Check, Package, Truck, ShieldCheck, MessageCircle } from "lucide-react";
 import AddToEnquiry from "@/app/(site)/shop/AddToEnquiry";
 import BuyNowButton from "./BuyNowButton";
+import ShareButton from "./ShareButton";
 import InstallmentSection from "@/app/(site)/shop/InstallmentSection";
 import { getSettings } from "@/lib/installments";
 
@@ -93,14 +94,17 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
       />
     <div className="max-w-7xl mx-auto px-4 sm:px-8 py-12">
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm text-gray-500 mb-6">
-        <Link href="/shop" className="flex items-center gap-1.5 hover:text-[#D4AF37] transition-colors">
-          <ArrowLeft size={14} /> Shop
-        </Link>
-        <span>/</span>
-        <span className="text-[#D4AF37]">{product.category}</span>
-        <span>/</span>
-        <span className="text-gray-400 truncate max-w-[200px]">{product.name}</span>
+      <div className="flex items-center justify-between gap-2 mb-6">
+        <div className="flex items-center gap-2 text-sm text-gray-500 min-w-0">
+          <Link href="/shop" className="flex items-center gap-1.5 hover:text-[#D4AF37] transition-colors shrink-0">
+            <ArrowLeft size={14} /> Shop
+          </Link>
+          <span>/</span>
+          <span className="text-[#D4AF37] shrink-0">{product.category}</span>
+          <span>/</span>
+          <span className="text-gray-400 truncate">{product.name}</span>
+        </div>
+        <ShareButton name={product.name} price={product.price} url={`${BASE}/shop/${product.id}`} />
       </div>
 
       {/* Product layout */}
