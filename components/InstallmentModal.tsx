@@ -140,8 +140,9 @@ export default function InstallmentModal({ product, settings, onClose }: Props) 
       ref={overlayRef}
       onClick={handleOverlayClick}
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm p-0 sm:p-4"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
-      <div className="relative w-full sm:max-w-lg bg-[#111111] border border-[#1F1F1F] rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden max-h-[92dvh] flex flex-col">
+      <div className="relative w-full sm:max-w-lg bg-[#111111] border border-[#1F1F1F] rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden max-h-[85dvh] flex flex-col">
 
         {/* Header */}
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#1F1F1F] shrink-0">
@@ -353,7 +354,7 @@ export default function InstallmentModal({ product, settings, onClose }: Props) 
 
         {/* Sticky footer — action buttons always visible */}
         {step !== "success" && (
-          <div className="shrink-0 px-6 py-4 border-t border-[#1F1F1F] bg-[#111111]">
+          <div className="shrink-0 px-6 pt-4 pb-5 border-t border-[#1F1F1F] bg-[#111111]">
             {step === 1 && (
               <button onClick={goStep2}
                 className="btn-gold w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2">
