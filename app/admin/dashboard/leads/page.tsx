@@ -65,7 +65,7 @@ const QUICK_REPLIES = {
   cartReminder: (name: string, product: string, price: string) =>
     `Hi ${name || "there"}, this is Daisy Gadgets Co. You added the ${product} (${price}) to your cart earlier but didn't complete your order. We're still holding it for you! Ready to proceed? 🛒`,
   discountPush: (name: string) =>
-    `Hi ${name || "there"}, Daisy Gadgets Co. here! Your 25% discount code is DAISY25 — just mention it when you order. Valid on everything in our store. Shop now: https://daisygadgetsco.co.za`,
+    `Hi ${name || "there"}, Daisy Gadgets Co. here! Your 25% discount code is DAISY25 — just mention it when you order. Valid on everything in our store. Shop now: https://daisygadgetsco.com`,
   orderReady: (name: string) =>
     `Hi ${name || "there"}, good news from Daisy Gadgets Co.! Your order is ready. Please make your EFT payment and send us your proof of payment to confirm. Any questions? Reply here!`,
 };

@@ -37,7 +37,7 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
     return {
       title: m.title,
       description: m.description,
-      alternates: { canonical: `https://daisygadgetsco.co.za/shop?cat=${encodeURIComponent(cat)}` },
+      alternates: { canonical: `https://daisygadgetsco.com/shop?cat=${encodeURIComponent(cat)}` },
       openGraph: { title: `${m.title} | Daisy Gadgets Co.`, description: m.description },
       twitter: { card: "summary_large_image", title: m.title, description: m.description },
     };
@@ -45,7 +45,7 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
   return {
     title: "Shop — Premium Gadgets",
     description: "Browse our full range of smartphones, smart TVs, gaming consoles, laptops, MacBooks, home appliances, solar & more. Worldwide shipping available.",
-    alternates: { canonical: "https://daisygadgetsco.co.za/shop" },
+    alternates: { canonical: "https://daisygadgetsco.com/shop" },
   };
 }
 

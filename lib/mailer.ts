@@ -124,7 +124,7 @@ function layout(content: string, accentBar = ""): string {
                   <img src="cid:${LOGO_CID}" alt="Daisy Gadgets Co." height="44" style="height:44px;width:auto;display:block;border:0" />
                 </td>
                 <td align="right">
-                  <a href="${SITE}" style="color:${MUTED};font-size:12px;text-decoration:none">daisygadgetsco.co.za</a>
+                  <a href="${SITE}" style="color:${MUTED};font-size:12px;text-decoration:none">daisygadgetsco.com</a>
                 </td>
               </tr>
             </table>
@@ -147,7 +147,7 @@ function layout(content: string, accentBar = ""): string {
               Questions? &nbsp;
               <a href="https://wa.me/${WA_NUM}" style="color:${GOLD};text-decoration:none;font-weight:600">WhatsApp +27 84 896 1782</a>
               &nbsp;·&nbsp;
-              <a href="${SITE}" style="color:${GOLD};text-decoration:none;font-weight:600">daisygadgetsco.co.za</a>
+              <a href="${SITE}" style="color:${GOLD};text-decoration:none;font-weight:600">daisygadgetsco.com</a>
             </p>
             <p style="margin:0;color:#333;font-size:11px;text-align:center">
               © ${new Date().getFullYear()} Daisy Gadgets Co. · All rights reserved.

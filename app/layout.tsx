@@ -16,7 +16,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://daisygadgetsco.co.za"),
+  metadataBase: new URL("https://daisygadgetsco.com"),
   title: {
     default: "Daisy Gadgets Co. | Premium Gadgets — Worldwide Shipping",
     template: "%s | Daisy Gadgets Co.",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Daisy Gadgets Co. | Premium Gadgets For Everyday Convenience",
     description: "Premium gadgets for everyday convenience. Worldwide shipping available. Free delivery in South Africa.",
-    url: "https://daisygadgetsco.co.za",
+    url: "https://daisygadgetsco.com",
     siteName: "Daisy Gadgets Co.",
     locale: "en_ZA",
     type: "website",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     images: ["/logo.jpg"],
   },
   alternates: {
-    canonical: "https://daisygadgetsco.co.za",
+    canonical: "https://daisygadgetsco.com",
   },
 };
 
@@ -47,8 +47,8 @@ const orgJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Daisy Gadgets Co.",
-  url: "https://daisygadgetsco.co.za",
-  logo: "https://daisygadgetsco.co.za/logo.jpg",
+  url: "https://daisygadgetsco.com",
+  logo: "https://daisygadgetsco.com/logo.jpg",
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+27-84-896-1782",

@@ -13,11 +13,11 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Daisy Gadgets Co. | Premium Gadgets — Worldwide Shipping",
   description: "Shop iPhones, Smart TVs, PS5, Xbox, Gaming PCs, MacBooks, Laptops, Solar Inverters, Home Appliances & more. Same-day delivery in South Africa. Free worldwide shipping.",
-  alternates: { canonical: "https://daisygadgetsco.co.za" },
+  alternates: { canonical: "https://daisygadgetsco.com" },
   openGraph: {
     title: "Daisy Gadgets Co. | Premium Gadgets — Worldwide Shipping",
     description: "Shop iPhones, Smart TVs, PS5, Xbox, Gaming PCs, MacBooks, Laptops, Solar & more. 30% OFF August to December. Same-day delivery in South Africa.",
-    url: "https://daisygadgetsco.co.za",
+    url: "https://daisygadgetsco.com",
     type: "website",
   },
 };
@@ -51,12 +51,12 @@ const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: "Daisy Gadgets Co.",
-  url: "https://daisygadgetsco.co.za",
+  url: "https://daisygadgetsco.com",
   potentialAction: {
     "@type": "SearchAction",
     target: {
       "@type": "EntryPoint",
-      urlTemplate: "https://daisygadgetsco.co.za/shop?q={search_term_string}",
+      urlTemplate: "https://daisygadgetsco.com/shop?q={search_term_string}",
     },
     "query-input": "required name=search_term_string",
   },

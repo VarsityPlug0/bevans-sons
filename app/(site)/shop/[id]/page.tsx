@@ -12,7 +12,7 @@ import { getSettings } from "@/lib/installments";
 
 export const dynamic = "force-dynamic";
 
-const BASE = "https://daisygadgetsco.co.za";
+const BASE = "https://daisygadgetsco.com";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;

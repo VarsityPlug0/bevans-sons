@@ -22,7 +22,7 @@ module.exports=[67010,33464,e=>{"use strict";var t=e.i(84423),o=e.i(14747),i=e.i
                   <img src="cid:${p}" alt="Daisy Gadgets Co." height="44" style="height:44px;width:auto;display:block;border:0" />
                 </td>
                 <td align="right">
-                  <a href="${x}" style="color:${f};font-size:12px;text-decoration:none">daisygadgetsco.co.za</a>
+                  <a href="${x}" style="color:${f};font-size:12px;text-decoration:none">daisygadgetsco.com</a>
                 </td>
               </tr>
             </table>
@@ -45,7 +45,7 @@ module.exports=[67010,33464,e=>{"use strict";var t=e.i(84423),o=e.i(14747),i=e.i
               Questions? &nbsp;
               <a href="https://wa.me/${m}" style="color:${s};text-decoration:none;font-weight:600">WhatsApp +27 84 896 1782</a>
               &nbsp;\xb7&nbsp;
-              <a href="${x}" style="color:${s};text-decoration:none;font-weight:600">daisygadgetsco.co.za</a>
+              <a href="${x}" style="color:${s};text-decoration:none;font-weight:600">daisygadgetsco.com</a>
             </p>
             <p style="margin:0;color:#333;font-size:11px;text-align:center">
               \xa9 ${new Date().getFullYear()} Daisy Gadgets Co. \xb7 All rights reserved.
