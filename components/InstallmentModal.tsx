@@ -141,7 +141,7 @@ export default function InstallmentModal({ product, settings, onClose }: Props) 
       onClick={handleOverlayClick}
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm p-0 sm:p-4"
     >
-      <div className="relative w-full sm:max-w-lg bg-[#111111] border border-[#1F1F1F] rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden max-h-[95vh] flex flex-col">
+      <div className="relative w-full sm:max-w-lg bg-[#111111] border border-[#1F1F1F] rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden max-h-[92dvh] flex flex-col">
 
         {/* Header */}
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-[#1F1F1F] shrink-0">
@@ -208,7 +208,7 @@ export default function InstallmentModal({ product, settings, onClose }: Props) 
               {/* Term selector */}
               <div>
                 <p className={labelClass}>Choose your installment period</p>
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {terms.map(t => {
                     const { monthly: m } = calcMonthly(price, deposit, t, settings.monthly_rate, settings.admin_fee);
                     const active = term === t;
@@ -232,7 +232,7 @@ export default function InstallmentModal({ product, settings, onClose }: Props) 
               {/* Monthly highlight */}
               <div className="bg-[#0A0A0A] border border-[#D4AF37]/20 rounded-2xl p-5 text-center">
                 <p className="text-gray-500 text-xs mb-1">Your monthly payment</p>
-                <p className="text-[#D4AF37] text-4xl font-black">R {monthly.toLocaleString("en-ZA")}</p>
+                <p className="text-[#D4AF37] text-3xl sm:text-4xl font-black">R {monthly.toLocaleString("en-ZA")}</p>
                 <p className="text-gray-600 text-xs mt-1">× {term} months</p>
                 <div className="mt-3 pt-3 border-t border-[#1F1F1F] grid grid-cols-2 gap-3 text-center text-xs">
                   <div>
