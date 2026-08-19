@@ -247,11 +247,6 @@ export default function InstallmentModal({ product, settings, onClose }: Props) 
                   </div>
                 </div>
               </div>
-
-              <button onClick={goStep2}
-                className="btn-gold w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2">
-                Next — Enter Your Details <ChevronRight size={16} />
-              </button>
             </div>
           )}
 
@@ -289,17 +284,6 @@ export default function InstallmentModal({ product, settings, onClose }: Props) 
                   I consent to Daisy Gadgets Co. collecting and using my personal information to process this installment application and contact me via WhatsApp.
                 </p>
               </label>
-
-              <div className="flex gap-3 pt-1">
-                <button onClick={() => setStep(1)}
-                  className="flex items-center gap-1.5 px-4 py-3 rounded-xl border border-[#2a2a2a] text-gray-400 hover:text-white text-sm transition-colors">
-                  <ChevronLeft size={14} /> Back
-                </button>
-                <button onClick={goStep3} disabled={!canGoStep3}
-                  className="btn-gold flex-1 py-3 rounded-xl font-bold flex items-center justify-center gap-2 disabled:opacity-40">
-                  Review Application <ChevronRight size={16} />
-                </button>
-              </div>
             </div>
           )}
 
@@ -330,17 +314,6 @@ export default function InstallmentModal({ product, settings, onClose }: Props) 
                   <p className="text-red-400 text-sm">{error}</p>
                 </div>
               )}
-
-              <div className="flex gap-3">
-                <button onClick={() => setStep(2)}
-                  className="flex items-center gap-1.5 px-4 py-3 rounded-xl border border-[#2a2a2a] text-gray-400 hover:text-white text-sm transition-colors">
-                  <ChevronLeft size={14} /> Back
-                </button>
-                <button onClick={submit} disabled={submitting}
-                  className="btn-gold flex-1 py-3.5 rounded-xl font-bold text-sm disabled:opacity-50">
-                  {submitting ? "Submitting…" : `APPLY FOR THIS ${product.name.split(" ")[0].toUpperCase()}`}
-                </button>
-              </div>
 
               <p className="text-center text-gray-600 text-xs">
                 No credit bureau check. Our team will contact you on WhatsApp to finalise the agreement.
@@ -377,6 +350,42 @@ export default function InstallmentModal({ product, settings, onClose }: Props) 
             </div>
           )}
         </div>
+
+        {/* Sticky footer — action buttons always visible */}
+        {step !== "success" && (
+          <div className="shrink-0 px-6 py-4 border-t border-[#1F1F1F] bg-[#111111]">
+            {step === 1 && (
+              <button onClick={goStep2}
+                className="btn-gold w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2">
+                Next — Enter Your Details <ChevronRight size={16} />
+              </button>
+            )}
+            {step === 2 && (
+              <div className="flex gap-3">
+                <button onClick={() => setStep(1)}
+                  className="flex items-center gap-1.5 px-4 py-3 rounded-xl border border-[#2a2a2a] text-gray-400 hover:text-white text-sm transition-colors">
+                  <ChevronLeft size={14} /> Back
+                </button>
+                <button onClick={goStep3} disabled={!canGoStep3}
+                  className="btn-gold flex-1 py-3 rounded-xl font-bold flex items-center justify-center gap-2 disabled:opacity-40">
+                  Review Application <ChevronRight size={16} />
+                </button>
+              </div>
+            )}
+            {step === 3 && (
+              <div className="flex gap-3">
+                <button onClick={() => setStep(2)}
+                  className="flex items-center gap-1.5 px-4 py-3 rounded-xl border border-[#2a2a2a] text-gray-400 hover:text-white text-sm transition-colors">
+                  <ChevronLeft size={14} /> Back
+                </button>
+                <button onClick={submit} disabled={submitting}
+                  className="btn-gold flex-1 py-3.5 rounded-xl font-bold text-sm disabled:opacity-50">
+                  {submitting ? "Submitting…" : `APPLY FOR THIS ${product.name.split(" ")[0].toUpperCase()}`}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
