@@ -37,31 +37,57 @@ async function cropToBlob(image: HTMLImageElement, crop: PixelCrop): Promise<Blo
   );
 }
 
+// Fetch remote image as a local blob URL to avoid tainted canvas CORS errors
+async function toLocalSrc(src: string): Promise<string> {
+  if (src.startsWith("blob:") || src.startsWith("data:")) return src;
+  const res = await fetch(src);
+  const blob = await res.blob();
+  return URL.createObjectURL(blob);
+}
+
 export default function ImageCropper({ src, onDone, onCancel }: Props) {
   const imgRef = useRef<HTMLImageElement>(null);
+  const [localSrc, setLocalSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState<Crop>();
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
   const [processing, setProcessing] = useState(false);
+  const [error, setError] = useState("");
+
+  // Convert remote URL to local blob on first render
+  useState(() => {
+    toLocalSrc(src).then(setLocalSrc).catch(() => setLocalSrc(src));
+  });
 
   function onImageLoad(e: React.SyntheticEvent<HTMLImageElement>) {
     const { width, height } = e.currentTarget;
-    setCrop(centerAspectCrop(width, height));
+    const c = centerAspectCrop(width, height);
+    setCrop(c);
+    // Pre-set completedCrop so Apply works without dragging
+    setCompletedCrop({
+      unit: "px",
+      x: (c.x / 100) * width,
+      y: (c.y / 100) * height,
+      width: (c.width / 100) * width,
+      height: (c.height / 100) * height,
+    });
   }
 
   async function handleApply() {
     if (!imgRef.current || !completedCrop) return;
     setProcessing(true);
+    setError("");
     try {
       const blob = await cropToBlob(imgRef.current, completedCrop);
       onDone(blob);
-    } catch {
+    } catch (e) {
+      console.error("Crop error:", e);
+      setError("Crop failed — try again.");
       setProcessing(false);
     }
   }
 
   return (
     <>
-      {/* Make crop handles finger-friendly on mobile */}
       <style>{`
         .ReactCrop__drag-handle::after {
           width: 28px !important;
@@ -97,32 +123,39 @@ export default function ImageCropper({ src, onDone, onCancel }: Props) {
             </button>
           </div>
 
-          {/* Crop canvas — fills available space on mobile */}
+          {/* Crop canvas */}
           <div className="flex-1 flex items-center justify-center bg-black p-3 overflow-hidden">
-            <ReactCrop
-              crop={crop}
-              onChange={(c) => setCrop(c)}
-              onComplete={(c) => setCompletedCrop(c)}
-              style={{ maxHeight: "100%", maxWidth: "100%" }}
-            >
-              <img
-                ref={imgRef}
-                src={src}
-                alt="Crop"
-                onLoad={onImageLoad}
-                style={{
-                  maxHeight: "calc(100vh - 200px)",
-                  maxWidth: "100%",
-                  display: "block",
-                  touchAction: "none",
-                }}
-              />
-            </ReactCrop>
+            {localSrc ? (
+              <ReactCrop
+                crop={crop}
+                onChange={(c) => setCrop(c)}
+                onComplete={(c) => setCompletedCrop(c)}
+                style={{ maxHeight: "100%", maxWidth: "100%" }}
+              >
+                <img
+                  ref={imgRef}
+                  src={localSrc}
+                  alt="Crop"
+                  onLoad={onImageLoad}
+                  crossOrigin="anonymous"
+                  style={{
+                    maxHeight: "calc(100vh - 200px)",
+                    maxWidth: "100%",
+                    display: "block",
+                    touchAction: "none",
+                  }}
+                />
+              </ReactCrop>
+            ) : (
+              <div className="w-8 h-8 border-2 border-[#D4AF37] border-t-transparent rounded-full animate-spin" />
+            )}
           </div>
 
           <p className="text-center text-gray-600 text-xs py-2 shrink-0">
             Drag the corners or edges to adjust
           </p>
+
+          {error && <p className="text-red-400 text-xs text-center pb-2">{error}</p>}
 
           {/* Footer */}
           <div className="flex gap-3 px-5 py-4 border-t border-[#1F1F1F] shrink-0">
