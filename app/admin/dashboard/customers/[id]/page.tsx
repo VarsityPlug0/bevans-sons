@@ -29,7 +29,8 @@ export default async function CustomerProfilePage({ params }: { params: Promise<
 
   let email: string;
   try {
-    email = Buffer.from(id, "base64").toString("utf-8");
+    const padded = id + "=".repeat((4 - (id.length % 4)) % 4);
+    email = Buffer.from(padded, "base64").toString("utf-8");
     if (!email.includes("@")) throw new Error("invalid");
   } catch {
     notFound();

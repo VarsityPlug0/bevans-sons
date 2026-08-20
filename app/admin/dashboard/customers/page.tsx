@@ -214,7 +214,7 @@ export default function CustomersPage() {
                     {/* Actions */}
                     <div className="flex items-center gap-1.5 shrink-0 ml-2">
                       <Link
-                        href={`/admin/dashboard/customers/${btoa(customer.email)}`}
+                        href={`/admin/dashboard/customers/${btoa(customer.email).replace(/=/g, "")}`}
                         className="p-2 rounded-lg text-gray-500 hover:text-white hover:bg-white/10 transition-colors"
                         title="View Profile">
                         <User size={15} />
