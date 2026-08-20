@@ -249,12 +249,6 @@
       "namedRegex": "^/api/admin/products(?:/)?$"
     },
     {
-      "page": "/api/admin/run-price-migration",
-      "regex": "^/api/admin/run\\-price\\-migration(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/api/admin/run\\-price\\-migration(?:/)?$"
-    },
-    {
       "page": "/api/admin/site-images",
       "regex": "^/api/admin/site\\-images(?:/)?$",
       "routeKeys": {},
