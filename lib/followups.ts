@@ -40,18 +40,22 @@ export async function runFollowUps(): Promise<{ sent: number; skipped: number }>
 
   // ── 1. Cart abandonment (24 – 72 h after adding to cart, no order placed) ──
   const abandoned = db.prepare(`
-    SELECT v.email, v.name, MAX(ce.createdAt) AS lastAdded
-    FROM cart_events ce
-    JOIN visitors v ON v.id = ce.visitorId
-    WHERE v.email IS NOT NULL
-      AND TRIM(v.email) != ''
-      AND ce.createdAt < datetime('now', '-24 hours')
-      AND ce.createdAt > datetime('now', '-72 hours')
-    GROUP BY LOWER(v.email)
-    HAVING NOT EXISTS (
+    WITH cart_summary AS (
+      SELECT v.email, v.name, MAX(ce.createdAt) AS lastAdded
+      FROM cart_events ce
+      JOIN visitors v ON v.id = ce.visitorId
+      WHERE v.email IS NOT NULL
+        AND TRIM(v.email) != ''
+        AND ce.createdAt < datetime('now', '-24 hours')
+        AND ce.createdAt > datetime('now', '-72 hours')
+      GROUP BY LOWER(v.email)
+    )
+    SELECT email, name, lastAdded
+    FROM cart_summary cs
+    WHERE NOT EXISTS (
       SELECT 1 FROM orders o
-      WHERE LOWER(o.email) = LOWER(v.email)
-        AND o.createdAt > MAX(ce.createdAt)
+      WHERE LOWER(o.email) = LOWER(cs.email)
+        AND o.createdAt > cs.lastAdded
     )
   `).all() as { email: string; name: string; lastAdded: string }[];
 
