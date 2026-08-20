@@ -56,7 +56,6 @@
   "/api/admin/send-campaign/route": "app/api/admin/send-campaign/route.js",
   "/api/admin/site-images/route": "app/api/admin/site-images/route.js",
   "/api/admin/test-email/route": "app/api/admin/test-email/route.js",
-  "/api/admin/test-followup/route": "app/api/admin/test-followup/route.js",
   "/api/admin/upload/route": "app/api/admin/upload/route.js",
   "/api/ai-assistant/route": "app/api/ai-assistant/route.js",
   "/api/chat/messages/route": "app/api/chat/messages/route.js",

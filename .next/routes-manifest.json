@@ -287,12 +287,6 @@
       "namedRegex": "^/api/admin/test\\-email(?:/)?$"
     },
     {
-      "page": "/api/admin/test-followup",
-      "regex": "^/api/admin/test\\-followup(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/api/admin/test\\-followup(?:/)?$"
-    },
-    {
       "page": "/api/admin/upload",
       "regex": "^/api/admin/upload(?:/)?$",
       "routeKeys": {},
