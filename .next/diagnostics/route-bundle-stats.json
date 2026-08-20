@@ -431,11 +431,11 @@
   },
   {
     "route": "/admin/dashboard/emails",
-    "firstLoadUncompressedJsBytes": 488984,
+    "firstLoadUncompressedJsBytes": 490411,
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\1c7-viq9lje2v.js",
-      ".next\\static\\chunks\\1dg8weqllli0k.js",
+      ".next\\static\\chunks\\15eq28sc01t1g.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
       ".next\\static\\chunks\\3eugurg7-xpx7.js",

@@ -1266,9 +1266,16 @@ export async function sendCampaignEmail(data: {
   orderItems?: { id?: string; name: string; price: string; qty: number; imageUrl?: string }[];
   orderRef?: string;
   restoreCartUrl?: string;
+  trackingId?: string;
 }) {
-  const cta = data.ctaText && data.ctaUrl
-    ? `<div style="text-align:center;margin:28px 0">${btn(data.ctaText, data.ctaUrl)}</div>`
+  const ctaHref = data.ctaUrl && data.trackingId
+    ? `${SITE}/api/track/email?id=${data.trackingId}&e=click&url=${encodeURIComponent(data.ctaUrl)}`
+    : data.ctaUrl;
+  const cta = data.ctaText && ctaHref
+    ? `<div style="text-align:center;margin:28px 0">${btn(data.ctaText, ctaHref)}</div>`
+    : "";
+  const pixel = data.trackingId
+    ? `<img src="${SITE}/api/track/email?id=${data.trackingId}&e=open" width="1" height="1" style="display:none;width:1px;height:1px;border:0" alt="" />`
     : "";
 
   let productSection = "";
@@ -1369,6 +1376,7 @@ export async function sendCampaignEmail(data: {
     <p style="margin:0;color:${MUTED};font-size:12px;text-align:center">
       You received this because you placed an order with Daisy Gadgets Co.
     </p>
+    ${pixel}
   `;
 
   await sendMail({

@@ -317,6 +317,12 @@
       "namedRegex": "^/api/contact(?:/)?$"
     },
     {
+      "page": "/api/cron/follow-ups",
+      "regex": "^/api/cron/follow\\-ups(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/cron/follow\\-ups(?:/)?$"
+    },
+    {
       "page": "/api/installments/apply",
       "regex": "^/api/installments/apply(?:/)?$",
       "routeKeys": {},
@@ -351,6 +357,12 @@
       "regex": "^/api/track/cart(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/api/track/cart(?:/)?$"
+    },
+    {
+      "page": "/api/track/email",
+      "regex": "^/api/track/email(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/track/email(?:/)?$"
     },
     {
       "page": "/api/track/lead",

@@ -208,6 +208,19 @@ function initSchema(db: Database.Database) {
       status      TEXT NOT NULL DEFAULT 'sent',
       createdAt   TEXT NOT NULL
     );
+
+    CREATE TABLE IF NOT EXISTS email_sends (
+      id         TEXT PRIMARY KEY,
+      email      TEXT NOT NULL,
+      type       TEXT NOT NULL,
+      ref        TEXT,
+      subject    TEXT,
+      opened     INTEGER NOT NULL DEFAULT 0,
+      clicked    INTEGER NOT NULL DEFAULT 0,
+      opened_at  TEXT,
+      clicked_at TEXT,
+      createdAt  TEXT NOT NULL
+    );
   `);
 
   // Migrate existing orders tables that predate bank_id / tracking_number columns
