@@ -49,6 +49,7 @@
   "/api/admin/products/[id]/route": "/api/admin/products/[id]",
   "/api/admin/products/route": "/api/admin/products",
   "/api/admin/quotes/[id]/route": "/api/admin/quotes/[id]",
+  "/api/admin/run-price-migration/route": "/api/admin/run-price-migration",
   "/api/admin/site-images/route": "/api/admin/site-images",
   "/api/admin/test-email/route": "/api/admin/test-email",
   "/api/admin/upload/route": "/api/admin/upload",

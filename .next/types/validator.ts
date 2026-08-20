@@ -479,6 +479,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../app/api/admin/run-price-migration/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/admin/run-price-migration">> = Specific
+  const handler = {} as typeof import("../../app/api/admin/run-price-migration/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/api/admin/site-images/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/admin/site-images">> = Specific
