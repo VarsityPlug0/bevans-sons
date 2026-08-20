@@ -81,6 +81,18 @@ export default async function CustomerProfilePage({ params }: { params: Promise<
     id: string; name: string; message: string; productInterest: string; createdAt: string;
   }[];
 
+  // Cart events — via visitor.email → cart_events.visitorId
+  const rawCartEvents = db.prepare(`
+    SELECT ce.productId, ce.productName, ce.price, ce.category, MAX(ce.createdAt) as lastAdded
+    FROM cart_events ce
+    JOIN visitors v ON v.id = ce.visitorId
+    WHERE LOWER(v.email) = ?
+    GROUP BY ce.productId
+    ORDER BY lastAdded DESC
+  `).all(email.toLowerCase()) as {
+    productId: string; productName: string; price: string; category: string; lastAdded: string;
+  }[];
+
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
 
@@ -210,6 +222,32 @@ export default async function CustomerProfilePage({ params }: { params: Promise<
             </div>
           )}
 
+          {/* Cart items */}
+          {rawCartEvents.length > 0 && (
+            <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl overflow-hidden">
+              <div className="px-5 py-4 border-b border-[#1F1F1F] flex items-center justify-between">
+                <h2 className="text-sm font-bold text-white">Cart Items</h2>
+                <span className="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded-full bg-amber-400/10 border border-amber-400/20">
+                  {rawCartEvents.length} item{rawCartEvents.length !== 1 ? "s" : ""}
+                </span>
+              </div>
+              <div className="divide-y divide-[#1A1A1A]">
+                {rawCartEvents.map((item) => (
+                  <div key={item.productId} className="flex items-center gap-3 px-5 py-3.5">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-white text-sm font-medium truncate">{item.productName}</p>
+                      <p className="text-gray-500 text-xs">{item.category}</p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="text-[#D4AF37] text-sm font-bold">{item.price}</p>
+                      <p className="text-gray-600 text-[10px]">{new Date(item.lastAdded).toLocaleDateString("en-ZA")}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Contact submissions */}
           {leads.length > 0 && (
             <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl overflow-hidden">
@@ -240,6 +278,7 @@ export default async function CustomerProfilePage({ params }: { params: Promise<
               name={customer.name}
               lastOrderItems={lastOrderItems}
               lastOrderRef={lastOrder.ref}
+              cartItems={rawCartEvents.map(e => ({ id: e.productId, name: e.productName, price: e.price, qty: 1 }))}
             />
           </div>
         </div>
