@@ -317,14 +317,14 @@ export default function CheckoutPage() {
                 </button>
                 <p className="text-center text-gray-600 text-xs mt-3">
                   Don&apos;t have proof yet?{" "}
-                  <button onClick={() => router.push(`/checkout/success?ref=${order.ref}`)} className="text-[#D4AF37] underline">
+                  <button onClick={() => { clear(); router.push(`/checkout/success?ref=${order.ref}`); }} className="text-[#D4AF37] underline">
                     Submit later
                   </button>
                 </p>
               </div>
             </div>
 
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 space-y-4">
               <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-6 sticky top-[124px] space-y-4">
                 <h3 className="text-base font-semibold text-white">Order Placed</h3>
                 <div className="bg-[#0A0A0A] rounded-xl p-4 text-center">
@@ -339,6 +339,20 @@ export default function CheckoutPage() {
                 <p className="text-xs text-gray-600 leading-relaxed">
                   We will review your proof of payment and confirm your order via email within 2–4 hours.
                 </p>
+              </div>
+
+              {/* Cart clear notice */}
+              <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-5">
+                <p className="text-amber-400 font-semibold text-sm mb-1">Clear your cart</p>
+                <p className="text-gray-400 text-xs leading-relaxed mb-4">
+                  Your order is placed. Clear your cart now so you don&apos;t accidentally place a duplicate order.
+                </p>
+                <button
+                  onClick={() => clear()}
+                  className="w-full py-2.5 rounded-xl text-sm font-bold border border-amber-500/40 text-amber-400 hover:bg-amber-500/10 transition-colors"
+                >
+                  Clear Cart
+                </button>
               </div>
             </div>
           </div>
