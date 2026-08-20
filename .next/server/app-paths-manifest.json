@@ -41,7 +41,6 @@
   "/admin/dashboard/products/page": "app/admin/dashboard/products/page.js",
   "/admin/dashboard/quotes/page": "app/admin/dashboard/quotes/page.js",
   "/admin/page": "app/admin/page.js",
-  "/api/admin/bulk-enable-installments/route": "app/api/admin/bulk-enable-installments/route.js",
   "/api/admin/chat/reply/route": "app/api/admin/chat/reply/route.js",
   "/api/admin/chat/sessions/route": "app/api/admin/chat/sessions/route.js",
   "/api/admin/installments/[id]/route": "app/api/admin/installments/[id]/route.js",

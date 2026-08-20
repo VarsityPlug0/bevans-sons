@@ -407,15 +407,6 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
-// Validate ../../app/api/admin/bulk-enable-installments/route.ts
-{
-  type __IsExpected<Specific extends RouteHandlerConfig<"/api/admin/bulk-enable-installments">> = Specific
-  const handler = {} as typeof import("../../app/api/admin/bulk-enable-installments/route.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
-}
-
 // Validate ../../app/api/admin/chat/reply/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/admin/chat/reply">> = Specific

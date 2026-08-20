@@ -233,12 +233,6 @@
       "namedRegex": "^/admin/dashboard/quotes(?:/)?$"
     },
     {
-      "page": "/api/admin/bulk-enable-installments",
-      "regex": "^/api/admin/bulk\\-enable\\-installments(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/api/admin/bulk\\-enable\\-installments(?:/)?$"
-    },
-    {
       "page": "/api/admin/chat/reply",
       "regex": "^/api/admin/chat/reply(?:/)?$",
       "routeKeys": {},

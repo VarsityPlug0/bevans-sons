@@ -41,7 +41,6 @@
   "/admin/dashboard/products/page": "/admin/dashboard/products",
   "/admin/dashboard/quotes/page": "/admin/dashboard/quotes",
   "/admin/page": "/admin",
-  "/api/admin/bulk-enable-installments/route": "/api/admin/bulk-enable-installments",
   "/api/admin/chat/reply/route": "/api/admin/chat/reply",
   "/api/admin/chat/sessions/route": "/api/admin/chat/sessions",
   "/api/admin/installments/[id]/route": "/api/admin/installments/[id]",
