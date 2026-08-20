@@ -3,7 +3,6 @@ import { getQuotes } from "@/lib/quotes";
 import { listOrders } from "@/lib/orders";
 import { listApplications as listInstallmentApps } from "@/lib/installments";
 import Link from "next/link";
-import DeleteButton from "./DeleteButton";
 
 export const dynamic = "force-dynamic";
 
@@ -228,16 +227,22 @@ export default async function Dashboard() {
             <p className="text-gray-500 text-xs mt-0.5">Customer messages</p>
           </Link>
 
-          {/* Add product CTA */}
-          <Link href="/admin/dashboard/new"
-            className="group bg-[#D4AF37]/5 border border-[#D4AF37]/20 hover:border-[#D4AF37]/50 rounded-2xl p-4 transition-all hover:bg-[#D4AF37]/10 flex flex-col justify-between">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-[#D4AF37]/15 mb-3">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="2.5" strokeLinecap="round">
-                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
+          {/* Products */}
+          <Link href="/admin/dashboard/products"
+            className="group bg-[#111111] border border-[#1F1F1F] hover:border-[#D4AF37]/40 rounded-2xl p-4 transition-all hover:bg-[#141414]">
+            <div className="flex items-start justify-between mb-3">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${GOLD}18` }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={GOLD} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+                  <polyline points="3.27,6.96 12,12.01 20.73,6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
+                </svg>
+              </div>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: `${GOLD}20`, color: GOLD }}>
+                {products.length}
+              </span>
             </div>
-            <p className="text-[#D4AF37] font-semibold text-sm">Add Product</p>
-            <p className="text-gray-500 text-xs mt-0.5">List a new item</p>
+            <p className="text-white font-semibold text-sm">Products</p>
+            <p className="text-gray-500 text-xs mt-0.5">{inStock} in stock</p>
           </Link>
 
         </div>
@@ -325,99 +330,6 @@ export default async function Dashboard() {
         </div>
       )}
 
-      {/* ── Products ─────────────────────────────────────────────────────────── */}
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-bold text-white">Products ({products.length})</h2>
-        <Link href="/admin/dashboard/new" className="btn-gold px-4 py-2 rounded-xl text-xs font-bold">
-          + Add Product
-        </Link>
-      </div>
-
-      {products.length === 0 ? (
-        <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-12 text-center">
-          <p className="text-gray-500 text-lg mb-6">No products yet.</p>
-          <Link href="/admin/dashboard/new" className="btn-gold px-8 py-3 rounded-xl font-bold">Add Your First Product</Link>
-        </div>
-      ) : (
-        <>
-          {/* Desktop table */}
-          <div className="hidden md:block bg-[#111111] border border-[#1F1F1F] rounded-2xl overflow-hidden">
-            <div className="grid grid-cols-[52px_1fr_130px_155px_105px_100px] gap-3 px-5 py-3 border-b border-[#1F1F1F]">
-              {["", "Product", "Price", "Category", "Status", "Actions"].map((h) => (
-                <p key={h} className="text-[11px] text-gray-500 uppercase tracking-wider font-medium">{h}</p>
-              ))}
-            </div>
-            {products.map((p) => (
-              <div key={p.id}
-                className="grid grid-cols-[52px_1fr_130px_155px_105px_100px] gap-3 items-center px-5 py-3.5 border-b border-[#1A1A1A] last:border-0 hover:bg-white/[0.02] transition-colors">
-                <div className="w-11 h-11 rounded-lg overflow-hidden bg-[#0A0A0A] shrink-0">
-                  {p.imageUrl
-                    ? <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover" />
-                    : <div className="w-full h-full flex items-center justify-center text-gray-700 text-xs">–</div>}
-                </div>
-                <div className="min-w-0">
-                  <p className="text-white font-medium text-sm truncate">{p.name}</p>
-                  {p.description && <p className="text-gray-500 text-xs truncate mt-0.5">{p.description}</p>}
-                </div>
-                <p className="text-[#D4AF37] font-bold text-sm">{p.price}</p>
-                <p className="text-gray-400 text-sm truncate">{p.category}</p>
-                <div className="flex gap-1 flex-wrap">
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${p.inStock ? "bg-green-400/10 text-green-400" : "bg-red-400/10 text-red-400"}`}>
-                    {p.inStock ? "In Stock" : "Out"}
-                  </span>
-                  {p.featured && (
-                    <span className="text-[10px] px-2 py-0.5 rounded-full font-medium bg-[#D4AF37]/10 text-[#D4AF37]">Featured</span>
-                  )}
-                </div>
-                <div className="flex gap-1.5">
-                  <Link href={`/admin/dashboard/edit/${p.id}`}
-                    className="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 transition-colors">
-                    Edit
-                  </Link>
-                  <DeleteButton id={p.id} />
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Mobile cards */}
-          <div className="md:hidden space-y-3">
-            {products.map((p) => (
-              <div key={p.id} className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-4">
-                <div className="flex gap-3">
-                  <div className="w-16 h-16 rounded-xl overflow-hidden bg-[#0A0A0A] shrink-0">
-                    {p.imageUrl
-                      ? <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover" />
-                      : <div className="w-full h-full flex items-center justify-center text-gray-700 text-xs">–</div>}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-white font-semibold text-sm leading-snug">{p.name}</p>
-                    <p className="text-[#D4AF37] font-bold text-sm mt-0.5">{p.price}</p>
-                    <p className="text-gray-500 text-xs mt-0.5 truncate">{p.category}</p>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#1A1A1A]">
-                  <div className="flex gap-1.5 flex-wrap">
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${p.inStock ? "bg-green-400/10 text-green-400" : "bg-red-400/10 text-red-400"}`}>
-                      {p.inStock ? "In Stock" : "Out of Stock"}
-                    </span>
-                    {p.featured && (
-                      <span className="text-[10px] px-2 py-0.5 rounded-full font-medium bg-[#D4AF37]/10 text-[#D4AF37]">Featured</span>
-                    )}
-                  </div>
-                  <div className="flex gap-2">
-                    <Link href={`/admin/dashboard/edit/${p.id}`}
-                      className="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 transition-colors">
-                      Edit
-                    </Link>
-                    <DeleteButton id={p.id} />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
     </div>
   );
 }

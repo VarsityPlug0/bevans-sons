@@ -1,0 +1,153 @@
+"use client";
+import { useState, useMemo } from "react";
+import Link from "next/link";
+import DeleteButton from "../DeleteButton";
+
+type Product = {
+  id: string; name: string; price: string; originalPrice?: string;
+  category: string; description?: string; imageUrl?: string;
+  inStock: boolean | number; featured: boolean | number;
+};
+
+export default function ProductsClient({ products }: { products: Product[] }) {
+  const [search, setSearch] = useState("");
+  const [cat, setCat] = useState("All");
+  const [stockFilter, setStockFilter] = useState("All");
+
+  const categories = useMemo(() => {
+    const s = new Set(products.map((p) => p.category));
+    return ["All", ...Array.from(s).sort()];
+  }, [products]);
+
+  const filtered = useMemo(() => {
+    const q = search.toLowerCase();
+    return products.filter((p) => {
+      if (cat !== "All" && p.category !== cat) return false;
+      if (stockFilter === "In Stock" && !p.inStock) return false;
+      if (stockFilter === "Out of Stock" && p.inStock) return false;
+      if (stockFilter === "Featured" && !p.featured) return false;
+      if (q && !p.name.toLowerCase().includes(q) && !p.category.toLowerCase().includes(q)) return false;
+      return true;
+    });
+  }, [products, search, cat, stockFilter]);
+
+  return (
+    <>
+      {/* Filters */}
+      <div className="flex flex-col sm:flex-row gap-3 mb-5">
+        <input
+          type="text"
+          placeholder="Search products…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="flex-1 bg-[#111111] border border-[#1F1F1F] rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]/40"
+        />
+        <select
+          value={cat}
+          onChange={(e) => setCat(e.target.value)}
+          className="bg-[#111111] border border-[#1F1F1F] rounded-xl px-4 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#D4AF37]/40"
+        >
+          {categories.map((c) => <option key={c}>{c}</option>)}
+        </select>
+        <select
+          value={stockFilter}
+          onChange={(e) => setStockFilter(e.target.value)}
+          className="bg-[#111111] border border-[#1F1F1F] rounded-xl px-4 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#D4AF37]/40"
+        >
+          {["All", "In Stock", "Out of Stock", "Featured"].map((s) => <option key={s}>{s}</option>)}
+        </select>
+      </div>
+
+      <p className="text-xs text-gray-600 mb-3">{filtered.length} product{filtered.length !== 1 ? "s" : ""}</p>
+
+      {filtered.length === 0 ? (
+        <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-12 text-center">
+          <p className="text-gray-500">No products match your filters.</p>
+        </div>
+      ) : (
+        <>
+          {/* Desktop table */}
+          <div className="hidden md:block bg-[#111111] border border-[#1F1F1F] rounded-2xl overflow-hidden">
+            <div className="grid grid-cols-[52px_1fr_140px_160px_110px_110px] gap-3 px-5 py-3 border-b border-[#1F1F1F]">
+              {["", "Product", "Price", "Category", "Status", "Actions"].map((h) => (
+                <p key={h} className="text-[11px] text-gray-500 uppercase tracking-wider font-medium">{h}</p>
+              ))}
+            </div>
+            {filtered.map((p) => (
+              <div key={p.id}
+                className="grid grid-cols-[52px_1fr_140px_160px_110px_110px] gap-3 items-center px-5 py-3.5 border-b border-[#1A1A1A] last:border-0 hover:bg-white/[0.02] transition-colors">
+                <div className="w-11 h-11 rounded-lg overflow-hidden bg-[#0A0A0A] shrink-0">
+                  {p.imageUrl
+                    ? <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover" />
+                    : <div className="w-full h-full flex items-center justify-center text-gray-700 text-xs">–</div>}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-white font-medium text-sm truncate">{p.name}</p>
+                  {p.description && <p className="text-gray-500 text-xs truncate mt-0.5">{p.description}</p>}
+                </div>
+                <div>
+                  <p className="text-[#D4AF37] font-bold text-sm">{p.price}</p>
+                  {p.originalPrice && <p className="text-gray-600 text-xs line-through">{p.originalPrice}</p>}
+                </div>
+                <p className="text-gray-400 text-sm truncate">{p.category}</p>
+                <div className="flex gap-1 flex-wrap">
+                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${p.inStock ? "bg-green-400/10 text-green-400" : "bg-red-400/10 text-red-400"}`}>
+                    {p.inStock ? "In Stock" : "Out"}
+                  </span>
+                  {p.featured && (
+                    <span className="text-[10px] px-2 py-0.5 rounded-full font-medium bg-[#D4AF37]/10 text-[#D4AF37]">Featured</span>
+                  )}
+                </div>
+                <div className="flex gap-1.5">
+                  <Link href={`/admin/dashboard/edit/${p.id}`}
+                    className="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 transition-colors">
+                    Edit
+                  </Link>
+                  <DeleteButton id={p.id} />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile cards */}
+          <div className="md:hidden space-y-3">
+            {filtered.map((p) => (
+              <div key={p.id} className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-4">
+                <div className="flex gap-3">
+                  <div className="w-14 h-14 rounded-xl overflow-hidden bg-[#0A0A0A] shrink-0">
+                    {p.imageUrl
+                      ? <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover" />
+                      : <div className="w-full h-full flex items-center justify-center text-gray-700 text-xs">–</div>}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white font-semibold text-sm leading-snug truncate">{p.name}</p>
+                    <p className="text-[#D4AF37] font-bold text-sm mt-0.5">{p.price}</p>
+                    {p.originalPrice && <p className="text-gray-600 text-xs line-through">{p.originalPrice}</p>}
+                    <p className="text-gray-500 text-xs mt-0.5 truncate">{p.category}</p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#1A1A1A]">
+                  <div className="flex gap-1.5 flex-wrap">
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${p.inStock ? "bg-green-400/10 text-green-400" : "bg-red-400/10 text-red-400"}`}>
+                      {p.inStock ? "In Stock" : "Out of Stock"}
+                    </span>
+                    {p.featured && (
+                      <span className="text-[10px] px-2 py-0.5 rounded-full font-medium bg-[#D4AF37]/10 text-[#D4AF37]">Featured</span>
+                    )}
+                  </div>
+                  <div className="flex gap-2">
+                    <Link href={`/admin/dashboard/edit/${p.id}`}
+                      className="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 transition-colors">
+                      Edit
+                    </Link>
+                    <DeleteButton id={p.id} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </>
+  );
+}

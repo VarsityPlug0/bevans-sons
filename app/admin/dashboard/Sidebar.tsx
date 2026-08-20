@@ -18,6 +18,7 @@ const groups = [
   {
     title: "Catalogue",
     items: [
+      { label: "Products",    href: "/admin/dashboard/products",    icon: Package },
       { label: "Add Product", href: "/admin/dashboard/new",         icon: Plus },
       { label: "Site Images", href: "/admin/dashboard/images",      icon: Image },
     ],

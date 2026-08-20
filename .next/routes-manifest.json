@@ -207,6 +207,12 @@
       "namedRegex": "^/admin/dashboard/orders(?:/)?$"
     },
     {
+      "page": "/admin/dashboard/products",
+      "regex": "^/admin/dashboard/products(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/dashboard/products(?:/)?$"
+    },
+    {
       "page": "/admin/dashboard/quotes",
       "regex": "^/admin/dashboard/quotes(?:/)?$",
       "routeKeys": {},

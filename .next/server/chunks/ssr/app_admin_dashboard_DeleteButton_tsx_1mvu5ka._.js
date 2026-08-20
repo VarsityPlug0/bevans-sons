@@ -1,3 +1,0 @@
-module.exports=[18511,a=>{"use strict";var b=a.i(87924);a.s(["default",0,function({id:a}){async function c(){confirm("Delete this product?")&&(await fetch(`/api/admin/products/${a}`,{method:"DELETE"}),window.location.reload())}return(0,b.jsx)("button",{onClick:c,className:"px-3 py-1.5 rounded-lg text-xs font-medium text-red-400 hover:text-red-300 bg-red-400/5 hover:bg-red-400/10 transition-colors",children:"Delete"})}])}];
-
-//# sourceMappingURL=app_admin_dashboard_DeleteButton_tsx_1mvu5ka._.js.map

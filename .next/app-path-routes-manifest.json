@@ -35,6 +35,7 @@
   "/admin/dashboard/new/page": "/admin/dashboard/new",
   "/admin/dashboard/orders/page": "/admin/dashboard/orders",
   "/admin/dashboard/page": "/admin/dashboard",
+  "/admin/dashboard/products/page": "/admin/dashboard/products",
   "/admin/dashboard/quotes/page": "/admin/dashboard/quotes",
   "/admin/page": "/admin",
   "/api/admin/chat/reply/route": "/api/admin/chat/reply",

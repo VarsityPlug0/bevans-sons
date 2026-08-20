@@ -35,6 +35,7 @@
   "/admin/dashboard/new/page": "app/admin/dashboard/new/page.js",
   "/admin/dashboard/orders/page": "app/admin/dashboard/orders/page.js",
   "/admin/dashboard/page": "app/admin/dashboard/page.js",
+  "/admin/dashboard/products/page": "app/admin/dashboard/products/page.js",
   "/admin/dashboard/quotes/page": "app/admin/dashboard/quotes/page.js",
   "/admin/page": "app/admin/page.js",
   "/api/admin/chat/reply/route": "app/api/admin/chat/reply/route.js",
