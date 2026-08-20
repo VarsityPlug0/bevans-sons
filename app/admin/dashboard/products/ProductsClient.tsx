@@ -2,6 +2,9 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import DeleteButton from "../DeleteButton";
+import dynamic from "next/dynamic";
+
+const ImageCropper = dynamic(() => import("@/components/ImageCropper"), { ssr: false });
 
 type Product = {
   id: string; name: string; price: string; originalPrice?: string;
@@ -13,6 +16,38 @@ export default function ProductsClient({ products }: { products: Product[] }) {
   const [search, setSearch] = useState("");
   const [cat, setCat] = useState("All");
   const [stockFilter, setStockFilter] = useState("All");
+  const [cropProduct, setCropProduct] = useState<Product | null>(null);
+  const [cropSaving, setCropSaving] = useState(false);
+
+  async function handleCropDone(blob: Blob) {
+    if (!cropProduct) return;
+    setCropSaving(true);
+    try {
+      const arrayBuffer = await blob.arrayBuffer();
+      const bytes = new Uint8Array(arrayBuffer);
+      let binary = "";
+      for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+      const base64 = btoa(binary);
+      const uploadRes = await fetch("/api/admin/upload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ file: base64, mimeType: "image/jpeg", filename: "product.jpg" }),
+      });
+      const { url } = await uploadRes.json();
+      if (url) {
+        await fetch(`/api/admin/products/${cropProduct.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ imageUrl: url }),
+        });
+        // Update local state so the new image shows without a page reload
+        cropProduct.imageUrl = url;
+      }
+    } finally {
+      setCropSaving(false);
+      setCropProduct(null);
+    }
+  }
 
   const categories = useMemo(() => {
     const s = new Set(products.map((p) => p.category));
@@ -99,6 +134,15 @@ export default function ProductsClient({ products }: { products: Product[] }) {
                   )}
                 </div>
                 <div className="flex gap-1.5">
+                  {p.imageUrl && (
+                    <button
+                      onClick={() => setCropProduct(p)}
+                      title="Crop image"
+                      className="px-2 py-1.5 rounded-lg text-xs font-medium text-[#D4AF37] bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 transition-colors"
+                    >
+                      ✂
+                    </button>
+                  )}
                   <Link href={`/admin/dashboard/edit/${p.id}`}
                     className="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 transition-colors">
                     Edit
@@ -136,6 +180,15 @@ export default function ProductsClient({ products }: { products: Product[] }) {
                     )}
                   </div>
                   <div className="flex gap-2">
+                    {p.imageUrl && (
+                      <button
+                        onClick={() => setCropProduct(p)}
+                        title="Crop image"
+                        className="px-2 py-1.5 rounded-lg text-xs font-medium text-[#D4AF37] bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 transition-colors"
+                      >
+                        ✂
+                      </button>
+                    )}
                     <Link href={`/admin/dashboard/edit/${p.id}`}
                       className="px-3 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 transition-colors">
                       Edit
@@ -147,6 +200,22 @@ export default function ProductsClient({ products }: { products: Product[] }) {
             ))}
           </div>
         </>
+      )}
+      {cropProduct?.imageUrl && (
+        <ImageCropper
+          src={cropProduct.imageUrl}
+          onDone={handleCropDone}
+          onCancel={() => setCropProduct(null)}
+        />
+      )}
+
+      {cropSaving && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
+          <div className="flex flex-col items-center gap-3">
+            <div className="w-10 h-10 border-2 border-[#D4AF37] border-t-transparent rounded-full animate-spin" />
+            <p className="text-white text-sm">Saving cropped image…</p>
+          </div>
+        </div>
       )}
     </>
   );
