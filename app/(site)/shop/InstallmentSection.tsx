@@ -30,8 +30,8 @@ export default function InstallmentSection({ product, settings }: Props) {
   const [open, setOpen] = useState(false);
 
   const price = parseFloat(product.price.replace(/[^0-9.]/g, "")) || 0;
-  const deposit = Math.ceil(price * settings.min_deposit_pct / 100 * 100) / 100;
-  if (deposit < 2000) return null;
+  if (price < 5000) return null;
+  const deposit = Math.max(2000, Math.ceil(price * settings.min_deposit_pct / 100 * 100) / 100);
   const terms = settings.eligible_terms;
   const maxTerm = Math.max(...terms);
   const monthly = calcMonthly(price, deposit, maxTerm, settings.monthly_rate, settings.admin_fee);

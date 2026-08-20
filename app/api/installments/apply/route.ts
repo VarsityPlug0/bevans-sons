@@ -29,8 +29,8 @@ export async function POST(req: NextRequest) {
   if (!product) return NextResponse.json({ error: "Product not found" }, { status: 404 });
 
   const price = parseFloat(product.price.replace(/[^0-9.]/g, "")) || 0;
-  const deposit = Math.ceil(price * settings.min_deposit_pct / 100 * 100) / 100;
-  if (deposit < 2000) return NextResponse.json({ error: "Product not eligible for installments" }, { status: 400 });
+  if (price < 5000) return NextResponse.json({ error: "Product not eligible for installments" }, { status: 400 });
+  const deposit = Math.max(2000, Math.ceil(price * settings.min_deposit_pct / 100 * 100) / 100);
   const { monthly, total } = calcMonthly(price, deposit, Number(term_months), settings.monthly_rate, settings.admin_fee);
 
   try {
