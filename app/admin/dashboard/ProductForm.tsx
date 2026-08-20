@@ -3,7 +3,10 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { CATEGORIES } from "@/lib/categories";
 import type { Product } from "@/lib/products";
-import { Upload, X } from "lucide-react";
+import { Upload, X, Scissors } from "lucide-react";
+import dynamic from "next/dynamic";
+
+const ImageCropper = dynamic(() => import("@/components/ImageCropper"), { ssr: false });
 
 interface Props {
   product?: Product;
@@ -29,6 +32,7 @@ export default function ProductForm({ product }: Props) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [uploadError, setUploadError] = useState("");
+  const [cropSrc, setCropSrc] = useState<string | null>(null);
 
   function set(key: string, value: string | boolean) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -37,11 +41,17 @@ export default function ProductForm({ product }: Props) {
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    e.target.value = "";
     setUploadError("");
-    setUploading(true);
+    const objectUrl = URL.createObjectURL(file);
+    setCropSrc(objectUrl);
+  }
 
+  async function uploadBlob(blob: Blob) {
+    setUploading(true);
+    setCropSrc(null);
     try {
-      const arrayBuffer = await file.arrayBuffer();
+      const arrayBuffer = await blob.arrayBuffer();
       const bytes = new Uint8Array(arrayBuffer);
       let binary = "";
       for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
@@ -50,7 +60,7 @@ export default function ProductForm({ product }: Props) {
       const res = await fetch("/api/admin/upload", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ file: base64, mimeType: file.type, filename: file.name }),
+        body: JSON.stringify({ file: base64, mimeType: "image/jpeg", filename: "product.jpg" }),
       });
       const data = await res.json();
       if (res.ok) {
@@ -93,6 +103,7 @@ export default function ProductForm({ product }: Props) {
   }
 
   return (
+    <>
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && (
         <div className="bg-red-400/10 border border-red-400/30 rounded-xl px-5 py-3 text-red-400 text-sm">
@@ -200,6 +211,15 @@ export default function ProductForm({ product }: Props) {
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <p className="text-white text-sm font-medium">Click to change image</p>
                 </div>
+                {/* Crop button */}
+                <button
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); setCropSrc(form.imageUrl); }}
+                  className="absolute top-3 left-3 w-8 h-8 bg-black/70 rounded-full flex items-center justify-center text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-colors"
+                  title="Crop image"
+                >
+                  <Scissors size={14} />
+                </button>
                 <button
                   type="button"
                   onClick={(e) => { e.stopPropagation(); set("imageUrl", ""); }}
@@ -256,5 +276,20 @@ export default function ProductForm({ product }: Props) {
         </button>
       </div>
     </form>
+
+    {cropSrc && (
+      <ImageCropper
+        src={cropSrc}
+        onDone={(blob) => {
+          URL.revokeObjectURL(cropSrc);
+          uploadBlob(blob);
+        }}
+        onCancel={() => {
+          URL.revokeObjectURL(cropSrc);
+          setCropSrc(null);
+        }}
+      />
+    )}
+    </>
   );
 }
