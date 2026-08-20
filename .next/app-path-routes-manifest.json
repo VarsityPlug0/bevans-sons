@@ -56,6 +56,7 @@
   "/api/admin/send-campaign/route": "/api/admin/send-campaign",
   "/api/admin/site-images/route": "/api/admin/site-images",
   "/api/admin/test-email/route": "/api/admin/test-email",
+  "/api/admin/test-followup/route": "/api/admin/test-followup",
   "/api/admin/upload/route": "/api/admin/upload",
   "/api/ai-assistant/route": "/api/ai-assistant",
   "/api/chat/messages/route": "/api/chat/messages",
