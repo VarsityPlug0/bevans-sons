@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, RefreshCw, MessageCircle, Mail, ChevronDown, ChevronUp, Search } from "lucide-react";
+import { ArrowLeft, RefreshCw, MessageCircle, Mail, ChevronDown, ChevronUp, Search, User } from "lucide-react";
 
 interface OrderItem {
   id: string; name: string; price: string; qty: number; imageUrl: string;
@@ -213,6 +213,12 @@ export default function CustomersPage() {
 
                     {/* Actions */}
                     <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                      <Link
+                        href={`/admin/dashboard/customers/${btoa(customer.email)}`}
+                        className="p-2 rounded-lg text-gray-500 hover:text-white hover:bg-white/10 transition-colors"
+                        title="View Profile">
+                        <User size={15} />
+                      </Link>
                       <a
                         href={`https://wa.me/${toWaPhone(customer.phone)}?text=${encodeURIComponent(`Hi ${customer.name.split(" ")[0]}, this is Daisy Gadgets Co. `)}`}
                         target="_blank" rel="noopener noreferrer"

@@ -1187,3 +1187,194 @@ export async function sendInstallmentDeclined(data: InstallmentUpdateBase) {
     html,
   });
 }
+
+// ─── 6. Order placed — clear cart reminder ────────────────────────────────────
+export async function sendClearCartReminder(data: {
+  name: string;
+  email: string;
+  ref: string;
+  items: { name: string; price: string; qty: number; imageUrl?: string }[];
+}) {
+  const { attachments: imgAttachments, cidMap } = await buildProductAttachments(data.items);
+
+  const itemRows = data.items.map((i) => {
+    const src = i.imageUrl
+      ? (cidMap.get(i.imageUrl) ?? (i.imageUrl.startsWith("http") ? i.imageUrl : SITE + i.imageUrl))
+      : null;
+    const thumb = src
+      ? `<img src="${src}" alt="${i.name}" width="64" height="64" style="width:64px;height:64px;object-fit:cover;border-radius:10px;display:block;border:1px solid ${BORDER}" />`
+      : `<div style="width:64px;height:64px;background:${DARK2};border:1px solid ${BORDER};border-radius:10px"></div>`;
+    return `
+    <tr>
+      <td style="padding:10px 0;border-bottom:1px solid ${BORDER};width:76px;vertical-align:middle">${thumb}</td>
+      <td style="padding:10px 12px;border-bottom:1px solid ${BORDER};vertical-align:middle">
+        <p style="margin:0 0 3px;color:#e5e7eb;font-size:14px;font-weight:600">${i.name}</p>
+        <p style="margin:0;color:${MUTED};font-size:12px">Qty: ${i.qty}</p>
+      </td>
+      <td style="padding:10px 0;border-bottom:1px solid ${BORDER};text-align:right;vertical-align:middle">
+        <span style="color:${GOLD};font-size:13px;font-weight:700">${i.price}</span>
+      </td>
+    </tr>`;
+  }).join("");
+
+  const content = `
+    <h1 style="margin:0 0 6px;color:#fff;font-size:24px;font-weight:800;letter-spacing:-0.02em">Order placed!</h1>
+    <p style="margin:0 0 24px;color:${MUTED};font-size:15px">Hi ${data.name.split(" ")[0]}, your order <strong style="color:${GOLD}">${data.ref}</strong> is in — we're waiting for your proof of payment.</p>
+
+    <!-- Items ordered -->
+    <p style="margin:0 0 12px;color:#e5e7eb;font-size:14px;font-weight:700">Items in your order</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px">
+      ${itemRows}
+    </table>
+
+    <!-- Clear cart notice -->
+    <div style="background:${DARK2};border:1px solid #f59e0b44;border-radius:12px;padding:20px 24px;margin-bottom:28px">
+      <p style="margin:0 0 8px;color:#f59e0b;font-size:14px;font-weight:700">Remove these from your cart</p>
+      <p style="margin:0;color:#9ca3af;font-size:13px;line-height:1.6">
+        Your order is now in our system. To avoid placing the same order twice, please clear your cart the next time you visit our shop.
+      </p>
+    </div>
+
+    <div style="text-align:center;margin-bottom:28px">
+      ${btn("Go to Shop", `${SITE}/shop`)}
+    </div>
+
+    ${divider()}
+    <p style="margin:0;color:${MUTED};font-size:13px;text-align:center">
+      Questions? ${btn("WhatsApp Us", `https://wa.me/${WA_NUM}?text=Hi%2C%20my%20order%20ref%20is%20${encodeURIComponent(data.ref)}`, DARK2, GOLD)}
+    </p>
+  `;
+
+  await sendMail({
+    to: data.email,
+    subject: `Order ${data.ref} received — clear your cart | Daisy Gadgets Co.`,
+    html: layout(content),
+    attachments: imgAttachments,
+  });
+}
+
+// ─── 7. Campaign / broadcast email ───────────────────────────────────────────
+export async function sendCampaignEmail(data: {
+  to: string;
+  name: string;
+  subject: string;
+  heading: string;
+  body: string;
+  ctaText?: string;
+  ctaUrl?: string;
+  featuredProducts?: { id: string; name: string; price: string; imageUrl?: string }[];
+  orderItems?: { id?: string; name: string; price: string; qty: number; imageUrl?: string }[];
+  orderRef?: string;
+  restoreCartUrl?: string;
+}) {
+  const cta = data.ctaText && data.ctaUrl
+    ? `<div style="text-align:center;margin:28px 0">${btn(data.ctaText, data.ctaUrl)}</div>`
+    : "";
+
+  let productSection = "";
+  let imgAttachments: MailAttachment[] = [];
+
+  // ── Order items (personalised — from customer's actual order) ──────────────
+  if (data.orderItems?.length) {
+    const { attachments, cidMap } = await buildProductAttachments(
+      data.orderItems.map((i) => ({ name: i.name, imageUrl: i.imageUrl }))
+    );
+    imgAttachments = attachments;
+
+    const itemRows = data.orderItems.map((i) => {
+      const src = i.imageUrl
+        ? (cidMap.get(i.imageUrl) ?? (i.imageUrl.startsWith("http") ? i.imageUrl : SITE + i.imageUrl))
+        : null;
+      const thumb = src
+        ? `<img src="${src}" alt="${i.name}" width="64" height="64" style="width:64px;height:64px;object-fit:cover;border-radius:10px;display:block;border:1px solid ${BORDER}" />`
+        : `<div style="width:64px;height:64px;background:${DARK2};border:1px solid ${BORDER};border-radius:10px"></div>`;
+      const productLink = i.id ? `${SITE}/shop/${i.id}` : `${SITE}/shop`;
+      return `
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid ${BORDER};width:76px;vertical-align:middle">
+          <a href="${productLink}">${thumb}</a>
+        </td>
+        <td style="padding:10px 12px;border-bottom:1px solid ${BORDER};vertical-align:middle">
+          <a href="${productLink}" style="text-decoration:none">
+            <p style="margin:0 0 3px;color:#e5e7eb;font-size:14px;font-weight:600">${i.name}</p>
+            <p style="margin:0;color:${MUTED};font-size:12px">Qty: ${i.qty}</p>
+          </a>
+        </td>
+        <td style="padding:10px 0;border-bottom:1px solid ${BORDER};text-align:right;vertical-align:middle">
+          <span style="color:${GOLD};font-size:13px;font-weight:700">${i.price}</span>
+        </td>
+      </tr>`;
+    }).join("");
+
+    const refLine = data.orderRef
+      ? `<p style="margin:0 0 14px;color:${MUTED};font-size:12px">Order ref: <span style="color:${GOLD};font-weight:700;font-family:monospace">${data.orderRef}</span></p>`
+      : "";
+
+    const restoreBtn = data.restoreCartUrl
+      ? `<div style="text-align:center;margin-top:20px">${btn("Complete Your Order →", data.restoreCartUrl)}</div>`
+      : "";
+
+    productSection = `
+      ${divider()}
+      <p style="margin:0 0 4px;color:#e5e7eb;font-size:14px;font-weight:700">Your last order</p>
+      ${refLine}
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:8px">
+        ${itemRows}
+      </table>
+      ${restoreBtn}`;
+
+  // ── Featured products (admin-picked — same for everyone) ───────────────────
+  } else if (data.featuredProducts?.length) {
+    const { attachments, cidMap } = await buildProductAttachments(
+      data.featuredProducts.map((p) => ({ name: p.name, imageUrl: p.imageUrl }))
+    );
+    imgAttachments = attachments;
+
+    const productCells = data.featuredProducts.map((p) => {
+      const src = p.imageUrl
+        ? (cidMap.get(p.imageUrl) ?? (p.imageUrl.startsWith("http") ? p.imageUrl : SITE + p.imageUrl))
+        : null;
+      const thumb = src
+        ? `<img src="${src}" alt="${p.name}" width="200" style="width:100%;max-width:200px;height:140px;object-fit:cover;border-radius:10px;display:block;border:1px solid ${BORDER}" />`
+        : `<div style="width:100%;height:140px;background:${DARK2};border:1px solid ${BORDER};border-radius:10px"></div>`;
+      return `
+        <td style="width:48%;vertical-align:top;padding:6px">
+          <a href="${SITE}/shop/${p.id}" style="text-decoration:none;display:block">
+            ${thumb}
+            <p style="margin:10px 0 4px;color:#e5e7eb;font-size:13px;font-weight:600;line-height:1.3">${p.name}</p>
+            <p style="margin:0;color:${GOLD};font-size:14px;font-weight:800">${p.price}</p>
+          </a>
+        </td>`;
+    });
+
+    const rows: string[] = [];
+    for (let i = 0; i < productCells.length; i += 2) {
+      rows.push(`<tr>${productCells.slice(i, i + 2).join("")}</tr>`);
+    }
+
+    productSection = `
+      ${divider()}
+      <p style="margin:0 0 16px;color:#e5e7eb;font-size:14px;font-weight:700">Featured Products</p>
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:8px">
+        ${rows.join("")}
+      </table>`;
+  }
+
+  const content = `
+    <h1 style="margin:0 0 20px;color:#fff;font-size:22px;font-weight:800;letter-spacing:-0.02em">${data.heading}</h1>
+    <div style="color:#d1d5db;font-size:14px;line-height:1.75;white-space:pre-wrap">${data.body}</div>
+    ${cta}
+    ${productSection}
+    ${divider()}
+    <p style="margin:0;color:${MUTED};font-size:12px;text-align:center">
+      You received this because you placed an order with Daisy Gadgets Co.
+    </p>
+  `;
+
+  await sendMail({
+    to: data.to,
+    subject: data.subject,
+    html: layout(content),
+    attachments: imgAttachments.length ? imgAttachments : undefined,
+  });
+}

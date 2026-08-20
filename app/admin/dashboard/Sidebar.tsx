@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, Package, Plus, ShoppingBag, FileText,
   Users, UserCheck, CreditCard, Image, MessageCircle,
-  ExternalLink, Menu, X, LogOut,
+  Mail, ExternalLink, Menu, X, LogOut,
 } from "lucide-react";
 import AdminLogoutButton from "./LogoutButton";
 
@@ -29,6 +29,7 @@ const groups = [
       { label: "Orders",        href: "/admin/dashboard/orders",        icon: ShoppingBag },
       { label: "Quotes",        href: "/admin/dashboard/quotes",        icon: FileText },
       { label: "Installments",  href: "/admin/dashboard/installments",  icon: CreditCard },
+      { label: "Emails",        href: "/admin/dashboard/emails",        icon: Mail },
     ],
   },
   {

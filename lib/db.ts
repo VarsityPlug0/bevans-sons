@@ -195,6 +195,19 @@ function initSchema(db: Database.Database) {
       metadata    TEXT,
       createdAt   TEXT NOT NULL
     );
+
+    CREATE TABLE IF NOT EXISTS email_campaigns (
+      id          TEXT PRIMARY KEY,
+      subject     TEXT NOT NULL,
+      heading     TEXT NOT NULL,
+      body        TEXT NOT NULL,
+      cta_text    TEXT,
+      cta_url     TEXT,
+      recipients  TEXT NOT NULL DEFAULT 'all',
+      sent_to     INTEGER NOT NULL DEFAULT 0,
+      status      TEXT NOT NULL DEFAULT 'sent',
+      createdAt   TEXT NOT NULL
+    );
   `);
 
   // Migrate existing orders tables that predate bank_id / tracking_number columns

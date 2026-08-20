@@ -56,6 +56,10 @@
       "static/media/1b99372b3eaef0c8-s.p.1gsd1jahc5dg_.woff2",
       "static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2"
     ],
+    "[project]/app/(site)/restore-cart/page": [
+      "static/media/1b99372b3eaef0c8-s.p.1gsd1jahc5dg_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2"
+    ],
     "[project]/app/(site)/reviews/page": [
       "static/media/1b99372b3eaef0c8-s.p.1gsd1jahc5dg_.woff2",
       "static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2"
@@ -108,11 +112,19 @@
       "static/media/1b99372b3eaef0c8-s.p.1gsd1jahc5dg_.woff2",
       "static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2"
     ],
+    "[project]/app/admin/dashboard/customers/[id]/page": [
+      "static/media/1b99372b3eaef0c8-s.p.1gsd1jahc5dg_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2"
+    ],
     "[project]/app/admin/dashboard/customers/page": [
       "static/media/1b99372b3eaef0c8-s.p.1gsd1jahc5dg_.woff2",
       "static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2"
     ],
     "[project]/app/admin/dashboard/edit/[id]/page": [
+      "static/media/1b99372b3eaef0c8-s.p.1gsd1jahc5dg_.woff2",
+      "static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2"
+    ],
+    "[project]/app/admin/dashboard/emails/page": [
       "static/media/1b99372b3eaef0c8-s.p.1gsd1jahc5dg_.woff2",
       "static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2"
     ],

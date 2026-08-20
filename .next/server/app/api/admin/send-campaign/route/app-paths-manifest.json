@@ -1,0 +1,3 @@
+{
+  "/api/admin/send-campaign/route": "app/api/admin/send-campaign/route.js"
+}

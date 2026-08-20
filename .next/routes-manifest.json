@@ -47,6 +47,14 @@
   },
   "dynamicRoutes": [
     {
+      "page": "/admin/dashboard/customers/[id]",
+      "regex": "^/admin/dashboard/customers/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/admin/dashboard/customers/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
       "page": "/admin/dashboard/edit/[id]",
       "regex": "^/admin/dashboard/edit/([^/]+?)(?:/)?$",
       "routeKeys": {
@@ -177,6 +185,12 @@
       "namedRegex": "^/admin/dashboard/customers(?:/)?$"
     },
     {
+      "page": "/admin/dashboard/emails",
+      "regex": "^/admin/dashboard/emails(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/dashboard/emails(?:/)?$"
+    },
+    {
       "page": "/admin/dashboard/images",
       "regex": "^/admin/dashboard/images(?:/)?$",
       "routeKeys": {},
@@ -253,6 +267,12 @@
       "regex": "^/api/admin/products(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/api/admin/products(?:/)?$"
+    },
+    {
+      "page": "/api/admin/send-campaign",
+      "regex": "^/api/admin/send\\-campaign(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/send\\-campaign(?:/)?$"
     },
     {
       "page": "/api/admin/site-images",
@@ -427,6 +447,12 @@
       "regex": "^/policies/warranty(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/policies/warranty(?:/)?$"
+    },
+    {
+      "page": "/restore-cart",
+      "regex": "^/restore\\-cart(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/restore\\-cart(?:/)?$"
     },
     {
       "page": "/reviews",

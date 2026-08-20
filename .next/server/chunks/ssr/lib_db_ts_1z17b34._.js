@@ -155,6 +155,19 @@ module.exports=[66879,a=>{"use strict";var b=a.i(85148),c=a.i(14747),d=a.i(22734
       metadata    TEXT,
       createdAt   TEXT NOT NULL
     );
+
+    CREATE TABLE IF NOT EXISTS email_campaigns (
+      id          TEXT PRIMARY KEY,
+      subject     TEXT NOT NULL,
+      heading     TEXT NOT NULL,
+      body        TEXT NOT NULL,
+      cta_text    TEXT,
+      cta_url     TEXT,
+      recipients  TEXT NOT NULL DEFAULT 'all',
+      sent_to     INTEGER NOT NULL DEFAULT 0,
+      status      TEXT NOT NULL DEFAULT 'sent',
+      createdAt   TEXT NOT NULL
+    );
   `);try{a.exec("ALTER TABLE orders ADD COLUMN bank_id TEXT")}catch{}try{a.exec("ALTER TABLE orders ADD COLUMN tracking_number TEXT")}catch{}try{a.exec("ALTER TABLE installment_applications ADD COLUMN product_imageUrl TEXT")}catch{}}(h),function(a){try{a.exec("ALTER TABLE products ADD COLUMN originalPrice TEXT NOT NULL DEFAULT ''")}catch{}}(h),function(a){if(!a.prepare("SELECT name FROM migrations WHERE name = ?").get("json_import_gadgets_v1")){for(let b of g)if((0,d.existsSync)(b))try{let c=JSON.parse((0,d.readFileSync)(b,"utf-8"));if(Array.isArray(c)&&c.length>0){a.prepare("DELETE FROM products").run();let b=a.prepare(`
           INSERT OR REPLACE INTO products
             (id, name, price, category, description, imageUrl, inStock, featured, createdAt, updatedAt)

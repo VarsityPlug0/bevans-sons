@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createOrder, listOrders } from "@/lib/orders";
 import { isAuthenticated } from "@/lib/auth";
 import { getProduct } from "@/lib/products";
-import { sendMail } from "@/lib/mailer";
+import { sendMail, sendClearCartReminder } from "@/lib/mailer";
 import { getRotatingBank, getBankById } from "@/lib/bankDetails";
 
 export async function GET() {
@@ -84,6 +84,9 @@ export async function POST(req: NextRequest) {
     subject: `New Order ${order.ref} — R${finalTotal.toLocaleString()} — ${name}`,
     html: `<pre style="font-family:monospace;font-size:13px">New order received.\n\nRef: ${order.ref}\nCustomer: ${name}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address || "—"}\n\nItems:\n${itemLines}${discountLine}\n\nTotal to collect: R${finalTotal.toLocaleString()}\n\nBank: ${bank.bank} | ${bank.accountHolder} | Acc: ${bank.accountNumber} | Branch: ${bank.branchCode}${payshapLine}</pre>`,
   });
+
+  // Email customer — clear cart reminder with product images
+  sendClearCartReminder({ name: order.name, email: order.email, ref: order.ref, items: order.items });
 
   return NextResponse.json({ ok: true, ref: order.ref, id: order.id, bank, total: finalTotal });
 }
