@@ -12,6 +12,11 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const result = await runFollowUps();
-  return NextResponse.json({ ok: true, ...result });
+  try {
+    const result = await runFollowUps();
+    return NextResponse.json({ ok: true, ...result });
+  } catch (e) {
+    console.error("[cron/follow-ups] fatal:", e);
+    return NextResponse.json({ error: String(e) }, { status: 500 });
+  }
 }
