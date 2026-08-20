@@ -40,7 +40,7 @@ const WA_NUM = "27848961782";
 
 export default function InstallmentModal({ product, settings, onClose }: Props) {
   const price = parseFloat(product.price.replace(/[^0-9.]/g, "")) || 0;
-  const deposit = Math.ceil(price * settings.min_deposit_pct / 100 * 100) / 100;
+  const deposit = Math.max(2000, Math.ceil(price * settings.min_deposit_pct / 100 * 100) / 100);
   const terms = settings.eligible_terms;
 
   const [step, setStep] = useState<1 | 2 | 3 | "success">(1);
@@ -200,7 +200,7 @@ export default function InstallmentModal({ product, settings, onClose }: Props) 
                 </div>
                 {deposit > 0 && (
                   <div className="mt-3 pt-3 border-t border-[#1F1F1F]">
-                    <p className="text-gray-500 text-xs">Min. Deposit ({settings.min_deposit_pct}%)</p>
+                    <p className="text-gray-500 text-xs">Min. Deposit</p>
                     <p className="text-white font-semibold text-sm">R {deposit.toLocaleString("en-ZA")}</p>
                   </div>
                 )}

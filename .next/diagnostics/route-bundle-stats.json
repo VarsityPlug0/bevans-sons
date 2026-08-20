@@ -49,13 +49,13 @@
   },
   {
     "route": "/shop/[id]",
-    "firstLoadUncompressedJsBytes": 542799,
+    "firstLoadUncompressedJsBytes": 542813,
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\44oxwbh__ebkl.js",
       ".next\\static\\chunks\\0yvx2tttsuap1.js",
       ".next\\static\\chunks\\0q9em_-daqqut.js",
       ".next\\static\\chunks\\2sjiod_3zmcbw.js",
-      ".next\\static\\chunks\\2ynhe9qh15rgy.js",
+      ".next\\static\\chunks\\2uhhs5mrkhutx.js",
       ".next\\static\\chunks\\3ivcc6t1s04dh.js",
       ".next\\static\\chunks\\0dhl8aw0tf-sp.js",
       ".next\\static\\chunks\\3eugurg7-xpx7.js",
