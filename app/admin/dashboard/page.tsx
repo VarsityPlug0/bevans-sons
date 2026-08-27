@@ -2,6 +2,7 @@ import { getProducts, getLeads } from "@/lib/products";
 import { getQuotes } from "@/lib/quotes";
 import { listOrders } from "@/lib/orders";
 import { listApplications as listInstallmentApps } from "@/lib/installments";
+import { isClothingCategory } from "@/lib/categories";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -15,6 +16,7 @@ const PURPLE = "#a855f7";
 const TEAL  = "#14b8a6";
 const PINK  = "#ec4899";
 const ORANGE = "#f97316";
+const ROSE  = "#f43f5e";
 
 export default async function Dashboard() {
   const products   = getProducts();
@@ -27,6 +29,7 @@ export default async function Dashboard() {
   const installmentApps = listInstallmentApps();
 
   // Derived counts
+  const clothingCount     = products.filter((p) => isClothingCategory(p.category)).length;
   const newQuotes         = quotes.filter((q) => q.status === "new").length;
   const pendingOrders     = orders.filter(o => o.status === "pending" || o.status === "proof_submitted").length;
   const newInstallments   = installmentApps.filter(a => a.status === "new").length;
@@ -241,8 +244,25 @@ export default async function Dashboard() {
                 {products.length}
               </span>
             </div>
-            <p className="text-white font-semibold text-sm">Products</p>
+            <p className="text-white font-semibold text-sm">Products (All)</p>
             <p className="text-gray-500 text-xs mt-0.5">{inStock} in stock</p>
+          </Link>
+
+          {/* Clothing & Apparel */}
+          <Link href="/admin/dashboard/clothing"
+            className="group bg-[#111111] border border-[#1F1F1F] hover:border-[#D4AF37]/40 rounded-2xl p-4 transition-all hover:bg-[#141414]">
+            <div className="flex items-start justify-between mb-3">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${ROSE}18` }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={ROSE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/>
+                </svg>
+              </div>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: `${ROSE}20`, color: ROSE }}>
+                {clothingCount} items
+              </span>
+            </div>
+            <p className="text-white font-semibold text-sm">Clothing &amp; Apparel</p>
+            <p className="text-gray-500 text-xs mt-0.5">Streetwear &amp; drops</p>
           </Link>
 
         </div>

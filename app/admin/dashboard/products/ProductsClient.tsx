@@ -3,6 +3,8 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import DeleteButton from "../DeleteButton";
 import dynamic from "next/dynamic";
+import { isClothingCategory, isDeviceCategory } from "@/lib/categories";
+import { Shirt, Cpu, LayoutGrid } from "lucide-react";
 
 const ImageCropper = dynamic(() => import("@/components/ImageCropper"), { ssr: false });
 
@@ -14,6 +16,7 @@ type Product = {
 
 export default function ProductsClient({ products }: { products: Product[] }) {
   const [search, setSearch] = useState("");
+  const [department, setDepartment] = useState<"all" | "devices" | "clothing">("all");
   const [cat, setCat] = useState("All");
   const [stockFilter, setStockFilter] = useState("All");
   const [cropProduct, setCropProduct] = useState<Product | null>(null);
@@ -49,14 +52,22 @@ export default function ProductsClient({ products }: { products: Product[] }) {
     }
   }
 
+  const clothingCount = useMemo(() => products.filter(p => isClothingCategory(p.category)).length, [products]);
+  const deviceCount = useMemo(() => products.filter(p => isDeviceCategory(p.category)).length, [products]);
+
   const categories = useMemo(() => {
-    const s = new Set(products.map((p) => p.category));
+    let source = products;
+    if (department === "devices") source = products.filter(p => isDeviceCategory(p.category));
+    if (department === "clothing") source = products.filter(p => isClothingCategory(p.category));
+    const s = new Set(source.map((p) => p.category));
     return ["All", ...Array.from(s).sort()];
-  }, [products]);
+  }, [products, department]);
 
   const filtered = useMemo(() => {
-    const q = search.toLowerCase();
+    const q = search.toLowerCase().trim();
     return products.filter((p) => {
+      if (department === "devices" && isClothingCategory(p.category)) return false;
+      if (department === "clothing" && !isClothingCategory(p.category)) return false;
       if (cat !== "All" && p.category !== cat) return false;
       if (stockFilter === "In Stock" && !p.inStock) return false;
       if (stockFilter === "Out of Stock" && p.inStock) return false;
@@ -64,10 +75,49 @@ export default function ProductsClient({ products }: { products: Product[] }) {
       if (q && !p.name.toLowerCase().includes(q) && !p.category.toLowerCase().includes(q)) return false;
       return true;
     });
-  }, [products, search, cat, stockFilter]);
+  }, [products, search, department, cat, stockFilter]);
 
   return (
     <>
+      {/* Department Tabs */}
+      <div className="flex items-center gap-2 mb-4">
+        <button
+          onClick={() => { setDepartment("all"); setCat("All"); }}
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+            department === "all"
+              ? "bg-[#D4AF37] text-black shadow-lg shadow-[#D4AF37]/20"
+              : "bg-[#111111] border border-[#1F1F1F] text-gray-400 hover:text-white"
+          }`}
+        >
+          <LayoutGrid size={13} />
+          <span>All Catalogue ({products.length})</span>
+        </button>
+
+        <button
+          onClick={() => { setDepartment("devices"); setCat("All"); }}
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+            department === "devices"
+              ? "bg-[#3B82F6] text-white shadow-lg shadow-[#3B82F6]/20"
+              : "bg-[#111111] border border-[#1F1F1F] text-gray-400 hover:text-white"
+          }`}
+        >
+          <Cpu size={13} />
+          <span>Devices &amp; Tech ({deviceCount})</span>
+        </button>
+
+        <button
+          onClick={() => { setDepartment("clothing"); setCat("All"); }}
+          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+            department === "clothing"
+              ? "bg-[#F43F5E] text-white shadow-lg shadow-[#F43F5E]/20"
+              : "bg-[#111111] border border-[#1F1F1F] text-gray-400 hover:text-white"
+          }`}
+        >
+          <Shirt size={13} />
+          <span>Clothing &amp; Apparel ({clothingCount})</span>
+        </button>
+      </div>
+
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3 mb-5">
         <input

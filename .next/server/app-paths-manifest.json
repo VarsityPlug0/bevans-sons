@@ -29,6 +29,7 @@
   "/_global-error/page": "app/_global-error/page.js",
   "/_not-found/page": "app/_not-found/page.js",
   "/admin/dashboard/chat/page": "app/admin/dashboard/chat/page.js",
+  "/admin/dashboard/clothing/page": "app/admin/dashboard/clothing/page.js",
   "/admin/dashboard/customers/[id]/page": "app/admin/dashboard/customers/[id]/page.js",
   "/admin/dashboard/customers/page": "app/admin/dashboard/customers/page.js",
   "/admin/dashboard/edit/[id]/page": "app/admin/dashboard/edit/[id]/page.js",

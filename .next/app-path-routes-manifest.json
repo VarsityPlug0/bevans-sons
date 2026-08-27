@@ -29,6 +29,7 @@
   "/_global-error/page": "/_global-error",
   "/_not-found/page": "/_not-found",
   "/admin/dashboard/chat/page": "/admin/dashboard/chat",
+  "/admin/dashboard/clothing/page": "/admin/dashboard/clothing",
   "/admin/dashboard/customers/[id]/page": "/admin/dashboard/customers/[id]",
   "/admin/dashboard/customers/page": "/admin/dashboard/customers",
   "/admin/dashboard/edit/[id]/page": "/admin/dashboard/edit/[id]",

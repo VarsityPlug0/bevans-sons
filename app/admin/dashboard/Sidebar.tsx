@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, Package, Plus, ShoppingBag, FileText,
   Users, UserCheck, CreditCard, Image, MessageCircle,
-  Mail, ExternalLink, Menu, X, LogOut,
+  Mail, ExternalLink, Menu, X, LogOut, Shirt,
 } from "lucide-react";
 import AdminLogoutButton from "./LogoutButton";
 
@@ -18,9 +18,10 @@ const groups = [
   {
     title: "Catalogue",
     items: [
-      { label: "Products",    href: "/admin/dashboard/products",    icon: Package },
-      { label: "Add Product", href: "/admin/dashboard/new",         icon: Plus },
-      { label: "Site Images", href: "/admin/dashboard/images",      icon: Image },
+      { label: "Products",           href: "/admin/dashboard/products",    icon: Package },
+      { label: "Clothing & Apparel", href: "/admin/dashboard/clothing",    icon: Shirt },
+      { label: "Add Product",        href: "/admin/dashboard/new",         icon: Plus },
+      { label: "Site Images",        href: "/admin/dashboard/images",      icon: Image },
     ],
   },
   {

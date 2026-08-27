@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
-import { useRouter } from "next/navigation";
-import { CATEGORIES } from "@/lib/categories";
+import { useRouter, useSearchParams } from "next/navigation";
+import { CATEGORIES, DEVICE_CATEGORIES, CLOTHING_CATEGORIES } from "@/lib/categories";
 import type { Product } from "@/lib/products";
 import { Upload, X, Scissors } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -14,6 +14,8 @@ interface Props {
 
 export default function ProductForm({ product }: Props) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialCategory = searchParams.get("category") || product?.category || CATEGORIES[0];
   const fileRef = useRef<HTMLInputElement>(null);
   const isEdit = !!product;
 
@@ -21,7 +23,7 @@ export default function ProductForm({ product }: Props) {
     name: product?.name ?? "",
     price: product?.price ?? "",
     originalPrice: product?.originalPrice ?? "",
-    category: product?.category ?? CATEGORIES[0],
+    category: initialCategory,
     description: product?.description ?? "",
     imageUrl: product?.imageUrl ?? "",
     inStock: product?.inStock !== false,
@@ -155,9 +157,16 @@ export default function ProductForm({ product }: Props) {
               onChange={(e) => set("category", e.target.value)}
               className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm focus:outline-none"
             >
-              {CATEGORIES.map((c) => (
-                <option key={c} value={c}>{c}</option>
-              ))}
+              <optgroup label="── Clothing & Streetwear ──">
+                {CLOTHING_CATEGORIES.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </optgroup>
+              <optgroup label="── Electronics & Gadgets ──">
+                {DEVICE_CATEGORIES.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </optgroup>
             </select>
           </div>
 
