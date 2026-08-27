@@ -1,6 +1,7 @@
 {
   "/(site)/about/page": "app/(site)/about/page.js",
   "/(site)/checkout/page": "app/(site)/checkout/page.js",
+  "/(site)/clothing/page": "app/(site)/clothing/page.js",
   "/(site)/contact/page": "app/(site)/contact/page.js",
   "/(site)/delivery/page": "app/(site)/delivery/page.js",
   "/(site)/electronics/page": "app/(site)/electronics/page.js",

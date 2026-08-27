@@ -24,8 +24,7 @@ export default function PaymentOptionsPage() {
       {/* Payment methods */}
       <div className="grid sm:grid-cols-2 gap-5 mb-12">
         {[
-          { title: "EFT / Bank Transfer", desc: "Transfer directly to our FNB or TymeBank business account. Upload proof of payment and your order is processed within 2–4 hours.", badge: "Most Popular" },
-          { title: "PayShap", desc: "Instant payment via PayShap using our FNB PayShap ID: +27848961782@FNB. Instant confirmation.", badge: "Instant" },
+          { title: "EFT / Bank Transfer", desc: "Transfer directly to our TymeBank business account. Upload proof of payment and your order is processed within 2–4 hours.", badge: "Most Popular" },
           { title: "Visa & Mastercard", desc: "Card payments accepted via secure payment gateway. Contact us on WhatsApp to process a card payment.", badge: null },
           { title: "All SA Banks", desc: "We accept payments from all major South African banks including Standard Bank, ABSA, Nedbank, Capitec, and more.", badge: null },
         ].map(({ title, desc, badge }) => (
@@ -42,7 +41,7 @@ export default function PaymentOptionsPage() {
       {/* Bank details */}
       <div className="mb-8">
         <h2 className="text-lg font-bold text-white mb-4">Our Bank Details</h2>
-        <p className="text-gray-500 text-sm mb-6">You may receive payment details for either of the accounts below when checking out.</p>
+        <p className="text-gray-500 text-sm mb-6">You will receive the payment details below when checking out.</p>
         <div className="grid sm:grid-cols-2 gap-5">
           {BANKS.map((bank) => {
             const rows: [string, string][] = [
@@ -101,7 +100,7 @@ export default function PaymentOptionsPage() {
         <h3 className="text-xl font-bold text-white mb-3">Questions about payment?</h3>
         <p className="text-gray-400 text-sm mb-6">Our team is happy to help you through the payment process.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="https://wa.me/27848961782" target="_blank" rel="noopener noreferrer" className="btn-gold px-8 py-3.5 rounded-xl font-bold">Chat on WhatsApp</a>
+          <a href="https://wa.me/27825876811" target="_blank" rel="noopener noreferrer" className="btn-gold px-8 py-3.5 rounded-xl font-bold">Chat on WhatsApp</a>
           <Link href="/shop" className="btn-outline px-8 py-3.5 rounded-xl font-bold">Start Shopping</Link>
         </div>
       </div>

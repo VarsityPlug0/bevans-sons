@@ -139,7 +139,7 @@ export default function TrackOrderPage() {
 
           <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-5 text-center">
             <p className="text-gray-400 text-sm mb-3">Need help with your order? Message us on WhatsApp with your reference number.</p>
-            <a href={`https://wa.me/27848961782?text=Hi! I'd like to check on order ${order.ref}`}
+            <a href={`https://wa.me/27825876811?text=Hi! I'd like to check on order ${order.ref}`}
               target="_blank" rel="noopener noreferrer" className="btn-gold px-8 py-3 rounded-xl font-bold text-sm">
               Message Us on WhatsApp
             </a>
@@ -151,7 +151,7 @@ export default function TrackOrderPage() {
         <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-8 text-center">
           <Package size={40} color="#2a2a2a" strokeWidth={1} className="mx-auto mb-3" />
           <p className="text-gray-500 text-sm mb-4">Your order reference is in your confirmation email or WhatsApp message.</p>
-          <a href="https://wa.me/27848961782" target="_blank" rel="noopener noreferrer"
+          <a href="https://wa.me/27825876811" target="_blank" rel="noopener noreferrer"
             className="text-[#D4AF37] text-sm font-semibold hover:underline">
             Can&apos;t find your reference? Chat with us
           </a>

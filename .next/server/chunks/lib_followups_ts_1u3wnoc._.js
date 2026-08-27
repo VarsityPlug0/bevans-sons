@@ -86,7 +86,7 @@ module.exports=[94689,e=>{"use strict";var t=e.i(54799),a=e.i(85148),i=e.i(14747
           <td style="background:${g};padding:24px 36px;border-top:1px solid ${u}">
             <p style="margin:0 0 8px;color:${E};font-size:12px;text-align:center">
               Questions? &nbsp;
-              <a href="https://wa.me/27848961782" style="color:${m};text-decoration:none;font-weight:600">WhatsApp +27 84 896 1782</a>
+              <a href="https://wa.me/27825876811" style="color:${m};text-decoration:none;font-weight:600">WhatsApp +27 82 587 6811</a>
               &nbsp;\xb7&nbsp;
               <a href="${L}" style="color:${m};text-decoration:none;font-weight:600">daisygadgetsco.com</a>
             </p>

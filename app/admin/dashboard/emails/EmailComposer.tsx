@@ -30,7 +30,7 @@ const TEMPLATES = [
     heading: "How's everything going?",
     body: "Hi there,\n\nWe hope you're enjoying your recent purchase from Daisy Gadgets Co.!\n\nIf you have any questions or need any support, we're always here to help. Feel free to reach out on WhatsApp anytime.",
     ctaText: "WhatsApp Us",
-    ctaUrl: "https://wa.me/27848961782",
+    ctaUrl: "https://wa.me/27825876811",
   },
   {
     id: "new_arrivals",

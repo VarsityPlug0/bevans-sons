@@ -59,7 +59,7 @@ export default function TermsPage() {
           },
           {
             title: "11. Contact",
-            body: "For questions about these Terms, contact us at daisygadgetsco@gmail.com or via WhatsApp at +27 84 896 1782.",
+            body: "For questions about these Terms, contact us at daisygadgetsco@gmail.com or via WhatsApp at +27 82 587 6811.",
           },
         ].map(({ title, body }) => (
           <div key={title}>

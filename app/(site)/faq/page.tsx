@@ -16,7 +16,7 @@ const sections = [
       },
       {
         q: "Can I order via WhatsApp?",
-        a: "Yes! Many customers prefer to order directly via WhatsApp (+27 84 896 1782). Just send us the product name and your delivery address and we'll create an order for you.",
+        a: "Yes! Many customers prefer to order directly via WhatsApp (+27 82 587 6811). Just send us the product name and your delivery address and we'll create an order for you.",
       },
       {
         q: "Do you offer bulk or business pricing?",
@@ -33,11 +33,11 @@ const sections = [
     items: [
       {
         q: "What payment methods do you accept?",
-        a: "We accept EFT (bank transfer), PayShap, Visa, and Mastercard. Our bank details are: FNB, Account: 63211629332, Branch: 250655, PayShap: +27848961782@FNB.",
+        a: "We accept EFT (bank transfer), Visa, and Mastercard. Our bank details are: TymeBank, Account: 51072673949, Branch: 678910.",
       },
       {
         q: "Is it safe to pay via EFT?",
-        a: "Yes. All EFT payments go directly to our verified FNB business account. You will receive an order reference to use as your payment reference.",
+        a: "Yes. All EFT payments go directly to our verified TymeBank business account. You will receive an order reference to use as your payment reference.",
       },
       {
         q: "When do I upload proof of payment?",
@@ -168,7 +168,7 @@ export default function FAQPage() {
         <h3 className="text-xl font-bold text-white mb-3">Still have questions?</h3>
         <p className="text-gray-400 mb-6 text-sm">Our team is ready to help. Reach us via WhatsApp for the fastest response.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="https://wa.me/27848961782" target="_blank" rel="noopener noreferrer"
+          <a href="https://wa.me/27825876811" target="_blank" rel="noopener noreferrer"
             className="btn-gold px-8 py-3.5 rounded-xl font-bold">Chat on WhatsApp</a>
           <Link href="/contact" className="btn-outline px-8 py-3.5 rounded-xl font-bold">Send a Message</Link>
         </div>

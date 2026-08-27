@@ -90,7 +90,7 @@ export default function DeliveryPage() {
         <h3 className="text-xl font-bold text-white mb-3">Need a delivery quote?</h3>
         <p className="text-gray-400 text-sm mb-6">Chat with us on WhatsApp for international shipping quotes and special delivery arrangements.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="https://wa.me/27848961782" target="_blank" rel="noopener noreferrer" className="btn-gold px-8 py-3.5 rounded-xl font-bold">Chat on WhatsApp</a>
+          <a href="https://wa.me/27825876811" target="_blank" rel="noopener noreferrer" className="btn-gold px-8 py-3.5 rounded-xl font-bold">Chat on WhatsApp</a>
           <Link href="/track-order" className="btn-outline px-8 py-3.5 rounded-xl font-bold">Track My Order</Link>
         </div>
       </div>

@@ -70,7 +70,7 @@ export default function AboutPage() {
             </div>
             <div className="flex items-center gap-3">
               <Phone size={16} color="#D4AF37" className="shrink-0" />
-              <a href="https://wa.me/27848961782" className="text-white hover:text-[#D4AF37] transition-colors">+27 84 896 1782</a>
+              <a href="https://wa.me/27825876811" className="text-white hover:text-[#D4AF37] transition-colors">+27 82 587 6811</a>
             </div>
             <div className="flex items-center gap-3">
               <Mail size={16} color="#D4AF37" className="shrink-0" />
@@ -114,7 +114,7 @@ export default function AboutPage() {
         <p className="text-gray-400 mb-8">Browse our full catalogue or chat with us on WhatsApp to get started.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/shop" className="btn-gold px-10 py-4 rounded-xl font-bold">Shop Now</Link>
-          <a href="https://wa.me/27848961782" target="_blank" rel="noopener noreferrer"
+          <a href="https://wa.me/27825876811" target="_blank" rel="noopener noreferrer"
             className="btn-outline px-10 py-4 rounded-xl font-bold">Chat on WhatsApp</a>
         </div>
       </div>

@@ -51,7 +51,7 @@ export default function PrivacyPage() {
           },
           {
             title: "9. Contact",
-            body: "To exercise your rights or for privacy questions, contact: daisygadgetsco@gmail.com or WhatsApp +27 84 896 1782.",
+            body: "To exercise your rights or for privacy questions, contact: daisygadgetsco@gmail.com or WhatsApp +27 82 587 6811.",
           },
         ].map(({ title, body }) => (
           <div key={title}>

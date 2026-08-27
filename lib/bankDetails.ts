@@ -10,15 +10,6 @@ export interface BankDetails {
 
 export const BANKS: BankDetails[] = [
   {
-    id: "fnb",
-    bank: "FNB / RMB",
-    accountHolder: "Daisy Gadgets Co.",
-    accountType: "Business Cheque Account",
-    accountNumber: "63211629332",
-    branchCode: "250655",
-    payshap: "+27848961782@FNB",
-  },
-  {
     id: "tymebank",
     bank: "TymeBank / GoTymeBank",
     accountHolder: "Daisy Gadgets Co.",

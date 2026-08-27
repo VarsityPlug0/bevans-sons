@@ -13,7 +13,7 @@ const DARK        = "#111111";
 const DARK2       = "#161616";
 const BORDER      = "#1F1F1F";
 const MUTED       = "#6b7280";
-const WA_NUM      = "27848961782";
+const WA_NUM      = "27825876811";
 const SITE        = "https://daisygadgetsco.com";
 
 
@@ -145,7 +145,7 @@ function layout(content: string, accentBar = ""): string {
           <td style="background:${BLACK};padding:24px 36px;border-top:1px solid ${BORDER}">
             <p style="margin:0 0 8px;color:${MUTED};font-size:12px;text-align:center">
               Questions? &nbsp;
-              <a href="https://wa.me/${WA_NUM}" style="color:${GOLD};text-decoration:none;font-weight:600">WhatsApp +27 84 896 1782</a>
+              <a href="https://wa.me/${WA_NUM}" style="color:${GOLD};text-decoration:none;font-weight:600">WhatsApp +27 82 587 6811</a>
               &nbsp;·&nbsp;
               <a href="${SITE}" style="color:${GOLD};text-decoration:none;font-weight:600">daisygadgetsco.com</a>
             </p>
@@ -329,7 +329,7 @@ export interface RejectionEmailData {
 }
 
 export async function sendRejectionEmail(data: RejectionEmailData) {
-  const bank = data.bank ?? getBankById("fnb");
+  const bank = data.bank ?? getBankById("tymebank");
   const { attachments: imgAttachments, cidMap } = await buildProductAttachments(data.items);
 
   const itemRows = data.items.map(i => {
@@ -842,15 +842,7 @@ export async function sendInstallmentApproval(data: {
 
   const bankRows = `
     <tr>
-      <td colspan="2" style="padding:10px 0 4px;color:${MUTED};font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;border-top:1px solid ${BORDER}">FNB / RMB</td>
-    </tr>
-    ${infoRow("Account Holder", "Daisy Gadgets Co.")}
-    ${infoRow("Account Type", "Business Cheque Account")}
-    ${infoRow("Account Number", "63211629332")}
-    ${infoRow("Branch Code", "250655")}
-    ${infoRow("PayShap", "+27848961782@FNB")}
-    <tr>
-      <td colspan="2" style="padding:18px 0 4px;color:${MUTED};font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;border-top:1px solid ${BORDER}">TymeBank / GoTymeBank</td>
+      <td colspan="2" style="padding:10px 0 4px;color:${MUTED};font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;border-top:1px solid ${BORDER}">TymeBank / GoTymeBank</td>
     </tr>
     ${infoRow("Account Holder", "Daisy Gadgets Co.")}
     ${infoRow("Account Type", "Business Account")}
@@ -980,12 +972,7 @@ function bankDetailsBlock(ref: string) {
       <p style="margin:0 0 6px;color:#f59e0b;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em">Deposit Payment Details</p>
       <p style="margin:0 0 12px;color:#d1d5db;font-size:13px;line-height:1.6">Use <strong style="color:#fff">${ref}</strong> as your payment reference.</p>
       <table width="100%" cellpadding="0" cellspacing="0">
-        <tr><td colspan="2" style="padding:6px 0 2px;color:${MUTED};font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">FNB / RMB</td></tr>
-        ${infoRow("Account", "Daisy Gadgets Co.")}
-        ${infoRow("Account No.", "63211629332")}
-        ${infoRow("Branch", "250655")}
-        ${infoRow("PayShap", "+27848961782@FNB")}
-        <tr><td colspan="2" style="padding:14px 0 2px;color:${MUTED};font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">TymeBank</td></tr>
+        <tr><td colspan="2" style="padding:6px 0 2px;color:${MUTED};font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em">TymeBank / GoTymeBank</td></tr>
         ${infoRow("Account", "Daisy Gadgets Co.")}
         ${infoRow("Account No.", "51072673949")}
         ${infoRow("Branch", "678910")}

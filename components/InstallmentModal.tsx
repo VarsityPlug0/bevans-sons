@@ -36,7 +36,7 @@ function track(event: string, extra?: Record<string, unknown>) {
   }).catch(() => {});
 }
 
-const WA_NUM = "27848961782";
+const WA_NUM = "27825876811";
 
 export default function InstallmentModal({ product, settings, onClose }: Props) {
   const price = parseFloat(product.price.replace(/[^0-9.]/g, "")) || 0;
@@ -113,6 +113,17 @@ export default function InstallmentModal({ product, settings, onClose }: Props) 
       if (!res.ok) throw new Error(data.error ?? "Submission failed");
       setResult({ ref: data.ref, phone: form.phone });
       setStep("success");
+
+      // Direct WhatsApp redirect to the recent number (082 587 6811 / 27825876811)
+      const msg = encodeURIComponent(
+        `Hi Daisy Gadgets Co, I submitted an installment application for the ${product.name} (${term} months, R${monthly.toLocaleString("en-ZA")}/mo). Application Ref: ${data.ref}`
+      );
+      const waUrl = `https://wa.me/${WA_NUM}?text=${msg}`;
+      try {
+        window.open(waUrl, "_blank");
+      } catch {
+        // Handled by manual button on success screen
+      }
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Something went wrong");
     } finally {
@@ -124,7 +135,7 @@ export default function InstallmentModal({ product, settings, onClose }: Props) 
     if (result) {
       track("whatsapp_clicked", { product_id: product.id, ref: result.ref });
       const msg = encodeURIComponent(
-        `Hi, I applied for installments on the ${product.name} (${term} months, R${monthly.toLocaleString("en-ZA")}/mo). Ref: ${result.ref}`
+        `Hi Daisy Gadgets Co, I submitted an installment application for the ${product.name} (${term} months, R${monthly.toLocaleString("en-ZA")}/mo). Application Ref: ${result.ref}`
       );
       window.open(`https://wa.me/${WA_NUM}?text=${msg}`, "_blank");
     }
@@ -338,12 +349,19 @@ export default function InstallmentModal({ product, settings, onClose }: Props) 
                 <p className="text-gray-500 text-xs mb-1">Your Reference</p>
                 <p className="text-[#D4AF37] text-xl font-mono font-black">{result.ref}</p>
               </div>
-              <button onClick={handleWhatsApp}
-                className="w-full flex items-center justify-center gap-3 py-4 rounded-xl font-bold text-white text-base"
-                style={{ background: "#25D366" }}>
+              <a
+                href={`https://wa.me/${WA_NUM}?text=${encodeURIComponent(
+                  `Hi Daisy Gadgets Co, I submitted an installment application for the ${product.name} (${term} months, R${monthly.toLocaleString("en-ZA")}/mo). Application Ref: ${result.ref}`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => track("whatsapp_clicked", { product_id: product.id, ref: result.ref })}
+                className="w-full flex items-center justify-center gap-3 py-4 rounded-xl font-bold text-white text-base shadow-lg shadow-[#25D366]/20 transition-transform active:scale-95"
+                style={{ background: "#25D366" }}
+              >
                 <MessageCircle size={20} />
-                CONTINUE ON WHATSAPP
-              </button>
+                CONTINUE ON WHATSAPP (+27 82 587 6811)
+              </a>
               <button onClick={onClose}
                 className="w-full text-center text-gray-600 text-sm hover:text-gray-400 transition-colors py-2">
                 Close

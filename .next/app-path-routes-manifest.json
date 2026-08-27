@@ -1,6 +1,7 @@
 {
   "/(site)/about/page": "/about",
   "/(site)/checkout/page": "/checkout",
+  "/(site)/clothing/page": "/clothing",
   "/(site)/contact/page": "/contact",
   "/(site)/delivery/page": "/delivery",
   "/(site)/electronics/page": "/electronics",

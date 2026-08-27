@@ -50,12 +50,11 @@ export default function Footer() {
                 <p className="text-[10px] text-gray-600 uppercase tracking-wide mb-2 font-semibold">Bank Details</p>
                 <div className="space-y-1">
                   {[
-                    ["Bank", "FNB / RMB"],
+                    ["Bank", "TymeBank / GoTymeBank"],
                     ["Account Holder", "Daisy Gadgets Co."],
-                    ["Account Type", "Business"],
-                    ["Account No.", "63211629332"],
-                    ["Branch Code", "250655"],
-                    ["PayShap", "+27848961782@FNB"],
+                    ["Account Type", "Business Account"],
+                    ["Account No.", "51072673949"],
+                    ["Branch Code", "678910"],
                     ["Reference", "Name & Surname"],
                   ].map(([k, v]) => (
                     <div key={k} className="flex justify-between gap-2">
@@ -73,6 +72,7 @@ export default function Footer() {
               <ul className="space-y-2.5">
                 {[
                   ["All Products",       "/shop"],
+                  ["Clothing & Apparel", "/clothing"],
                   ["Smartphones",        "/shop?cat=Smartphones"],
                   ["Smart TVs",          "/shop?cat=TVs"],
                   ["Gaming Consoles",    "/shop?cat=Gaming%20Consoles"],
@@ -134,7 +134,7 @@ export default function Footer() {
                 <li className="flex items-start gap-2.5">
                   <svg className="mt-0.5 shrink-0" width="13" height="13" viewBox="0 0 24 24" fill="#22c55e"><path d={WaPath} /></svg>
                   <div>
-                    <a href="https://wa.me/27848961782" className="text-white font-medium hover:text-[#D4AF37] transition-colors">+27 84 896 1782</a>
+                    <a href="https://wa.me/27825876811" className="text-white font-medium hover:text-[#D4AF37] transition-colors">+27 82 587 6811</a>
                     <p>WhatsApp & Calls</p>
                   </div>
                 </li>
@@ -168,7 +168,7 @@ export default function Footer() {
                     icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V9.01a8.16 8.16 0 004.77 1.52V7.07a4.85 4.85 0 01-1.01-.38z"/></svg> },
                   { label: "Facebook", href: "https://facebook.com/daisydgadgetsco",
                     icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> },
-                  { label: "WhatsApp", href: "https://wa.me/27848961782",
+                  { label: "WhatsApp", href: "https://wa.me/27825876811",
                     icon: <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d={WaPath}/></svg> },
                 ].map((s) => (
                   <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}

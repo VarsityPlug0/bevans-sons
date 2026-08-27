@@ -32,7 +32,7 @@ async function lookupOrder(ref: string): Promise<Message> {
         content: `I couldn't find order **${ref.toUpperCase()}**. Please double-check your reference from your confirmation email or WhatsApp message.`,
         actions: [
           { label: "Try Track Order page", href: "/track-order" },
-          { label: "Contact us on WhatsApp", href: "https://wa.me/27848961782", external: true },
+          { label: "Contact us on WhatsApp", href: "https://wa.me/27825876811", external: true },
         ],
       };
     }
@@ -46,7 +46,7 @@ async function lookupOrder(ref: string): Promise<Message> {
       content: `**Order ${order.ref}**\n\nStatus: ${status}\n\n${items ? `Items:\n${items}\n\n` : ""}Total: R ${Number(order.total).toLocaleString()}`,
       actions: [
         { label: "Full tracking page", href: "/track-order" },
-        { label: "WhatsApp for help", href: `https://wa.me/27848961782?text=Hi, I need help with order ${order.ref}`, external: true },
+        { label: "WhatsApp for help", href: `https://wa.me/27825876811?text=Hi, I need help with order ${order.ref}`, external: true },
       ],
     };
   } catch {
@@ -55,7 +55,7 @@ async function lookupOrder(ref: string): Promise<Message> {
       content: "I couldn't retrieve that order right now. Please try the track order page or contact us directly.",
       actions: [
         { label: "Track Order", href: "/track-order" },
-        { label: "Chat on WhatsApp", href: "https://wa.me/27848961782", external: true },
+        { label: "Chat on WhatsApp", href: "https://wa.me/27825876811", external: true },
       ],
     };
   }
@@ -68,16 +68,16 @@ const GUIDED: Record<string, Message> = {
     content: "To track your order, you'll need the reference number from your confirmation message (e.g. **DC-A1B2C3**).\n\nYou can:\n• Paste your order reference here and I'll look it up instantly\n• Or visit our dedicated tracking page",
     actions: [
       { label: "Go to Track Order page", href: "/track-order" },
-      { label: "WhatsApp for order update", href: "https://wa.me/27848961782?text=Hi, I'd like to track my order", external: true },
+      { label: "WhatsApp for order update", href: "https://wa.me/27825876811?text=Hi, I'd like to track my order", external: true },
     ],
   },
   "how do i pay?": {
     role: "assistant",
-    content: "We accept the following payment methods:\n\n• **EFT** — FNB account 63211629332 (Branch: 250655)\n• **PayShap** — +27848961782@FNB\n• **Visa & Mastercard**\n\nFor EFT, simply transfer the amount and upload your proof of payment at checkout. We confirm within 2–4 hours.",
+    content: "We accept the following payment methods:\n\n• **EFT** — TymeBank account 51072673949 (Branch: 678910)\n• **Visa & Mastercard**\n\nFor EFT, simply transfer the amount and upload your proof of payment at checkout. We confirm within 2–4 hours.",
     actions: [
       { label: "View all payment options", href: "/payment-options" },
       { label: "Start shopping", href: "/shop" },
-      { label: "Ask on WhatsApp", href: "https://wa.me/27848961782", external: true },
+      { label: "Ask on WhatsApp", href: "https://wa.me/27825876811", external: true },
     ],
   },
   "delivery times?": {
@@ -93,7 +93,7 @@ const GUIDED: Record<string, Message> = {
     content: "We accept returns within **7 days** of delivery, provided the item is:\n\n• Unused and in original condition\n• In original packaging with all accessories\n\nFor damaged or faulty items, contact us immediately with photos.",
     actions: [
       { label: "View Returns Policy", href: "/policies/returns" },
-      { label: "Start a return on WhatsApp", href: "https://wa.me/27848961782?text=Hi, I'd like to return an item", external: true },
+      { label: "Start a return on WhatsApp", href: "https://wa.me/27825876811?text=Hi, I'd like to return an item", external: true },
     ],
   },
   "current specials": {
@@ -106,9 +106,9 @@ const GUIDED: Record<string, Message> = {
   },
   "contact support": {
     role: "assistant",
-    content: "Here's how to reach us:\n\n• **WhatsApp** — +27 84 896 1782 *(fastest — we reply within minutes)*\n• **Email** — daisygadgetsco@gmail.com\n• **Address** — Unit 7 Eagle Street, Okavango Park, Bellville, Cape Town\n\nWe're available Mon–Sat 8am–6pm, Sun 9am–3pm.",
+    content: "Here's how to reach us:\n\n• **WhatsApp** — +27 82 587 6811 *(fastest — we reply within minutes)*\n• **Email** — daisygadgetsco@gmail.com\n• **Address** — Unit 7 Eagle Street, Okavango Park, Bellville, Cape Town\n\nWe're available Mon–Sat 8am–6pm, Sun 9am–3pm.",
     actions: [
-      { label: "Open WhatsApp chat", href: "https://wa.me/27848961782", external: true },
+      { label: "Open WhatsApp chat", href: "https://wa.me/27825876811", external: true },
       { label: "Send us a message", href: "/contact" },
     ],
   },
@@ -256,7 +256,7 @@ export default function AIAssistant() {
           content: "All our products carry the **full manufacturer warranty** (12–24 months). If your item arrived faulty or damaged, contact us immediately with photos.",
           actions: [
             { label: "Warranty Policy", href: "/policies/warranty" },
-            { label: "Report issue on WhatsApp", href: "https://wa.me/27848961782?text=Hi, I have a warranty issue", external: true },
+            { label: "Report issue on WhatsApp", href: "https://wa.me/27825876811?text=Hi, I have a warranty issue", external: true },
           ],
         }]);
         setLoading(false);
@@ -269,7 +269,7 @@ export default function AIAssistant() {
           actions: [
             { label: "Browse all products", href: "/shop" },
             { label: "View special offers", href: "/special-offers" },
-            { label: "Ask on WhatsApp", href: "https://wa.me/27848961782", external: true },
+            { label: "Ask on WhatsApp", href: "https://wa.me/27825876811", external: true },
           ],
         }]);
         setLoading(false);
@@ -287,7 +287,7 @@ export default function AIAssistant() {
         role: "assistant",
         content: data.reply ?? "I'm not sure about that. Let me connect you with our team.",
         actions: [
-          { label: "Chat on WhatsApp", href: "https://wa.me/27848961782", external: true },
+          { label: "Chat on WhatsApp", href: "https://wa.me/27825876811", external: true },
           { label: "Contact page", href: "/contact" },
         ],
       }]);
@@ -296,7 +296,7 @@ export default function AIAssistant() {
         role: "assistant",
         content: "Something went wrong on my end. Please reach us directly:",
         actions: [
-          { label: "WhatsApp support", href: "https://wa.me/27848961782", external: true },
+          { label: "WhatsApp support", href: "https://wa.me/27825876811", external: true },
         ],
       }]);
     } finally {

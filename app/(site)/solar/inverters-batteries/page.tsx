@@ -49,7 +49,7 @@ function ProductCard({ item }: { item: typeof inverterDefs[0] & { img: string } 
             </li>
           ))}
         </ul>
-        <a href="https://wa.me/27848961782" target="_blank" rel="noopener noreferrer"
+        <a href="https://wa.me/27825876811" target="_blank" rel="noopener noreferrer"
           className="btn-gold w-full py-3.5 rounded-xl text-sm font-bold">
           Get Price
         </a>
@@ -105,7 +105,7 @@ export default function InvertersBatteries() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/contact" className="btn-gold px-10 py-4 rounded-xl font-bold">Get Free Assessment</Link>
-          <a href="https://wa.me/27848961782" target="_blank" rel="noopener noreferrer"
+          <a href="https://wa.me/27825876811" target="_blank" rel="noopener noreferrer"
             className="btn-outline px-10 py-4 rounded-xl">Chat on WhatsApp</a>
         </div>
       </div>

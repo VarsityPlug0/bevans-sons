@@ -99,7 +99,7 @@ export default function SolarSolutions() {
         <p className="text-gray-400 mb-5 text-base">Not sure which system you need? Talk to our solar experts.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/contact" className="btn-gold px-12 py-4 rounded-xl font-bold text-base">Get a Free Quote</Link>
-          <a href="https://wa.me/27848961782" target="_blank" rel="noopener noreferrer"
+          <a href="https://wa.me/27825876811" target="_blank" rel="noopener noreferrer"
             className="btn-outline px-12 py-4 rounded-xl text-base">
             Chat on WhatsApp
           </a>

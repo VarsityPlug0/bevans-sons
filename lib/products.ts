@@ -1,5 +1,6 @@
 import { getDb } from "./db";
-export { CATEGORIES } from "./categories";
+export { CATEGORIES, CLOTHING_CATEGORIES, isClothingCategory } from "./categories";
+import { CLOTHING_CATEGORIES } from "./categories";
 
 export interface Product {
   id: string;
@@ -24,6 +25,14 @@ export function getProducts(): Product[] {
   return getDb()
     .prepare("SELECT * FROM products ORDER BY createdAt DESC")
     .all()
+    .map(toProduct);
+}
+
+export function getClothingProducts(): Product[] {
+  const placeholders = CLOTHING_CATEGORIES.map(() => "?").join(", ");
+  return getDb()
+    .prepare(`SELECT * FROM products WHERE inStock = 1 AND category IN (${placeholders}) ORDER BY createdAt DESC`)
+    .all(...CLOTHING_CATEGORIES)
     .map(toProduct);
 }
 

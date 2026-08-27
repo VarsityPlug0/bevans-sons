@@ -39,7 +39,7 @@ const PIPELINE_LABEL: Record<string, string> = {
   awaiting_payment: "Awaiting Payment", active: "Active", completed: "Completed",
 };
 
-const WA_NUM = "27848961782";
+const WA_NUM = "27825876811";
 
 export default function AdminInstallmentsPage() {
   const [tab, setTab] = useState<"applications" | "settings">("applications");

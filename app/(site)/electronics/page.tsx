@@ -108,7 +108,7 @@ export default function Electronics() {
         <p className="text-gray-400 text-base mb-5 max-w-lg mx-auto leading-relaxed">
           We source a wide range of electronics. Contact us and we will find it for you.
         </p>
-        <a href="https://wa.me/27848961782" target="_blank" rel="noopener noreferrer"
+        <a href="https://wa.me/27825876811" target="_blank" rel="noopener noreferrer"
           className="btn-gold px-10 py-4 rounded-xl font-bold text-base">
           WhatsApp Us
         </a>
