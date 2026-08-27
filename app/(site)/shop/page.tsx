@@ -10,18 +10,18 @@ import AddToEnquiry from "./AddToEnquiry";
 export const dynamic = "force-dynamic";
 
 const CAT_META: Record<string, { title: string; description: string }> = {
-  "Smartphones":                  { title: "Smartphones — iPhones & Android",         description: "Shop iPhones, Samsung Galaxy, and more. 100% authentic with full warranty. Fast delivery across South Africa." },
-  "TVs":                          { title: "Smart TVs — Samsung, LG, Hisense",        description: "4K and OLED Smart TVs from Samsung, LG, Hisense and more. Great prices with free delivery in South Africa." },
-  "Gaming Consoles":              { title: "Gaming Consoles — PS5, Xbox & More",      description: "Buy PS5, Xbox Series X/S and gaming accessories. 100% authentic with full warranty." },
-  "Gaming PCs":                   { title: "Gaming PCs — High-Performance Rigs",      description: "Pre-built gaming PCs with RTX and AMD Ryzen. Ready to game out of the box." },
-  "Laptops & MacBooks":           { title: "Laptops & MacBooks",                       description: "Windows laptops and Apple MacBooks for work, study and creative use. M3 chip MacBooks available." },
-  "Tablets & Watches":            { title: "Tablets & Watches — iPads & Apple Watch", description: "Shop iPads and Apple Watches. Sealed, authentic devices delivered fast." },
-  "Home Appliances":              { title: "Home Appliances — Fridges, Washers & More", description: "Fridges, washing machines, dishwashers and more from trusted brands. Delivered to your door." },
-  "Kitchen Appliances":           { title: "Kitchen Appliances — Ovens, Hobs & More", description: "Ovens, hobs, espresso machines and kitchen tech at great prices." },
-  "Solar & Power Solutions":      { title: "Solar & Power Solutions — Inverters & Batteries", description: "Load-shedding solutions: 5kVA–10kVA inverters, lithium batteries and solar panels for home and business." },
-  "Electric Ride-On Cars":        { title: "Kids Electric Ride-On Cars",              description: "Licensed Mercedes and premium electric ride-on cars for kids. Safe, fun and fast delivery." },
-  "Furniture":                    { title: "Furniture — Sofas, Beds & More",          description: "Quality furniture delivered to your home. Sofas, beds, dining sets and more." },
-  "Office Equipment":             { title: "Office Equipment — Printers & Tech",      description: "Printers, shredders and office technology for home and business use." },
+  "Smartphones":             { title: "Smartphones — iPhones & Android",               description: "Shop iPhones, Samsung Galaxy, and more. 100% authentic with full warranty. Fast delivery across South Africa." },
+  "TVs":                     { title: "Smart TVs — Samsung, LG, Hisense",              description: "4K and OLED Smart TVs from Samsung, LG, Hisense and more. Great prices with free delivery in South Africa." },
+  "Gaming Consoles":         { title: "Gaming Consoles — PS5, Xbox & More",            description: "Buy PS5, Xbox Series X/S and gaming accessories. 100% authentic with full warranty." },
+  "Gaming PCs":              { title: "Gaming PCs — High-Performance Rigs",            description: "Pre-built gaming PCs with RTX and AMD Ryzen. Ready to game out of the box." },
+  "Laptops & MacBooks":      { title: "Laptops & MacBooks",                             description: "Windows laptops and Apple MacBooks for work, study and creative use. M3 chip MacBooks available." },
+  "Tablets & Watches":       { title: "Tablets & Watches — iPads & Apple Watch",       description: "Shop iPads and Apple Watches. Sealed, authentic devices delivered fast." },
+  "Home Appliances":         { title: "Home Appliances — Fridges, Washers & More",     description: "Fridges, washing machines, dishwashers and more from trusted brands. Delivered to your door." },
+  "Kitchen Appliances":      { title: "Kitchen Appliances — Ovens, Hobs & More",       description: "Ovens, hobs, espresso machines and kitchen tech at great prices." },
+  "Solar & Power Solutions": { title: "Solar & Power Solutions — Inverters & Batteries", description: "Load-shedding solutions: 5kVA–10kVA inverters, lithium batteries and solar panels for home and business." },
+  "Electric Ride-On Cars":   { title: "Kids Electric Ride-On Cars",                    description: "Licensed Mercedes and premium electric ride-on cars for kids. Safe, fun and fast delivery." },
+  "Furniture":               { title: "Furniture — Sofas, Beds & More",                description: "Quality furniture delivered to your home. Sofas, beds, dining sets and more." },
+  "Office Equipment":        { title: "Office Equipment — Printers & Tech",            description: "Printers, shredders and office technology for home and business use." },
 };
 
 export async function generateMetadata({ searchParams }: { searchParams: Promise<{ cat?: string; q?: string }> }): Promise<Metadata> {
@@ -49,49 +49,73 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
   };
 }
 
-export default async function Shop({ searchParams }: { searchParams: Promise<{ cat?: string; q?: string }> }) {
-  const { cat, q } = await searchParams;
-  const all = getProducts().filter((p) => p.inStock);
+const toNum = (price: string) => parseFloat(price.replace(/[^0-9.]/g, "")) || 0;
 
-  let filtered = all;
-  if (cat) filtered = filtered.filter((p) => p.category === cat);
+export default async function Shop({
+  searchParams,
+}: {
+  searchParams: Promise<{ cat?: string; q?: string; sort?: string; price?: string }>;
+}) {
+  const { cat, q, sort = "featured", price } = await searchParams;
+
+  let products = getProducts().filter((p) => p.inStock);
+
+  // Category filter
+  if (cat) products = products.filter((p) => p.category === cat);
+
+  // Search filter
   if (q) {
     const query = q.toLowerCase();
-    filtered = filtered.filter((p) =>
-      p.name.toLowerCase().includes(query) ||
-      (p.description ?? "").toLowerCase().includes(query)
+    products = products.filter(
+      (p) =>
+        p.name.toLowerCase().includes(query) ||
+        (p.description ?? "").toLowerCase().includes(query),
     );
   }
 
-  const featured = filtered.filter((p) => p.featured);
+  // Price range filter
+  if (price) {
+    products = products.filter((p) => {
+      const n = toNum(p.price);
+      if (price === "under5")  return n < 5000;
+      if (price === "5to15")   return n >= 5000 && n < 15000;
+      if (price === "15to30")  return n >= 15000 && n < 30000;
+      if (price === "over30")  return n >= 30000;
+      return true;
+    });
+  }
+
+  // Sort
+  if (sort === "price_asc")  products = [...products].sort((a, b) => toNum(a.price) - toNum(b.price));
+  else if (sort === "price_desc") products = [...products].sort((a, b) => toNum(b.price) - toNum(a.price));
+  else if (sort === "newest") products = [...products].reverse();
+  else products = [...products].sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+
+  const total = products.length;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-8 py-16">
+    <div className="max-w-7xl mx-auto px-4 sm:px-8 py-10">
 
-      <div className="mb-12">
-        <p className="text-[#D4AF37] text-sm uppercase tracking-widest mb-3">All Products</p>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
+      {/* Compact header */}
+      <div className="mb-5 flex items-baseline gap-3">
+        <h1 className="text-2xl font-extrabold text-white">
           Our <span className="gold-text">Shop</span>
         </h1>
-        <p className="text-gray-400 text-lg leading-relaxed max-w-xl">
-          Premium gadgets across all categories. {cat ? `Showing: ${cat}` : "Browse everything or filter by category."}
-        </p>
+        {cat && <span className="text-gray-500 text-sm">/ {cat}</span>}
       </div>
 
       <Suspense fallback={null}>
-        <ShopFilters />
+        <ShopFilters total={total} />
       </Suspense>
 
-      {filtered.length === 0 ? (
+      {total === 0 ? (
         <div className="text-center py-16">
           <Package size={48} color="#2a2a2a" strokeWidth={1} className="mx-auto mb-4" />
-          <p className="text-gray-500 text-base mb-4">{q || cat ? "No products match your search." : "No products available yet."}</p>
+          <p className="text-gray-500 text-base mb-4">No products match your filters.</p>
           <Link href="/shop" className="btn-gold px-8 py-3 rounded-xl font-bold">Clear Filters</Link>
         </div>
       ) : (
-        <Suspense fallback={null}>
-          <ProductGrid products={filtered} featured={featured} />
-        </Suspense>
+        <ProductGrid products={products} cat={cat} isDefaultSort={sort === "featured"} />
       )}
 
       <div className="mt-12 bg-[#111111] border border-[#D4AF37]/25 rounded-2xl p-7 text-center">
@@ -99,8 +123,12 @@ export default async function Shop({ searchParams }: { searchParams: Promise<{ c
         <p className="text-gray-400 text-sm mb-5 max-w-lg mx-auto leading-relaxed">
           We source a wide range of gadgets. Chat with us on WhatsApp and we&apos;ll find it for you.
         </p>
-        <a href="https://wa.me/27848961782" target="_blank" rel="noopener noreferrer"
-          className="btn-gold px-10 py-4 rounded-xl font-bold text-base">
+        <a
+          href="https://wa.me/27848961782"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn-gold px-10 py-4 rounded-xl font-bold text-base"
+        >
           Chat on WhatsApp
         </a>
       </div>
@@ -108,28 +136,57 @@ export default async function Shop({ searchParams }: { searchParams: Promise<{ c
   );
 }
 
-function ProductGrid({ products, featured }: { products: ReturnType<typeof getProducts>; featured: ReturnType<typeof getProducts> }) {
+const SECTION_LIMIT = 8;
+
+function ProductGrid({
+  products,
+  cat,
+  isDefaultSort,
+}: {
+  products: ReturnType<typeof getProducts>;
+  cat?: string;
+  isDefaultSort: boolean;
+}) {
+  // Flat grid when filtered by category, search, price, or explicit sort
+  if (cat || !isDefaultSort) {
+    return (
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+        {products.map((p) => (
+          <ProductCard key={p.id} product={p} />
+        ))}
+      </div>
+    );
+  }
+
+  // Grouped by category with "See all" cap
+  const grouped: Record<string, typeof products> = {};
+  for (const p of products) {
+    if (!grouped[p.category]) grouped[p.category] = [];
+    grouped[p.category].push(p);
+  }
+
   return (
-    <div className="space-y-12">
-      {featured.length > 0 && (
-        <section>
-          <SectionHeader title="Featured" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featured.map((p) => <ProductCard key={p.id} product={p} />)}
+    <div className="space-y-10">
+      {Object.entries(grouped).map(([category, items]) => (
+        <section key={category}>
+          <div className="flex items-center justify-between gap-4 mb-4">
+            <div className="flex items-center gap-4 min-w-0 flex-1">
+              <h2 className="text-base font-bold text-white whitespace-nowrap">{category}</h2>
+              <div className="flex-1 h-px bg-[#1F1F1F]" />
+            </div>
+            {items.length > SECTION_LIMIT && (
+              <Link
+                href={`/shop?cat=${encodeURIComponent(category)}`}
+                className="text-xs text-[#D4AF37] hover:underline whitespace-nowrap shrink-0"
+              >
+                See all {items.length} →
+              </Link>
+            )}
           </div>
-        </section>
-      )}
-      {Object.entries(
-        products.reduce((acc, p) => {
-          if (!acc[p.category]) acc[p.category] = [];
-          acc[p.category].push(p);
-          return acc;
-        }, {} as Record<string, typeof products>)
-      ).map(([cat, items]) => (
-        <section key={cat}>
-          <SectionHeader title={cat} />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {items.map((p) => <ProductCard key={p.id} product={p} />)}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+            {items.slice(0, SECTION_LIMIT).map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
           </div>
         </section>
       ))}
@@ -137,58 +194,49 @@ function ProductGrid({ products, featured }: { products: ReturnType<typeof getPr
   );
 }
 
-function SectionHeader({ title }: { title: string }) {
-  return (
-    <div className="flex items-center gap-5 mb-8">
-      <h2 className="text-2xl font-bold text-white whitespace-nowrap">{title}</h2>
-      <div className="flex-1 h-px bg-[#1F1F1F]" />
-    </div>
-  );
-}
-
 function ProductCard({ product }: { product: ReturnType<typeof getProducts>[0] }) {
   return (
-    <Link href={`/shop/${product.id}`}
-      className="bg-[#111111] border border-[#1F1F1F] rounded-2xl overflow-hidden card-hover flex flex-col group">
-      <div className="relative h-64 bg-[#0f0f0f] overflow-hidden">
+    <Link
+      href={`/shop/${product.id}`}
+      className="bg-[#111111] border border-[#1F1F1F] rounded-xl overflow-hidden card-hover flex flex-col group"
+    >
+      <div className="relative h-40 bg-[#0f0f0f] overflow-hidden">
         {product.imageUrl ? (
-          <Image src={product.imageUrl} alt={product.name} fill
+          <Image
+            src={product.imageUrl}
+            alt={product.name}
+            fill
             className="object-contain transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" />
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+          />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <Package size={48} color="#2a2a2a" strokeWidth={1} />
+            <Package size={32} color="#2a2a2a" strokeWidth={1} />
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#111111]/70 to-transparent" />
         {product.featured && (
-          <span className="absolute top-3 left-3 btn-gold text-[10px] font-bold px-3 py-1 rounded-full">Featured</span>
+          <span className="absolute top-2 left-2 btn-gold text-[9px] font-bold px-2 py-0.5 rounded-full">
+            Featured
+          </span>
         )}
       </div>
-      <div className="p-6 flex flex-col flex-1">
-        <p className="text-xs text-[#D4AF37] uppercase tracking-wider mb-2">{product.category}</p>
-        <p className="font-medium text-white text-sm leading-snug mb-2 flex-1">{product.name}</p>
-        {product.description && (
-          <p className="text-gray-500 text-sm leading-relaxed mb-3 line-clamp-2">{product.description}</p>
-        )}
-        <div className="flex items-center gap-2 mb-3">
-          <p className="text-[#D4AF37] font-bold text-xl">{product.price}</p>
+      <div className="p-3 flex flex-col flex-1">
+        <p className="font-medium text-white text-xs leading-snug mb-2 flex-1 line-clamp-2">
+          {product.name}
+        </p>
+        <div className="flex items-center gap-1.5 mb-2">
+          <p className="text-[#D4AF37] font-bold text-sm">{product.price}</p>
           {product.originalPrice && (
-            <p className="text-gray-600 text-sm line-through">{product.originalPrice}</p>
+            <p className="text-gray-600 text-xs line-through">{product.originalPrice}</p>
           )}
         </div>
-        <div className="flex flex-col gap-2">
-          <div className="w-full py-2.5 rounded-xl text-sm font-semibold text-center text-white border border-[#2a2a2a] group-hover:border-[#D4AF37]/50 transition-colors">
-            View Details
-          </div>
-          <AddToEnquiry
-            id={product.id}
-            name={product.name}
-            price={product.price}
-            imageUrl={product.imageUrl}
-            category={product.category}
-          />
-        </div>
+        <AddToEnquiry
+          id={product.id}
+          name={product.name}
+          price={product.price}
+          imageUrl={product.imageUrl}
+          category={product.category}
+        />
       </div>
     </Link>
   );
