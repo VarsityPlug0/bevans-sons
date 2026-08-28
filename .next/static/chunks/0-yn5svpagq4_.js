@@ -1,1 +1,0 @@
-(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,41591,t=>{"use strict";var e=t.i(43476);t.s(["default",0,function({message:t,className:n,children:i}){return(0,e.jsx)("button",{onClick:()=>window.dispatchEvent(new CustomEvent("openDaisyChat",{detail:{message:t}})),className:n,children:i})}])}]);
