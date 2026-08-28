@@ -2,8 +2,8 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { X, Send, MessageCircle, ChevronDown } from "lucide-react";
 
-const VISITOR_KEY = "daisy_visitor_id";
-const SESSION_KEY = "daisy_chat_session";
+const VISITOR_KEY = "bevans_visitor_id";
+const SESSION_KEY = "bevans_chat_session";
 
 function getVisitorId(): string {
   let id = localStorage.getItem(VISITOR_KEY);
@@ -33,8 +33,8 @@ export default function ChatWidget() {
   // Restore session from localStorage
   useEffect(() => {
     const saved = localStorage.getItem(SESSION_KEY);
-    const savedName = localStorage.getItem("daisy_visitor_name") || "";
-    const savedPhone = localStorage.getItem("daisy_visitor_phone") || "";
+    const savedName = localStorage.getItem("bevans_visitor_name") || "";
+    const savedPhone = localStorage.getItem("bevans_visitor_phone") || "";
     if (savedName) setName(savedName);
     if (savedPhone) setPhone(savedPhone);
     if (saved) {
@@ -55,8 +55,8 @@ export default function ChatWidget() {
         if (step === "intro") setStep("form");
       }
     }
-    window.addEventListener("openDaisyChat", handler);
-    return () => window.removeEventListener("openDaisyChat", handler);
+    window.addEventListener("openBevansChat", handler);
+    return () => window.removeEventListener("openBevansChat", handler);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId, step]);
 
@@ -101,8 +101,8 @@ export default function ChatWidget() {
     if (!phone.trim() && !name.trim()) return;
     setStarting(true);
     const visitorId = getVisitorId();
-    if (name) localStorage.setItem("daisy_visitor_name", name);
-    if (phone) localStorage.setItem("daisy_visitor_phone", phone);
+    if (name) localStorage.setItem("bevans_visitor_name", name);
+    if (phone) localStorage.setItem("bevans_visitor_phone", phone);
     const res = await fetch("/api/chat/session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -189,7 +189,7 @@ export default function ChatWidget() {
                 <MessageCircle size={15} color={GOLD} />
               </div>
               <div>
-                <p className="text-white text-sm font-bold leading-none">Daisy Gadgets Co.</p>
+                <p className="text-white text-sm font-bold leading-none">Bevans Sons</p>
                 <p className="text-green-400 text-[10px] mt-0.5">Online — we reply fast</p>
               </div>
             </div>
@@ -275,7 +275,7 @@ export default function ChatWidget() {
                       }
                     >
                       {msg.sender === "admin" && (
-                        <p className="text-[10px] font-bold mb-1" style={{ color: GOLD }}>Daisy Support</p>
+                        <p className="text-[10px] font-bold mb-1" style={{ color: GOLD }}>Bevans Support</p>
                       )}
                       <p>{msg.body}</p>
                       <p className="text-[10px] mt-1 opacity-60 text-right">{formatTime(msg.createdAt)}</p>

@@ -1,67 +1,71 @@
 import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
+import { BRAND } from "@/lib/config";
 
-const outfit = Outfit({
+const playfair = Playfair_Display({
   subsets: ["latin"],
-  variable: "--font-outfit",
+  variable: "--font-playfair",
   weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://daisygadgetsco.com"),
+  metadataBase: new URL(BRAND.domain),
   title: {
-    default: "Daisy Gadgets Co. | Premium Gadgets — Worldwide Shipping",
-    template: "%s | Daisy Gadgets Co.",
+    default: `${BRAND.name} | Premium Clothing — South Africa`,
+    template: `%s | ${BRAND.name}`,
   },
-  description: "Premium gadgets for everyday convenience. iPhones, Smart TVs, Gaming, Laptops, MacBooks, Home Appliances, Solar & more. Free worldwide delivery. Same-day delivery in South Africa.",
-  keywords: "gadgets South Africa, iPhones, smart TVs, gaming consoles, PS5, Xbox, laptops, MacBook, solar panels, home appliances, daisy gadgets",
+  description: "Premium clothing crafted for the bold. Men's and women's fashion — hoodies, tees, jackets, dresses and more. Free delivery across South Africa.",
+  keywords: "premium clothing South Africa, streetwear, hoodies, t-shirts, jackets, dresses, Bevans Sons",
   openGraph: {
-    title: "Daisy Gadgets Co. | Premium Gadgets For Everyday Convenience",
-    description: "Premium gadgets for everyday convenience. Worldwide shipping available. Free delivery in South Africa.",
-    url: "https://daisygadgetsco.com",
-    siteName: "Daisy Gadgets Co.",
+    title: `${BRAND.name} | ${BRAND.tagline}`,
+    description: "Premium clothing crafted for the bold. Shop men's and women's fashion with free delivery across South Africa.",
+    url: BRAND.domain,
+    siteName: BRAND.name,
     locale: "en_ZA",
     type: "website",
-    images: [{ url: "/logo.jpg", width: 512, height: 512, alt: "Daisy Gadgets Co." }],
+    images: [{ url: "/logo.jpg", width: 512, height: 512, alt: BRAND.name }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Daisy Gadgets Co. | Premium Gadgets — Worldwide Shipping",
-    description: "Premium gadgets for everyday convenience. Worldwide shipping. Same-day delivery in South Africa.",
+    title: `${BRAND.name} | Premium Clothing`,
+    description: "Premium clothing crafted for the bold. Shop men's and women's fashion.",
     images: ["/logo.jpg"],
   },
   alternates: {
-    canonical: "https://daisygadgetsco.com",
+    canonical: BRAND.domain,
   },
 };
 
 const orgJsonLd = {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "Daisy Gadgets Co.",
-  url: "https://daisygadgetsco.com",
-  logo: "https://daisygadgetsco.com/logo.jpg",
+  "@type": "ClothingStore",
+  name: BRAND.name,
+  url: BRAND.domain,
+  logo: `${BRAND.domain}/logo.jpg`,
+  description: BRAND.tagline,
+  address: {
+    "@type": "PostalAddress",
+    addressCountry: "ZA",
+  },
   contactPoint: {
     "@type": "ContactPoint",
-    telephone: "+27-84-896-1782",
     contactType: "customer service",
-    areaServed: ["ZA", "Worldwide"],
+    areaServed: "ZA",
     availableLanguage: "English",
   },
-  sameAs: [],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${outfit.variable} ${inter.variable}`} data-scroll-behavior="smooth">
+    <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
       <body>
         <script
           type="application/ld+json"

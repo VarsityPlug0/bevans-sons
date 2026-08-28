@@ -2,8 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { createOrder, listOrders } from "@/lib/orders";
 import { isAuthenticated } from "@/lib/auth";
 import { getProduct } from "@/lib/products";
-import { sendMail, sendClearCartReminder } from "@/lib/mailer";
-import { getRotatingBank, getBankById } from "@/lib/bankDetails";
+import { getVariant } from "@/lib/variants";
+import { deductStock } from "@/lib/inventory";
+import { sendMail, sendAdminOrderNotification } from "@/lib/mailer";
+import { getDefaultBank } from "@/lib/bankDetails";
+import { getAdminEmails, parsePrice as parsePriceFn } from "@/lib/config";
 
 export async function GET() {
   const ok = await isAuthenticated();
@@ -31,7 +34,7 @@ export async function POST(req: NextRequest) {
   const { getDb } = await import("@/lib/db");
   const db = getDb();
   const threeMinAgo = new Date(Date.now() - 3 * 60 * 1000).toISOString();
-  const firstItemId = String(items[0]?.id ?? "");
+  const firstItemId = String(items[0]?.variantId ?? items[0]?.id ?? "");
   const dup = db.prepare(`
     SELECT o.id FROM orders o
     WHERE o.phone = ? AND o.createdAt > ? AND json_extract(o.items, '$[0].id') = ?
@@ -41,29 +44,68 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, ref: "DUPLICATE", duplicate: true }, { status: 200 });
   }
 
-  const validatedItems: { id: string; name: string; price: string; qty: number; imageUrl: string }[] = [];
+  const validatedItems: {
+    id: string; variantId?: string; name: string; price: number;
+    qty: number; imageUrl: string; size?: string; colour?: string; sku?: string;
+  }[] = [];
   let computedTotal = 0;
 
   for (const item of items) {
-    const product = getProduct(String(item.id ?? ""));
-    if (!product) return NextResponse.json({ error: `Product not found: ${item.id}` }, { status: 400 });
     const qty = Math.max(1, Math.min(99, parseInt(item.qty, 10) || 1));
-    computedTotal += parsePrice(product.price) * qty;
-    validatedItems.push({ id: product.id, name: product.name, price: product.price, qty, imageUrl: product.imageUrl });
+
+    if (item.variantId) {
+      // Variant-based item — price from variant (or product fallback)
+      const variant = getVariant(String(item.variantId));
+      if (!variant) return NextResponse.json({ error: `Variant not found: ${item.variantId}` }, { status: 400 });
+
+      const product = getProduct(variant.product_id);
+      if (!product) return NextResponse.json({ error: `Product not found` }, { status: 400 });
+
+      const priceNum = variant.price_override != null
+        ? variant.price_override
+        : parsePriceFn(product.price);
+
+      if (variant.stock < qty) {
+        return NextResponse.json({ error: `Insufficient stock for ${product.name} (${variant.colour} · ${variant.size})` }, { status: 400 });
+      }
+
+      computedTotal += priceNum * qty;
+      validatedItems.push({
+        id: product.id,
+        variantId: variant.id,
+        name: product.name,
+        price: priceNum,
+        qty,
+        imageUrl: product.imageUrl,
+        size: variant.size,
+        colour: variant.colour,
+        sku: variant.sku,
+      });
+    } else {
+      // Legacy item without variant
+      const product = getProduct(String(item.id ?? ""));
+      if (!product) return NextResponse.json({ error: `Product not found: ${item.id}` }, { status: 400 });
+      const priceNum = parsePriceFn(product.price);
+      computedTotal += priceNum * qty;
+      validatedItems.push({ id: product.id, name: product.name, price: priceNum, qty, imageUrl: product.imageUrl });
+    }
   }
 
-  // Apply 25% bulk discount for orders >= R10,000 (same logic as checkout UI)
-  const bulkDiscount = computedTotal >= 10000 ? computedTotal * 0.25 : 0;
-  const finalTotal = Math.round(computedTotal - bulkDiscount);
+  const finalTotal = Math.round(computedTotal);
 
-  // Reuse the same bank for returning customers (matched by email or phone)
-  const returning = db.prepare(
-    "SELECT bank_id FROM orders WHERE (email = ? OR phone = ?) AND bank_id IS NOT NULL LIMIT 1"
-  ).get(email.trim().toLowerCase(), phone.trim()) as { bank_id: string } | undefined;
+  // Atomically deduct stock for variant items
+  const variantLines = validatedItems
+    .filter((i) => i.variantId)
+    .map((i) => ({ variantId: i.variantId!, qty: i.qty }));
 
-  const bank = returning?.bank_id
-    ? getBankById(returning.bank_id)
-    : getRotatingBank((db.prepare("SELECT COUNT(*) as c FROM orders").get() as { c: number }).c);
+  if (variantLines.length > 0) {
+    const { ok: stockOk, insufficient } = deductStock(variantLines);
+    if (!stockOk) {
+      return NextResponse.json({ error: "Some items are out of stock", insufficient }, { status: 409 });
+    }
+  }
+
+  const bank = getDefaultBank();
 
   const order = createOrder({
     name: name.trim(),
@@ -75,18 +117,26 @@ export async function POST(req: NextRequest) {
     bank_id: bank.id,
   });
 
-  // Email admin — new order alert
-  const itemLines = order.items.map(i => `${i.name} × ${i.qty} — R ${parsePrice(i.price).toLocaleString()}`).join("\n");
-  const payshapLine = bank.payshap ? `\nPayShap: ${bank.payshap}` : "";
-  const discountLine = bulkDiscount > 0 ? `\nSubtotal: R${computedTotal.toLocaleString()}\nBulk Discount (25%): -R${Math.round(bulkDiscount).toLocaleString()}` : "";
-  sendMail({
-    to: "daisygadgetsco@gmail.com, moneybman0@gmail.com",
-    subject: `New Order ${order.ref} — R${finalTotal.toLocaleString()} — ${name}`,
-    html: `<pre style="font-family:monospace;font-size:13px">New order received.\n\nRef: ${order.ref}\nCustomer: ${name}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address || "—"}\n\nItems:\n${itemLines}${discountLine}\n\nTotal to collect: R${finalTotal.toLocaleString()}\n\nBank: ${bank.bank} | ${bank.accountHolder} | Acc: ${bank.accountNumber} | Branch: ${bank.branchCode}${payshapLine}</pre>`,
-  });
+  // Notify admin
+  const adminEmail = getAdminEmails();
+  if (adminEmail) {
+    sendAdminOrderNotification({
+      name: order.name,
+      email: order.email,
+      ref: order.ref,
+      items: order.items.map(i => ({ ...i, price: String(i.price) })),
+      total: order.total,
+      address: order.address,
+      phone: order.phone,
+    }).catch(() => {});
 
-  // Email customer — clear cart reminder with product images
-  sendClearCartReminder({ name: order.name, email: order.email, ref: order.ref, items: order.items });
+    const itemLines = order.items.map(i => `${i.name}${i.size ? ` (${i.colour} · ${i.size})` : ""} × ${i.qty} — R ${i.price.toLocaleString()}`).join("\n");
+    sendMail({
+      to: adminEmail,
+      subject: `New Order ${order.ref} — R${finalTotal.toLocaleString()} — ${name}`,
+      html: `<pre style="font-family:monospace;font-size:13px">New order received.\n\nRef: ${order.ref}\nCustomer: ${name}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address || "—"}\n\nItems:\n${itemLines}\n\nTotal: R${finalTotal.toLocaleString()}\n\nBank: ${bank.bank} | ${bank.accountHolder} | Acc: ${bank.accountNumber} | Branch: ${bank.branchCode}</pre>`,
+    }).catch(() => {});
+  }
 
   return NextResponse.json({ ok: true, ref: order.ref, id: order.id, bank, total: finalTotal });
 }

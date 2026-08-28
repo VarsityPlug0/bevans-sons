@@ -6,10 +6,22 @@
 }
 html { scroll-behavior: smooth; scroll-padding-top: 116px; }
 
+/* ─── Design tokens ──────────────────────────────────────── */
+:root {
+  --color-bg:       #0A0A0A;
+  --color-surface:  #111111;
+  --color-surface2: #161616;
+  --color-border:   #1F1F1F;
+  --color-text:     #F0F0F0;
+  --color-muted:    #6B7280;
+  --color-accent:   #FFFFFF;
+  --color-sale:     #EF4444;
+}
+
 /* ─── Typography ─────────────────────────────────────────── */
 body {
-  background-color: #0A0A0A;
-  color: #F0F0F0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
   font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
   font-size: 16px;
   line-height: 1.6;
@@ -22,39 +34,31 @@ body {
   H1  — font-extrabold (800) · page display title, one per page
   H2  — font-bold (700)      · major section headings
   H3  — font-semibold (600)  · card / component titles
-  .section-label             · eyebrow text above headings (gold, uppercase)
+  .section-label             · eyebrow text above headings (uppercase, muted)
   body / p                   · Inter, text-gray-400, text-sm, leading-relaxed
   .type-meta                 · text-xs, text-gray-500 — timestamps, captions
-  .type-price                · font-bold, gold — pricing callouts
+  .type-price                · font-bold, white — pricing callouts
 */
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-outfit), 'Outfit', system-ui, sans-serif;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  font-family: var(--font-playfair), 'Playfair Display', Georgia, serif;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
   color: #FFFFFF;
 }
 
 /* Semantic type utilities */
 .type-meta {
   font-size: 0.75rem;
-  color: #6B7280;
+  color: var(--color-muted);
   line-height: 1.5;
 }
 
 .type-price {
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-inter), sans-serif;
   font-weight: 700;
-  color: #D4AF37;
+  color: #FFFFFF;
   letter-spacing: -0.01em;
-}
-
-/* ─── Gold gradient text ─────────────────────────────────── */
-.gold-text {
-  background: linear-gradient(135deg, #C9971C 0%, #F0CE6A 45%, #D4AF37 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 /* ─── Hide scrollbars on scroll containers ───────────────── */
@@ -66,81 +70,99 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-inter), sans-serif;
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #D4AF37;
+  color: var(--color-muted);
 }
 
 /* ─── Buttons ────────────────────────────────────────────── */
 
-/* Primary — Gold filled */
+/* Primary — white filled */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #0A0A0A;
+  background: #FFFFFF;
+  border: 1.5px solid #FFFFFF;
+  border-radius: 4px;
+  padding: 14px 28px;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.btn-primary:hover {
+  background: #E5E7EB;
+  border-color: #E5E7EB;
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* Backward compat alias — same styles as btn-primary */
 .btn-gold {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-inter), sans-serif;
   font-weight: 700;
-  font-size: 15px;
-  letter-spacing: 0.01em;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: #0A0A0A;
-  background: linear-gradient(135deg, #D4AF37 0%, #F0CE6A 60%, #C9971C 100%);
-  border: none;
-  border-radius: 12px;
+  background: #FFFFFF;
+  border: 1.5px solid #FFFFFF;
+  border-radius: 4px;
   padding: 14px 28px;
   cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3), 0 1px 3px rgba(0,0,0,0.4);
-  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
   white-space: nowrap;
   text-decoration: none;
 }
-.btn-gold::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.12) 0%, transparent 100%);
-  pointer-events: none;
-}
 .btn-gold:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(212, 175, 55, 0.45), 0 2px 6px rgba(0,0,0,0.4);
-  opacity: 0.95;
+  background: #E5E7EB;
+  border-color: #E5E7EB;
+  transform: translateY(-1px);
 }
 .btn-gold:active {
-  transform: translateY(0px) scale(0.98);
-  box-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+  transform: scale(0.98);
 }
 
-/* Secondary — Gold outline */
+/* Secondary — white outline */
 .btn-outline {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-inter), sans-serif;
   font-weight: 600;
-  font-size: 15px;
-  letter-spacing: 0.01em;
-  color: #D4AF37;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #FFFFFF;
   background: transparent;
-  border: 1.5px solid rgba(212, 175, 55, 0.6);
-  border-radius: 12px;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
   padding: 14px 28px;
   cursor: pointer;
-  position: relative;
   transition: all 0.18s ease;
   white-space: nowrap;
   text-decoration: none;
 }
 .btn-outline:hover {
-  background: rgba(212, 175, 55, 0.08);
-  border-color: #D4AF37;
-  color: #F0CE6A;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #FFFFFF;
+  color: #FFFFFF;
+  transform: translateY(-1px);
 }
 .btn-outline:active {
-  transform: translateY(0px) scale(0.98);
+  transform: scale(0.98);
 }
 
 /* Ghost — for nav links styled as button */
@@ -148,14 +170,14 @@ h1, h2, h3, h4, h5, h6 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-outfit), sans-serif;
+  font-family: var(--font-inter), sans-serif;
   font-weight: 600;
   font-size: 14px;
   color: #9CA3AF;
   background: transparent;
   border: none;
   padding: 8px 14px;
-  border-radius: 8px;
+  border-radius: 4px;
   cursor: pointer;
   transition: color 0.15s ease, background 0.15s ease;
   text-decoration: none;
@@ -170,24 +192,26 @@ h1, h2, h3, h4, h5, h6 {
   transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
 }
 .card-hover:hover {
-  transform: translateY(-5px);
-  border-color: rgba(212, 175, 55, 0.5) !important;
-  box-shadow: 0 12px 40px rgba(212, 175, 55, 0.15), 0 4px 12px rgba(0,0,0,0.3);
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0,0,0,0.3);
 }
 
 /* ─── Dividers ───────────────────────────────────────────── */
 .gold-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
   border: none;
 }
 
 /* ─── Nav link with animated underline ──────────────────── */
 .nav-link {
   position: relative;
-  font-family: var(--font-outfit), sans-serif;
-  font-size: 14px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
   font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   color: #9CA3AF;
   text-decoration: none;
   transition: color 0.15s ease;
@@ -199,54 +223,121 @@ h1, h2, h3, h4, h5, h6 {
   bottom: -2px;
   left: 0;
   width: 0;
-  height: 1.5px;
-  background: #D4AF37;
+  height: 1px;
+  background: #FFFFFF;
   transition: width 0.22s ease;
 }
 .nav-link:hover { color: #FFFFFF; }
 .nav-link:hover::after { width: 100%; }
-.nav-link.active { color: #D4AF37; }
+.nav-link.active { color: #FFFFFF; }
 .nav-link.active::after { width: 100%; }
 
 /* ─── Mobile nav active ──────────────────────────────────── */
-.mobile-nav-active { color: #D4AF37 !important; }
+.mobile-nav-active { color: #FFFFFF !important; }
 
 /* ─── Scrollbar ──────────────────────────────────────────── */
-::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: #0A0A0A; }
-::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.4); border-radius: 99px; }
-::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
 
 /* ─── Input/select focus ─────────────────────────────────── */
 input:focus, textarea:focus, select:focus {
   outline: none;
-  border-color: rgba(212,175,55,0.6) !important;
-  box-shadow: 0 0 0 3px rgba(212,175,55,0.08);
+  border-color: rgba(255,255,255,0.4) !important;
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.06);
 }
 
 /* ─── Selection ──────────────────────────────────────────── */
-::selection { background: rgba(212,175,55,0.25); color: #fff; }
+::selection { background: rgba(255,255,255,0.15); color: #fff; }
 
-/* ─── Announcement ticker ────────────────────────────────── */
-@keyframes ticker-scroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+/* ─── Sale badge ─────────────────────────────────────────── */
+.badge-sale {
+  display: inline-block;
+  background: var(--color-sale);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 2px;
 }
-@-webkit-keyframes ticker-scroll {
-  from { -webkit-transform: translateX(0); transform: translateX(0); }
-  to   { -webkit-transform: translateX(-50%); transform: translateX(-50%); }
+
+/* ─── Size selector ──────────────────────────────────────── */
+.size-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
-.ticker-track {
-  display: flex;
-  flex-wrap: nowrap;
-  width: max-content;
+.size-btn:hover:not(:disabled) {
+  border-color: rgba(255,255,255,0.4);
+  color: #fff;
+}
+.size-btn.selected {
+  border-color: #fff;
+  background: #fff;
+  color: #000;
+}
+.size-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+/* ─── Gold-fill button (hero CTA) ───────────────────────── */
+.btn-gold-fill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0A0A0A;
+  background: #D4AF37;
+  border: 1.5px solid #D4AF37;
+  border-radius: 4px;
+  padding: 14px 28px;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
   white-space: nowrap;
-  animation: ticker-scroll 36s linear infinite;
-  -webkit-animation: ticker-scroll 36s linear infinite;
-  will-change: transform;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  text-decoration: none;
 }
-.ticker-track:hover { animation-play-state: paused; }
+.btn-gold-fill:hover {
+  background: #c9a52e;
+  border-color: #c9a52e;
+  transform: translateY(-1px);
+}
+.btn-gold-fill:active {
+  transform: scale(0.98);
+}
+
+/* ─── Colour swatch ──────────────────────────────────────── */
+.colour-swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.colour-swatch:hover {
+  transform: scale(1.15);
+}
+.colour-swatch.selected {
+  border-color: #fff;
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}

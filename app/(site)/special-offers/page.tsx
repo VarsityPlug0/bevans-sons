@@ -8,7 +8,7 @@ import AddToEnquiry from "@/app/(site)/shop/AddToEnquiry";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Special Offers — 30% OFF | Daisy Gadgets Co.",
+  title: "Special Offers — 30% OFF | Bevans Sons",
   description: "Shop our August to December special — 30% OFF Home Appliances, Tablets & Watches. Free worldwide delivery. Orders over R10,000 get an extra 25% discount.",
 };
 
@@ -28,12 +28,12 @@ export default async function SpecialOffersPage() {
         <div className="relative z-10">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Tag size={20} color="#0A0A0A" />
-            <span style={{ fontSize: 12, fontFamily: "var(--font-outfit)", fontWeight: 800, color: "#0A0A0A", letterSpacing: "0.15em", textTransform: "uppercase" }}>
+            <span style={{ fontSize: 12, fontFamily: "var(--font-inter)", fontWeight: 800, color: "#0A0A0A", letterSpacing: "0.15em", textTransform: "uppercase" }}>
               Limited Time — Aug to Dec
             </span>
             <Tag size={20} color="#0A0A0A" />
           </div>
-          <h1 style={{ fontFamily: "var(--font-outfit)", fontWeight: 900, fontSize: "clamp(2.5rem, 6vw, 4.5rem)", color: "#0A0A0A", lineHeight: 1.05, marginBottom: 12 }}>
+          <h1 style={{ fontFamily: "var(--font-inter)", fontWeight: 900, fontSize: "clamp(2.5rem, 6vw, 4.5rem)", color: "#0A0A0A", lineHeight: 1.05, marginBottom: 12 }}>
             30% OFF Everything
           </h1>
           <p style={{ color: "#1a1200", fontSize: 15, fontWeight: 600, marginBottom: 6 }}>
@@ -90,7 +90,7 @@ export default async function SpecialOffersPage() {
                     <div className="w-full py-2.5 rounded-xl text-sm font-semibold text-center text-white border border-[#2a2a2a] group-hover:border-[#D4AF37]/50 transition-colors">
                       View Details
                     </div>
-                    <AddToEnquiry id={p.id} name={p.name} price={p.price} imageUrl={p.imageUrl} category={p.category} />
+                    <AddToEnquiry id={p.id} slug={p.slug} />
                   </div>
                 </div>
               </Link>
@@ -101,7 +101,7 @@ export default async function SpecialOffersPage() {
 
       <div className="mt-12 bg-[#111111] border border-[#1F1F1F] rounded-2xl p-7 text-center">
         <p className="text-gray-400 text-sm mb-4">Need a specific product? We source anything. Chat with us on WhatsApp.</p>
-        <a href="https://wa.me/27825876811" target="_blank" rel="noopener noreferrer"
+        <a href="https://wa.me/27724816274" target="_blank" rel="noopener noreferrer"
           className="btn-gold px-10 py-3.5 rounded-xl font-bold">Chat on WhatsApp</a>
       </div>
     </div>

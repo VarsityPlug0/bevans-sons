@@ -1,8 +1,6 @@
 import { getProducts, getLeads } from "@/lib/products";
-import { getQuotes } from "@/lib/quotes";
 import { listOrders } from "@/lib/orders";
 import { listApplications as listInstallmentApps } from "@/lib/installments";
-import { isClothingCategory } from "@/lib/categories";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -24,13 +22,11 @@ export default async function Dashboard() {
     id: string; name?: string; email?: string; phone?: string;
     message?: string; productInterest?: string; createdAt: string;
   }[];
-  const quotes     = getQuotes();
   const orders     = listOrders();
   const installmentApps = listInstallmentApps();
 
   // Derived counts
-  const clothingCount     = products.filter((p) => isClothingCategory(p.category)).length;
-  const newQuotes         = quotes.filter((q) => q.status === "new").length;
+  const clothingCount     = products.length;
   const pendingOrders     = orders.filter(o => o.status === "pending" || o.status === "proof_submitted").length;
   const newInstallments   = installmentApps.filter(a => a.status === "new").length;
   const featured          = products.filter((p) => p.featured).length;
@@ -93,7 +89,6 @@ export default async function Dashboard() {
           { label: "In Stock",    value: inStock },
           { label: "Featured",    value: featured },
           { label: "Pending Orders", value: pendingOrders, gold: pendingOrders > 0 },
-          { label: "New Quotes",  value: newQuotes,      gold: newQuotes > 0 },
           { label: "New Install. Apps", value: newInstallments, gold: newInstallments > 0 },
         ].map((s) => (
           <div key={s.label}
@@ -128,24 +123,6 @@ export default async function Dashboard() {
             <p className="text-gray-500 text-xs mt-0.5">{orders.length} total</p>
           </Link>
 
-          {/* Quotes */}
-          <Link href="/admin/dashboard/quotes"
-            className="group bg-[#111111] border border-[#1F1F1F] hover:border-[#D4AF37]/40 rounded-2xl p-4 transition-all hover:bg-[#141414]">
-            <div className="flex items-start justify-between mb-3">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${BLUE}18` }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={BLUE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/>
-                </svg>
-              </div>
-              {newQuotes > 0 && (
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: `${BLUE}20`, color: BLUE }}>
-                  {newQuotes} new
-                </span>
-              )}
-            </div>
-            <p className="text-white font-semibold text-sm">Quotes</p>
-            <p className="text-gray-500 text-xs mt-0.5">{quotes.length} total</p>
-          </Link>
 
           {/* Installments */}
           <Link href="/admin/dashboard/installments"

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
-const WA = "27825876811";
+const WA = "27724816274";
 
 type Lead = {
   id: string;
@@ -61,13 +61,13 @@ function waLink(phone: string, message: string) {
 
 const QUICK_REPLIES = {
   followUp: (name: string) =>
-    `Hi ${name || "there"}, this is Daisy Gadgets Co. You showed interest in our store earlier. We have great deals available right now — can I help you find what you're looking for? 😊`,
+    `Hi ${name || "there"}, this is Bevans Sons You showed interest in our store earlier. We have great deals available right now — can I help you find what you're looking for? 😊`,
   cartReminder: (name: string, product: string, price: string) =>
-    `Hi ${name || "there"}, this is Daisy Gadgets Co. You added the ${product} (${price}) to your cart earlier but didn't complete your order. We're still holding it for you! Ready to proceed? 🛒`,
+    `Hi ${name || "there"}, this is Bevans Sons You added the ${product} (${price}) to your cart earlier but didn't complete your order. We're still holding it for you! Ready to proceed? 🛒`,
   discountPush: (name: string) =>
-    `Hi ${name || "there"}, Daisy Gadgets Co. here! Your 25% discount code is DAISY25 — just mention it when you order. Valid on everything in our store. Shop now: https://daisygadgetsco.com`,
+    `Hi ${name || "there"}, Bevans Sons here! Your 25% discount code is BEVANS25 — just mention it when you order. Valid on everything in our store. Shop now: https://bevanssons.store`,
   orderReady: (name: string) =>
-    `Hi ${name || "there"}, good news from Daisy Gadgets Co.! Your order is ready. Please make your EFT payment and send us your proof of payment to confirm. Any questions? Reply here!`,
+    `Hi ${name || "there"}, good news from Bevans Sons! Your order is ready. Please make your EFT payment and send us your proof of payment to confirm. Any questions? Reply here!`,
 };
 
 export default async function LeadsPage() {

@@ -1,8 +1,9 @@
 import { randomUUID } from "crypto";
 import { getDb } from "./db";
 import { sendCampaignEmail } from "./mailer";
+import { BRAND } from "./config";
 
-const SITE = "https://daisygadgetsco.com";
+const SITE = BRAND.domain;
 
 type OrderItem = { id: string; name: string; price: string; qty: number; imageUrl?: string };
 
@@ -38,7 +39,7 @@ export async function runFollowUps(): Promise<{ sent: number; skipped: number }>
   let sent = 0;
   let skipped = 0;
 
-  // ── 1. Cart abandonment (24 – 72 h after adding to cart, no order placed) ──
+  // ── 1. Cart abandonment (24–72 h after adding to cart, no order placed) ──
   const abandoned = db.prepare(`
     WITH cart_summary AS (
       SELECT v.email, v.name, MAX(ce.createdAt) AS lastAdded
@@ -60,7 +61,7 @@ export async function runFollowUps(): Promise<{ sent: number; skipped: number }>
   `).all() as { email: string; name: string; lastAdded: string }[];
 
   for (const row of abandoned) {
-    const ref = row.lastAdded.slice(0, 10); // date as dedup key
+    const ref = row.lastAdded.slice(0, 10);
     if (alreadySent(db, row.email, "cart_abandon_1d", ref)) { skipped++; continue; }
 
     const items = db.prepare(`
@@ -74,7 +75,7 @@ export async function runFollowUps(): Promise<{ sent: number; skipped: number }>
 
     const sendId = randomUUID();
     const firstName = (row.name ?? "there").split(" ")[0];
-    const subject = `${firstName}, you left something behind — Daisy Gadgets Co.`;
+    const subject = `${firstName}, you left something behind — ${BRAND.name}`;
     const encoded = Buffer.from(JSON.stringify(items)).toString("base64");
     const restoreUrl = `${SITE}/restore-cart?items=${encoded}`;
 
@@ -84,7 +85,7 @@ export async function runFollowUps(): Promise<{ sent: number; skipped: number }>
         name: row.name ?? "there",
         subject,
         heading: "Your cart is waiting for you",
-        body: `Hi ${firstName},\n\nYou browsed some great products but didn't complete your order. Your items are still available — grab them before they sell out!`,
+        body: `Hi ${firstName},\n\nYou browsed some great pieces but didn't complete your order. Your items are still available — don't miss out!`,
         ctaText: "Complete Your Order",
         ctaUrl: restoreUrl,
         orderItems: items,
@@ -98,7 +99,7 @@ export async function runFollowUps(): Promise<{ sent: number; skipped: number }>
     }
   }
 
-  // ── 2. Post-delivery review request (3 – 14 days after delivery) ──────────
+  // ── 2. Post-delivery review request (3–14 days after delivery) ────────────
   const delivered = db.prepare(`
     SELECT id, ref, email, name FROM orders
     WHERE status = 'delivered'
@@ -111,7 +112,7 @@ export async function runFollowUps(): Promise<{ sent: number; skipped: number }>
 
     const sendId = randomUUID();
     const firstName = order.name.split(" ")[0];
-    const subject = `How was your order, ${firstName}? — Daisy Gadgets Co.`;
+    const subject = `How was your order, ${firstName}? — ${BRAND.name}`;
 
     try {
       await sendCampaignEmail({
@@ -119,7 +120,7 @@ export async function runFollowUps(): Promise<{ sent: number; skipped: number }>
         name: order.name,
         subject,
         heading: "How was your experience?",
-        body: `Hi ${firstName},\n\nYour order ${order.ref} was delivered recently and we hope you're loving it! 🎉\n\nWe'd love to hear your feedback — it takes less than a minute and helps us serve you better.`,
+        body: `Hi ${firstName},\n\nYour order ${order.ref} was delivered recently and we hope you're loving your new pieces!\n\nWe'd love to hear your feedback — it takes less than a minute and helps us serve you better.`,
         ctaText: "Leave a Review",
         ctaUrl: `${SITE}/reviews`,
         trackingId: sendId,
@@ -131,7 +132,7 @@ export async function runFollowUps(): Promise<{ sent: number; skipped: number }>
     }
   }
 
-  // ── 3. Re-engagement (30 – 60 days since last paid order, no recent send) ──
+  // ── 3. Re-engagement (30–60 days since last paid order) ───────────────────
   const inactive = db.prepare(`
     SELECT email, name, MAX(createdAt) AS lastOrder
     FROM orders
@@ -146,7 +147,7 @@ export async function runFollowUps(): Promise<{ sent: number; skipped: number }>
 
     const sendId = randomUUID();
     const firstName = customer.name.split(" ")[0];
-    const subject = `We miss you, ${firstName}! — Daisy Gadgets Co.`;
+    const subject = `We miss you, ${firstName}! — ${BRAND.name}`;
 
     try {
       await sendCampaignEmail({
@@ -154,7 +155,7 @@ export async function runFollowUps(): Promise<{ sent: number; skipped: number }>
         name: customer.name,
         subject,
         heading: `We miss you, ${firstName}!`,
-        body: `Hi ${firstName},\n\nIt's been a while since your last order and we wanted to check in.\n\nWe have amazing new arrivals and deals that we think you'll love. Come back and see what's new!`,
+        body: `Hi ${firstName},\n\nIt's been a while since your last order and we wanted to check in.\n\nWe've dropped new styles and collections we think you'll love. Come see what's new!`,
         ctaText: "Shop New Arrivals",
         ctaUrl: `${SITE}/new-arrivals`,
         trackingId: sendId,

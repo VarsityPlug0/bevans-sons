@@ -1,3 +1,9 @@
+// ── Bevans Sons — Bank Details ───────────────────────────────────────────────
+// Bank account credentials are read from environment variables ONLY.
+// Never hardcode account numbers in source code.
+
+import { getBankConfig } from "./config";
+
 export interface BankDetails {
   id: string;
   bank: string;
@@ -8,21 +14,29 @@ export interface BankDetails {
   payshap?: string;
 }
 
-export const BANKS: BankDetails[] = [
-  {
-    id: "tymebank",
-    bank: "TymeBank / GoTymeBank",
-    accountHolder: "Daisy Gadgets Co.",
-    accountType: "Business Account",
-    accountNumber: "51072673949",
-    branchCode: "678910",
-  },
-];
-
-export function getBankById(id: string): BankDetails {
-  return BANKS.find(b => b.id === id) ?? BANKS[0];
+export function getDefaultBank(): BankDetails {
+  const cfg = getBankConfig();
+  return {
+    id: "primary",
+    bank: cfg.bank,
+    accountHolder: cfg.accountHolder,
+    accountType: cfg.accountType,
+    accountNumber: cfg.accountNumber,
+    branchCode: cfg.branchCode,
+  };
 }
 
-export function getRotatingBank(orderCount: number): BankDetails {
-  return BANKS[orderCount % BANKS.length];
+// Keep same interface as before for compatibility
+export function getBankById(_id: string): BankDetails {
+  return getDefaultBank();
+}
+
+export function getRotatingBank(_orderCount: number): BankDetails {
+  return getDefaultBank();
+}
+
+// Backward-compat: single bank array
+export const BANKS: BankDetails[] = [];
+export function getBanks(): BankDetails[] {
+  return [getDefaultBank()];
 }

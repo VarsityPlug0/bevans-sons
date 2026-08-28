@@ -11,7 +11,7 @@ export default function ChatButton({ message, className, children }: Props) {
     <button
       onClick={() =>
         window.dispatchEvent(
-          new CustomEvent("openDaisyChat", { detail: { message } })
+          new CustomEvent("openBevansChat", { detail: { message } })
         )
       }
       className={className}

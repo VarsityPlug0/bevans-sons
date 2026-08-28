@@ -3,6 +3,7 @@ import { isAuthenticated } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { listOrders } from "@/lib/orders";
 import { sendCampaignEmail } from "@/lib/mailer";
+import { BRAND } from "@/lib/config";
 import { randomUUID } from "crypto";
 
 export async function POST(req: NextRequest) {
@@ -11,7 +12,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { subject, heading, body: emailBody, ctaText, ctaUrl, recipients, customEmail, featuredProducts, includeOrderItems, cartItems } = body;
+  const { subject, heading, body: emailBody, ctaText, ctaUrl, recipients, customEmail, includeOrderItems, cartItems } = body;
 
   if (!subject || !heading || !emailBody) {
     return NextResponse.json({ error: "subject, heading and body are required" }, { status: 400 });
@@ -58,22 +59,19 @@ export async function POST(req: NextRequest) {
   for (const t of targets) {
     try {
       let orderItems: OrderItem[] | undefined;
-      let orderRef: string | undefined;
-
       let restoreCartUrl: string | undefined;
 
       if (cartItems?.length) {
         orderItems = cartItems as OrderItem[];
         const encoded = Buffer.from(JSON.stringify(orderItems)).toString("base64");
-        restoreCartUrl = `https://daisygadgetsco.com/restore-cart?items=${encoded}`;
+        restoreCartUrl = `${BRAND.domain}/restore-cart?items=${encoded}`;
       } else if (includeOrderItems) {
         const row = lastOrderStmt.get(t.email.toLowerCase()) as
           { items: string; ref: string; createdAt: string } | undefined;
         if (row) {
           orderItems = JSON.parse(row.items) as OrderItem[];
-          orderRef = row.ref;
           const encoded = Buffer.from(JSON.stringify(orderItems)).toString("base64");
-          restoreCartUrl = `https://daisygadgetsco.com/restore-cart?items=${encoded}`;
+          restoreCartUrl = `${BRAND.domain}/restore-cart?items=${encoded}`;
         }
       }
 
@@ -85,9 +83,7 @@ export async function POST(req: NextRequest) {
         body: emailBody,
         ctaText: ctaText || undefined,
         ctaUrl: ctaUrl || undefined,
-        featuredProducts: !includeOrderItems && featuredProducts?.length ? featuredProducts : undefined,
         orderItems,
-        orderRef,
         restoreCartUrl,
       });
       sent++;

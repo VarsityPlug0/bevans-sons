@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Warranty Policy | Daisy Gadgets Co.",
-  description: "Our warranty policy — what is covered and how to claim warranty on products purchased from Daisy Gadgets Co.",
+  title: "Warranty Policy | Bevans Sons",
+  description: "Our warranty policy — what is covered and how to claim warranty on products purchased from Bevans Sons",
 };
 
 export default function WarrantyPage() {
@@ -19,7 +19,7 @@ export default function WarrantyPage() {
         {[
           {
             title: "1. Warranty Coverage",
-            body: "All products sold by Daisy Gadgets Co. come with the standard manufacturer warranty. Most products carry a 12–24 month warranty. Specific warranty periods are listed on each product page.",
+            body: "All products sold by Bevans Sons come with the standard manufacturer warranty. Most products carry a 12–24 month warranty. Specific warranty periods are listed on each product page.",
           },
           {
             title: "2. What Is Covered",
@@ -31,7 +31,7 @@ export default function WarrantyPage() {
           },
           {
             title: "4. How to Claim Warranty",
-            body: "Step 1: Contact us via WhatsApp (+27 82 587 6811) or email with your order reference and a description of the issue. Step 2: Provide photos or a video demonstrating the fault. Step 3: We will assess the claim and advise on the next steps — this may include repair, replacement, or refund depending on the situation.",
+            body: "Step 1: Contact us via WhatsApp (WhatsApp) or email with your order reference and a description of the issue. Step 2: Provide photos or a video demonstrating the fault. Step 3: We will assess the claim and advise on the next steps — this may include repair, replacement, or refund depending on the situation.",
           },
           {
             title: "5. Warranty Processing Time",
@@ -47,11 +47,11 @@ export default function WarrantyPage() {
           },
           {
             title: "8. Contact",
-            body: "Warranty claims: daisygadgetsco@gmail.com | WhatsApp: +27 82 587 6811",
+            body: "Warranty claims: contact us via our contact page",
           },
         ].map(({ title, body }) => (
           <div key={title}>
-            <h2 style={{ fontFamily: "var(--font-outfit)", fontWeight: 700, fontSize: 16, color: "#fff", marginBottom: 8 }}>{title}</h2>
+            <h2 style={{ fontFamily: "var(--font-inter)", fontWeight: 700, fontSize: 16, color: "#fff", marginBottom: 8 }}>{title}</h2>
             <p>{body}</p>
           </div>
         ))}

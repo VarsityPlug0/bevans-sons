@@ -4,9 +4,13 @@ import { randomBytes } from "crypto";
 export interface OrderItem {
   id: string;
   name: string;
-  price: string;
+  price: number;
   qty: number;
   imageUrl: string;
+  variantId?: string;
+  size?: string;
+  colour?: string;
+  sku?: string;
 }
 
 export interface Order {
@@ -30,7 +34,7 @@ export interface Order {
 }
 
 function genRef(): string {
-  return "DC-" + randomBytes(3).toString("hex").toUpperCase();
+  return "BS-" + randomBytes(3).toString("hex").toUpperCase();
 }
 
 export function createOrder(data: {
@@ -68,14 +72,12 @@ export function createOrder(data: {
 }
 
 export function getOrder(id: string): Order | null {
-  const db = getDb();
-  const row = db.prepare("SELECT * FROM orders WHERE id = ? OR ref = ?").get(id, id) as Record<string, unknown> | undefined;
+  const row = getDb().prepare("SELECT * FROM orders WHERE id = ? OR ref = ?").get(id, id) as Record<string, unknown> | undefined;
   return row ? deserialize(row) : null;
 }
 
 export function listOrders(): Order[] {
-  const db = getDb();
-  const rows = db.prepare("SELECT * FROM orders ORDER BY createdAt DESC").all() as Record<string, unknown>[];
+  const rows = getDb().prepare("SELECT * FROM orders ORDER BY createdAt DESC").all() as Record<string, unknown>[];
   return rows.map(deserialize);
 }
 
@@ -84,11 +86,11 @@ export function updateOrder(id: string, data: Partial<Pick<Order, "status" | "pr
   const sets: string[] = [];
   const params: Record<string, unknown> = { id, now: new Date().toISOString() };
 
-  if (data.status !== undefined)       { sets.push("status = @status");             params.status = data.status; }
-  if (data.proof_url !== undefined)    { sets.push("proof_url = @proof_url");        params.proof_url = data.proof_url; }
-  if (data.notes !== undefined)        { sets.push("notes = @notes");               params.notes = data.notes; }
-  if (data.eft_reference !== undefined)   { sets.push("eft_reference = @eft_reference");     params.eft_reference = data.eft_reference; }
-  if (data.tracking_number !== undefined) { sets.push("tracking_number = @tracking_number"); params.tracking_number = data.tracking_number; }
+  if (data.status !== undefined)          { sets.push("status = @status");                     params.status = data.status; }
+  if (data.proof_url !== undefined)       { sets.push("proof_url = @proof_url");               params.proof_url = data.proof_url; }
+  if (data.notes !== undefined)           { sets.push("notes = @notes");                       params.notes = data.notes; }
+  if (data.eft_reference !== undefined)   { sets.push("eft_reference = @eft_reference");       params.eft_reference = data.eft_reference; }
+  if (data.tracking_number !== undefined) { sets.push("tracking_number = @tracking_number");   params.tracking_number = data.tracking_number; }
 
   if (!sets.length) return getOrder(id);
   sets.push("updatedAt = @now");
@@ -100,7 +102,7 @@ export function updateOrder(id: string, data: Partial<Pick<Order, "status" | "pr
 export function generateTrackingNumber(): string {
   const db = getDb();
   const date = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-  const prefix = `DGC-${date}-`;
+  const prefix = `BS-${date}-`;
   const row = db.prepare("SELECT COUNT(*) as n FROM orders WHERE tracking_number LIKE ?").get(`${prefix}%`) as { n: number };
   return `${prefix}${String((row?.n ?? 0) + 1).padStart(4, "0")}`;
 }

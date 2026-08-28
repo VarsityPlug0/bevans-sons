@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { password } = await req.json();
-  const expected = process.env.ADMIN_PASSWORD ?? "daisy2024";
+  const expected = process.env.ADMIN_PASSWORD ?? "bevans2024";
 
   // Timing-safe password comparison
   const match = password?.length === expected.length &&

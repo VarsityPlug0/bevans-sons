@@ -1,345 +1,329 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
-import { getProducts } from "@/lib/products";
-import { isClothingCategory, isDeviceCategory } from "@/lib/categories";
-import {
-  Smartphone, Tv, Gamepad2, Laptop, Package,
-  ShieldCheck, Truck, BadgeCheck, Headphones,
-  Star, ChevronRight, Zap, Tag, Sparkles,
-} from "lucide-react";
+import { getFeaturedProducts, getNewArrivals } from "@/lib/products";
+import { BRAND } from "@/lib/config";
+import { ArrowRight, Truck, RotateCcw, ShieldCheck, Lock } from "lucide-react";
+import NewsletterForm from "@/components/NewsletterForm";
+import WishlistButton from "@/components/WishlistButton";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Daisy Gadgets Co. | Premium Gadgets — Worldwide Shipping",
-  description: "Shop iPhones, Smart TVs, PS5, Xbox, Gaming PCs, MacBooks, Laptops, Solar Inverters, Home Appliances & more. Same-day delivery in South Africa. Free worldwide shipping.",
-  alternates: { canonical: "https://daisygadgetsco.com" },
+  title: `${BRAND.name} | ${BRAND.tagline}`,
+  description: "Shop premium men's and women's clothing — hoodies, tees, jackets, streetwear and more. Free delivery in South Africa.",
+  alternates: { canonical: BRAND.domain },
   openGraph: {
-    title: "Daisy Gadgets Co. | Premium Gadgets — Worldwide Shipping",
-    description: "Shop iPhones, Smart TVs, PS5, Xbox, Gaming PCs, MacBooks, Laptops, Solar & more. 30% OFF August to December. Same-day delivery in South Africa.",
-    url: "https://daisygadgetsco.com",
+    title: `${BRAND.name} | Premium Clothing`,
+    description: "Shop premium men's and women's clothing. Free delivery in South Africa.",
+    url: BRAND.domain,
     type: "website",
   },
 };
 
-const CATEGORIES = [
-  { label: "Smartphones",        href: "/shop?cat=Smartphones",                      icon: Smartphone,  color: "#3B82F6" },
-  { label: "Smart TVs",          href: "/shop?cat=TVs",                              icon: Tv,           color: "#8B5CF6" },
-  { label: "Gaming Consoles",    href: "/shop?cat=Gaming%20Consoles",                icon: Gamepad2,     color: "#EF4444" },
-  { label: "Gaming PCs",         href: "/shop?cat=Gaming%20PCs",                     icon: Gamepad2,     color: "#F59E0B" },
-  { label: "Laptops & MacBooks", href: "/shop?cat=Laptops%20%26%20MacBooks",         icon: Laptop,       color: "#10B981" },
-  { label: "Home Appliances",    href: "/shop?cat=Home%20Appliances",                icon: Package,      color: "#06B6D4" },
-  { label: "Solar & Power",      href: "/shop?cat=Solar%20%26%20Power%20Solutions",  icon: Zap,          color: "#D4AF37" },
-  { label: "All Products",       href: "/shop",                                      icon: Package,      color: "#6B7280" },
+const CATEGORY_CARDS = [
+  { label: "Men", sub: "Shop Now", href: "/men", bg: "#111111" },
+  { label: "Women", sub: "Shop Now", href: "/women", bg: "#0f0f0f" },
+  { label: "Lifestyle", sub: "Shop Now", href: "/collections", bg: "#0d0d0d" },
 ];
 
-const REVIEWS = [
-  { name: "Thabo M.", location: "Johannesburg", stars: 5, text: "Received my PS5 in perfect condition. Delivery was incredibly fast. Will definitely buy again!", product: "PlayStation 5" },
-  { name: "Sarah K.", location: "Cape Town",    stars: 5, text: "The iPhone I ordered was exactly as described. Came sealed in original packaging. Brilliant service!", product: "iPhone 15 Pro" },
-  { name: "Mpho D.", location: "Durban",        stars: 5, text: "Ordered a Samsung TV during the special and saved a fortune. Setup support via WhatsApp was amazing.", product: "Samsung 65\" QLED" },
-  { name: "Riaan V.", location: "Pretoria",     stars: 5, text: "Solar inverter system arrived well-packaged. The team guided me through everything on WhatsApp.", product: "5kVA Inverter Bundle" },
+const VALUES = [
+  { Icon: Truck,       title: "Free Delivery",     body: "Free nationwide delivery on orders over R999." },
+  { Icon: RotateCcw,   title: "Easy Returns",       body: "30-day hassle-free returns on unworn items." },
+  { Icon: ShieldCheck, title: "Authentic Products", body: "Every piece quality-checked before it ships." },
+  { Icon: Lock,        title: "Secure Payments",    body: "EFT payments processed safely every time." },
 ];
-
-const TRUST = [
-  { icon: ShieldCheck, title: "Secure Payments",     desc: "EFT, PayShap & card payments. SSL-secured checkout." },
-  { icon: Truck,       title: "Worldwide Shipping",  desc: "We ship globally. Same-day delivery available in South Africa." },
-  { icon: BadgeCheck,  title: "Authentic Products",  desc: "100% genuine products. All items come with full manufacturer warranty." },
-  { icon: Headphones,  title: "WhatsApp Support",    desc: "Real human support via WhatsApp. We respond within minutes." },
-];
-
-const websiteJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: "Daisy Gadgets Co.",
-  url: "https://daisygadgetsco.com",
-  potentialAction: {
-    "@type": "SearchAction",
-    target: {
-      "@type": "EntryPoint",
-      urlTemplate: "https://daisygadgetsco.com/shop?q={search_term_string}",
-    },
-    "query-input": "required name=search_term_string",
-  },
-};
 
 export default async function HomePage() {
-  const allProducts = getProducts().filter((p) => p.inStock);
-  const featuredDevices = allProducts.filter((p) => isDeviceCategory(p.category) && p.featured).slice(0, 8);
-  const featuredClothing = allProducts.filter((p) => isClothingCategory(p.category)).slice(0, 4);
-  const newArrivals = allProducts.slice(-8).reverse();
+  const featured = getFeaturedProducts(8);
+  const newArrivals = getNewArrivals(6);
 
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
-      />
-    <div className="overflow-x-hidden">
+    <div className="min-h-screen">
 
-      {/* ── Hero ─────────────────────────────────────────────────── */}
-      <section className="relative min-h-[88vh] flex items-center" style={{ background: "linear-gradient(135deg, #0A0A0A 0%, #111111 50%, #0f0d08 100%)" }}>
-        {/* Radial glow */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div style={{ position: "absolute", top: "10%", left: "50%", transform: "translateX(-50%)", width: 900, height: 500, background: "radial-gradient(ellipse, rgba(212,175,55,0.08) 0%, transparent 70%)", borderRadius: "50%" }} />
-        </div>
+      {/* ── Hero ─────────────────────────────────────────────── */}
+      <section className="relative overflow-hidden bg-[#080808]" style={{ minHeight: "92vh" }}>
+        {/* Background image fills full section */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('/images/hero-banner.jpg')", opacity: 0.35 }}
+        />
+        {/* Gradient overlay: strong on right for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#080808]/10 via-[#080808]/50 to-[#080808]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-transparent to-transparent" />
 
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 w-full py-20 md:py-28 grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="inline-flex items-center gap-2 bg-[#D4AF37]/10 border border-[#D4AF37]/20 rounded-full px-4 py-2 mb-6">
-              <Tag size={12} color="#D4AF37" />
-              <span style={{ fontSize: 11, fontFamily: "var(--font-outfit)", fontWeight: 700, color: "#D4AF37", letterSpacing: "0.08em" }}>SPECIAL OFFERS — AUG TO DEC</span>
-            </div>
-            <h1 style={{ fontFamily: "var(--font-outfit)", fontWeight: 900, fontSize: "clamp(2.4rem,5vw,4rem)", lineHeight: 1.08, color: "#fff", marginBottom: "1.5rem" }}>
-              Premium Gadgets<br />
-              <span className="gold-text">For Everyday</span><br />
-              Convenience.
+        {/* Content: centered on mobile, right-aligned on desktop */}
+        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 h-full flex items-center" style={{ minHeight: "92vh" }}>
+          <div className="w-full lg:w-1/2 lg:ml-auto py-24 lg:py-0">
+            <p className="section-label mb-4 tracking-[0.3em]">New Season — 2026</p>
+            <h1
+              className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[0.95] mb-6"
+              style={{ fontFamily: "var(--font-playfair)", letterSpacing: "-0.02em" }}
+            >
+              STEP INTO<br />YOUR NEXT
             </h1>
-            <p className="text-gray-400 text-lg leading-relaxed mb-8 max-w-md">
-              iPhones, Smart TVs, Gaming, MacBooks, Appliances, Solar & more. Free worldwide delivery. Same-day in South Africa.
+            <p className="text-gray-400 text-base sm:text-lg mb-10 max-w-sm leading-relaxed">
+              Premium clothing. Everyday confidence.
             </p>
-            <div className="flex flex-wrap gap-3">
-              <Link href="/shop" className="btn-gold px-8 py-4 rounded-xl font-bold text-base flex items-center gap-2">
-                Shop Now <ChevronRight size={16} />
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link href="/shop" className="btn-gold-fill px-8 py-4 text-sm">
+                Shop Now
               </Link>
-              <Link href="/special-offers" className="btn-outline px-8 py-4 rounded-xl font-bold text-base">
-                View Offers
+              <Link href="/collections" className="btn-outline px-8 py-4 text-sm">
+                Explore Collection
               </Link>
-            </div>
-            <div className="flex flex-wrap gap-6 mt-10">
-              {["Free Worldwide Delivery", "25% Off R10k+ Orders", "Authentic Products"].map((b) => (
-                <div key={b} className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
-                  <span style={{ fontSize: 12, color: "#9CA3AF", fontFamily: "var(--font-outfit)", fontWeight: 500 }}>{b}</span>
-                </div>
-              ))}
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Hero image grid */}
-          <div className="hidden md:grid grid-cols-2 gap-3">
-            {[
-              "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop",
-              "https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=400&h=300&fit=crop",
-              "https://images.unsplash.com/photo-1547394765-185e1e68f34e?w=400&h=300&fit=crop",
-              "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop",
-            ].map((src, i) => (
-              <div key={i} className={`relative rounded-2xl overflow-hidden ${i === 0 ? "row-span-2 h-64" : "h-[118px]"}`}>
-                <Image src={src} alt="gadget" fill className="object-cover" sizes="300px" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-              </div>
+      {/* ── Featured Products ─────────────────────────────────── */}
+      {featured.length > 0 && (
+        <section className="px-4 sm:px-6 py-16 max-w-7xl mx-auto">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <p className="section-label mb-1">Curated for You</p>
+              <h2
+                className="text-2xl sm:text-3xl font-bold text-white"
+                style={{ fontFamily: "var(--font-playfair)" }}
+              >
+                Featured Pieces
+              </h2>
+            </div>
+            <Link href="/shop" className="text-xs text-gray-400 hover:text-white flex items-center gap-1.5 transition-colors uppercase tracking-wider font-semibold">
+              View All <ArrowRight size={12} />
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
+            {featured.map((p) => (
+              <Link key={p.id} href={`/shop/${p.slug ?? p.id}`} className="group relative">
+                {/* Product image */}
+                <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-[#111111] mb-3">
+                  {p.imageUrl ? (
+                    <Image
+                      src={p.imageUrl}
+                      alt={p.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center bg-[#111] text-gray-700 text-5xl select-none">
+                      BS
+                    </div>
+                  )}
+                  {p.originalPrice && (
+                    <span className="badge-sale absolute top-3 left-3">Sale</span>
+                  )}
+                  {/* Wishlist heart */}
+                  <div className="absolute top-3 right-3">
+                    <WishlistButton size={14} />
+                  </div>
+                </div>
+                <p className="text-[10px] text-gray-500 mb-1 uppercase tracking-wider font-semibold">{p.category}</p>
+                <p className="text-sm font-semibold text-white leading-snug line-clamp-1 mb-1.5">{p.name}</p>
+                <div className="flex items-center gap-2">
+                  <span className="text-white font-bold text-sm">
+                    R {parseFloat(String(p.price)).toLocaleString("en-ZA")}
+                  </span>
+                  {p.originalPrice && (
+                    <span className="text-gray-600 text-xs line-through">
+                      R {parseFloat(String(p.originalPrice)).toLocaleString("en-ZA")}
+                    </span>
+                  )}
+                </div>
+              </Link>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ── Category Grid ────────────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto px-5 sm:px-8 py-20">
-        <div className="text-center mb-12">
-          <p className="section-label mb-3">Browse by Category</p>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white">Shop <span className="gold-text">Everything</span></h2>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {CATEGORIES.map(({ label, href, icon: Icon, color }) => (
-            <Link key={label} href={href}
-              className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-5 flex flex-col items-center gap-3 text-center card-hover group">
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: `${color}18` }}>
-                <Icon size={22} color={color} strokeWidth={1.8} />
-              </div>
-              <span style={{ fontSize: 13, fontFamily: "var(--font-outfit)", fontWeight: 600, color: "#D1D5DB" }}
-                className="group-hover:text-[#D4AF37] transition-colors">{label}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Special Offer Banner ─────────────────────────────────── */}
-      <section className="mx-4 sm:mx-8 lg:mx-auto max-w-7xl mb-8">
-        <div className="relative rounded-3xl overflow-hidden p-10 md:p-16 text-center"
-          style={{ background: "linear-gradient(135deg, #C9971C, #D4AF37, #F0CE6A, #D4AF37, #C9971C)" }}>
-          <div className="relative z-10">
-            <p style={{ fontSize: 11, fontFamily: "var(--font-outfit)", fontWeight: 800, letterSpacing: "0.15em", color: "#0A0A0A", textTransform: "uppercase", marginBottom: 8 }}>Limited Time</p>
-            <h2 style={{ fontFamily: "var(--font-outfit)", fontWeight: 900, fontSize: "clamp(2rem,5vw,3.5rem)", color: "#0A0A0A", lineHeight: 1.1, marginBottom: 12 }}>
-              30% OFF Selected Products
-            </h2>
-            <p style={{ color: "#1a1a00", fontSize: 16, marginBottom: 28, fontWeight: 500 }}>
-              Home Appliances · Tablets · Watches — Orders over R10,000 get an extra 25% discount
-            </p>
-            <Link href="/special-offers"
-              className="inline-flex items-center gap-2 bg-[#0A0A0A] text-[#D4AF37] font-bold px-8 py-4 rounded-xl text-sm hover:bg-[#111] transition-colors">
-              Shop the Sale <ChevronRight size={15} />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Featured Tech & Devices ───────────────────────────── */}
-      {featuredDevices.length > 0 && (
-        <section className="max-w-7xl mx-auto px-5 sm:px-8 py-16">
-          <div className="flex items-end justify-between mb-10">
-            <div>
-              <p className="section-label mb-2">⚡ Hand-picked Devices</p>
-              <h2 className="text-3xl font-extrabold text-white">Featured <span className="gold-text">Devices & Tech</span></h2>
-            </div>
-            <Link href="/shop" className="text-[#D4AF37] text-sm font-semibold flex items-center gap-1 hover:gap-2 transition-all">
-              View All Tech <ChevronRight size={14} />
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {featuredDevices.map((p) => <ProductCard key={p.id} product={p} />)}
-          </div>
         </section>
       )}
 
-      {/* ── Streetwear & Apparel Drop (Coming Soon) ────────────── */}
-      {featuredClothing.length > 0 && (
-        <section className="max-w-7xl mx-auto px-5 sm:px-8 py-16 border-t border-[#1F1F1F]">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/40 text-[#D4AF37] text-xs font-bold uppercase tracking-wider mb-2">
-                <Sparkles size={13} /> Official Drop Preview
-              </div>
-              <h2 className="text-3xl font-extrabold text-white">Daisy Streetwear <span className="gold-text">Collection</span></h2>
-              <p className="text-gray-400 text-sm mt-1">Preview upcoming heavyweight hoodies, jackets, retro kicks and urban essentials.</p>
-            </div>
-            <Link href="/clothing" className="btn-gold px-6 py-3 rounded-xl text-xs font-bold shrink-0 inline-flex items-center gap-1.5 self-start sm:self-auto">
-              Preview Clothing Hub <ChevronRight size={14} />
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {featuredClothing.map((p) => <ProductCard key={p.id} product={p} />)}
-          </div>
-        </section>
-      )}
-
-      {/* ── New Arrivals ─────────────────────────────────────────── */}
+      {/* ── New Arrivals ──────────────────────────────────────── */}
       {newArrivals.length > 0 && (
-        <section className="max-w-7xl mx-auto px-5 sm:px-8 pb-20 border-t border-[#1F1F1F] pt-16">
-          <div className="flex items-end justify-between mb-10">
+        <section className="py-14 border-t border-[#1F1F1F]">
+          <div className="px-4 sm:px-6 max-w-7xl mx-auto mb-6 flex items-center justify-between">
             <div>
-              <p className="section-label mb-2">Just landed</p>
-              <h2 className="text-3xl font-extrabold text-white">New <span className="gold-text">Arrivals</span></h2>
+              <p className="section-label mb-1">Just In</p>
+              <h2 className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-playfair)" }}>
+                New Arrivals
+              </h2>
             </div>
-            <Link href="/new-arrivals" className="text-[#D4AF37] text-sm font-semibold flex items-center gap-1 hover:gap-2 transition-all">
-              See All <ChevronRight size={14} />
+            <Link href="/new-arrivals" className="text-xs text-gray-400 hover:text-white flex items-center gap-1.5 transition-colors uppercase tracking-wider font-semibold">
+              Shop Now <ArrowRight size={12} />
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {newArrivals.slice(0, 4).map((p) => <ProductCard key={p.id} product={p} />)}
+          <div className="flex gap-4 overflow-x-auto no-scrollbar px-4 sm:px-6 pb-2">
+            {newArrivals.map((p) => (
+              <Link key={p.id} href={`/shop/${p.slug ?? p.id}`} className="group shrink-0 w-44 sm:w-52">
+                <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-[#111111] mb-3">
+                  {p.imageUrl ? (
+                    <Image
+                      src={p.imageUrl}
+                      alt={p.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center bg-[#111] text-gray-700 text-2xl font-bold">BS</div>
+                  )}
+                  <span className="absolute top-2 left-2 bg-white text-black text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                    New
+                  </span>
+                  <div className="absolute top-2 right-2">
+                    <WishlistButton size={12} />
+                  </div>
+                </div>
+                <p className="text-sm font-semibold text-white line-clamp-1 mb-0.5">{p.name}</p>
+                <p className="text-sm text-gray-400 font-medium">R {parseFloat(String(p.price)).toLocaleString("en-ZA")}</p>
+              </Link>
+            ))}
           </div>
         </section>
       )}
 
-      {/* ── Why Choose Us ────────────────────────────────────────── */}
-      <section style={{ background: "#111111", borderTop: "1px solid rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-20">
-          <div className="text-center mb-14">
-            <p className="section-label mb-3">Why Daisy Gadgets Co.</p>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-white">Your Trusted <span className="gold-text">Gadget Partner</span></h2>
+      {/* ── Best Sellers ──────────────────────────────────────── */}
+      {featured.length > 0 && (
+        <section className="py-14 border-t border-[#1F1F1F]">
+          <div className="px-4 sm:px-6 max-w-7xl mx-auto mb-6 flex items-center justify-between">
+            <div>
+              <p className="section-label mb-1">Top Picks</p>
+              <h2 className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-playfair)" }}>
+                Best Sellers
+              </h2>
+            </div>
+            <Link href="/shop" className="text-xs text-gray-400 hover:text-white flex items-center gap-1.5 transition-colors uppercase tracking-wider font-semibold">
+              Shop Now <ArrowRight size={12} />
+            </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {TRUST.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="bg-[#0d0d0d] border border-[#1F1F1F] rounded-2xl p-6 text-center">
-                <div className="w-12 h-12 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center mx-auto mb-4">
-                  <Icon size={22} color="#D4AF37" strokeWidth={1.8} />
+          <div className="flex gap-4 overflow-x-auto no-scrollbar px-4 sm:px-6 pb-2">
+            {featured.slice(0, 6).map((p) => (
+              <Link key={p.id} href={`/shop/${p.slug ?? p.id}`} className="group shrink-0 w-44 sm:w-52">
+                <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-[#111111] mb-3">
+                  {p.imageUrl ? (
+                    <Image
+                      src={p.imageUrl}
+                      alt={p.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center bg-[#111] text-gray-700 text-2xl font-bold">BS</div>
+                  )}
+                  <div className="absolute top-2 right-2">
+                    <WishlistButton size={12} />
+                  </div>
                 </div>
-                <h3 style={{ fontFamily: "var(--font-outfit)", fontWeight: 700, fontSize: 15, color: "#fff", marginBottom: 8 }}>{title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
-              </div>
+                <p className="text-sm font-semibold text-white line-clamp-1 mb-0.5">{p.name}</p>
+                <p className="text-sm text-gray-400 font-medium">R {parseFloat(String(p.price)).toLocaleString("en-ZA")}</p>
+              </Link>
             ))}
           </div>
+        </section>
+      )}
+
+      {/* ── Shop by Category ──────────────────────────────────── */}
+      <section className="px-4 sm:px-6 py-16 max-w-7xl mx-auto border-t border-[#1F1F1F]">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <p className="section-label mb-1">Browse</p>
+            <h2 className="text-2xl font-bold text-white" style={{ fontFamily: "var(--font-playfair)" }}>
+              Shop by Category
+            </h2>
+          </div>
+          <Link href="/shop" className="text-xs text-gray-400 hover:text-white flex items-center gap-1.5 transition-colors uppercase tracking-wider font-semibold">
+            View All <ArrowRight size={12} />
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {CATEGORY_CARDS.map((cat) => (
+            <Link
+              key={cat.label}
+              href={cat.href}
+              className="group relative aspect-[4/3] sm:aspect-[3/4] rounded-2xl overflow-hidden flex flex-col justify-end p-6"
+              style={{ background: cat.bg, border: "1px solid #1F1F1F" }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <div className="relative z-10">
+                <p
+                  className="text-2xl font-bold text-white mb-1 group-hover:translate-x-1 transition-transform duration-200"
+                  style={{ fontFamily: "var(--font-playfair)" }}
+                >
+                  {cat.label}
+                </p>
+                <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold flex items-center gap-1.5">
+                  {cat.sub} <ArrowRight size={10} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+                </p>
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
 
-      {/* ── Customer Reviews ─────────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto px-5 sm:px-8 py-20">
-        <div className="text-center mb-12">
-          <p className="section-label mb-3">Happy Customers</p>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white">What Our <span className="gold-text">Customers Say</span></h2>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {REVIEWS.map((r) => (
-            <div key={r.name} className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-6">
-              <div className="flex gap-0.5 mb-3">
-                {Array.from({ length: r.stars }).map((_, i) => (
-                  <Star key={i} size={14} fill="#D4AF37" color="#D4AF37" />
-                ))}
-              </div>
-              <p className="text-gray-300 text-sm leading-relaxed mb-4">&ldquo;{r.text}&rdquo;</p>
-              <div className="border-t border-[#1F1F1F] pt-4">
-                <p style={{ fontFamily: "var(--font-outfit)", fontWeight: 700, fontSize: 13, color: "#fff" }}>{r.name}</p>
-                <p className="text-xs text-gray-600">{r.location} &middot; {r.product}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="text-center mt-8">
-          <Link href="/reviews" className="btn-outline px-8 py-3.5 rounded-xl font-semibold text-sm">
-            Read More Reviews
+      {/* ── Limited Drop ──────────────────────────────────────── */}
+      <section className="px-4 sm:px-6 py-6 max-w-7xl mx-auto">
+        <div
+          className="relative rounded-2xl overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-6 p-10 sm:p-12"
+          style={{ background: "#0d0d0d", border: "1px solid #1F1F1F" }}
+        >
+          {/* subtle grain texture */}
+          <div className="absolute inset-0 opacity-[0.03]"
+            style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")" }} />
+          <div className="relative z-10 text-center sm:text-left">
+            <p className="section-label mb-2" style={{ color: "#D4AF37", borderColor: "#D4AF37" }}>Limited Drop</p>
+            <h2
+              className="text-3xl sm:text-4xl font-extrabold text-white mb-2"
+              style={{ fontFamily: "var(--font-playfair)" }}
+            >
+              Exclusive Styles.
+            </h2>
+            <p className="text-gray-400 text-sm tracking-wider uppercase font-semibold">Limited Quantity — Get Yours Now</p>
+          </div>
+          <Link href="/shop" className="btn-gold-fill relative z-10 px-10 py-4 text-sm shrink-0">
+            Shop the Drop
           </Link>
         </div>
       </section>
 
-      {/* ── WhatsApp CTA ─────────────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto px-5 sm:px-8 pb-24">
-        <div className="bg-[#111111] border border-[#1F1F1F] rounded-3xl p-12 text-center">
-          <h2 className="text-3xl font-extrabold text-white mb-4">Need Help Choosing?</h2>
-          <p className="text-gray-400 text-base leading-relaxed mb-8 max-w-xl mx-auto">
-            Chat with our team on WhatsApp. We&apos;ll help you find the perfect gadget, check availability, and get you the best deal.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="https://wa.me/27825876811" target="_blank" rel="noopener noreferrer"
-              className="btn-gold px-10 py-4 rounded-xl font-bold text-base flex items-center justify-center gap-2">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-              </svg>
-              Chat on WhatsApp
-            </a>
-            <Link href="/shop" className="btn-outline px-10 py-4 rounded-xl font-bold text-base">
-              Browse Products
-            </Link>
+      {/* ── Value Props ───────────────────────────────────────── */}
+      <section className="px-4 sm:px-6 py-16 max-w-7xl mx-auto border-t border-[#1F1F1F]">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          {VALUES.map(({ Icon, title, body }) => (
+            <div key={title} className="flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
+              <div className="w-11 h-11 rounded-xl bg-[#1a1a1a] border border-[#2a2a2a] flex items-center justify-center shrink-0">
+                <Icon size={19} className="text-white" strokeWidth={1.7} />
+              </div>
+              <div>
+                <p className="text-white font-semibold text-sm mb-1">{title}</p>
+                <p className="text-gray-500 text-xs leading-relaxed">{body}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Newsletter ────────────────────────────────────────── */}
+      <section className="px-4 sm:px-6 py-16 max-w-7xl mx-auto border-t border-[#1F1F1F]">
+        <div
+          className="rounded-2xl p-10 sm:p-14 flex flex-col lg:flex-row items-center justify-between gap-8"
+          style={{ background: "#111111", border: "1px solid #1F1F1F" }}
+        >
+          <div className="text-center lg:text-left">
+            <p className="section-label mb-3">Community</p>
+            <h2
+              className="text-2xl sm:text-3xl font-bold text-white mb-2"
+              style={{ fontFamily: "var(--font-playfair)" }}
+            >
+              Join the Bevans Sons Community
+            </h2>
+            <p className="text-gray-500 text-sm">
+              Be first to know about new drops, exclusive offers, and styling tips.
+            </p>
+          </div>
+          <div className="w-full lg:w-auto">
+            <NewsletterForm />
           </div>
         </div>
       </section>
 
     </div>
-    </>
-  );
-}
-
-function ProductCard({ product }: { product: ReturnType<typeof getProducts>[0] }) {
-  const isClothing = isClothingCategory(product.category);
-
-  return (
-    <Link href={`/shop/${product.id}`}
-      className="bg-[#111111] border border-[#1F1F1F] rounded-2xl overflow-hidden card-hover flex flex-col group">
-      <div className="relative h-64 bg-[#0f0f0f] overflow-hidden">
-        {product.imageUrl ? (
-          <Image src={product.imageUrl} alt={product.name} fill
-            className={`${isClothing ? "object-cover" : "object-contain"} transition-transform duration-500 group-hover:scale-105`}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <Package size={40} color="#2a2a2a" strokeWidth={1} />
-          </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#111111]/60 to-transparent" />
-        {isClothing ? (
-          <span className="absolute top-3 right-3 bg-[#D4AF37] text-black text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full shadow-lg">
-            COMING SOON
-          </span>
-        ) : product.featured ? (
-          <span className="absolute top-3 left-3 btn-gold text-[10px] font-bold px-2.5 py-1 rounded-full">Featured</span>
-        ) : null}
-      </div>
-      <div className="p-5 flex flex-col flex-1">
-        <p className="text-[10px] text-[#D4AF37] uppercase tracking-wider mb-1.5">{product.category}</p>
-        <p className="font-semibold text-white text-sm leading-snug mb-2 flex-1 line-clamp-2">{product.name}</p>
-        <p className="text-[#D4AF37] font-bold text-lg mb-3">{product.price}</p>
-        <div className="w-full py-2.5 rounded-xl text-xs font-semibold text-center text-white border border-[#2a2a2a] group-hover:border-[#D4AF37]/50 transition-colors">
-          {isClothing ? "Preview Item (Soon)" : "View Details"}
-        </div>
-      </div>
-    </Link>
   );
 }

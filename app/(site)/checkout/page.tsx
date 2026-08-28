@@ -6,13 +6,9 @@ import Image from "next/image";
 import { Upload, CheckCircle, Copy } from "lucide-react";
 import type { BankDetails } from "@/lib/bankDetails";
 
-function parsePrice(p: string): number {
-  return parseFloat(p.replace(/[^0-9.]/g, "")) || 0;
-}
-
 export default function CheckoutPage() {
   const { items, clear } = useCart();
-  const cartTotal = items.reduce((s, i) => s + parsePrice(i.price) * i.qty, 0);
+  const cartTotal = items.reduce((s, i) => s + i.price * i.qty, 0);
   const router = useRouter();
 
   const [step, setStep] = useState<"details" | "payment" | "done">("details");
@@ -222,7 +218,7 @@ export default function CheckoutPage() {
                         <p className="text-xs text-gray-500">Qty: {item.qty}</p>
                       </div>
                       <p className="text-sm text-[#D4AF37] font-semibold shrink-0">
-                        R {(parsePrice(item.price) * item.qty).toLocaleString()}
+                        R {(item.price * item.qty).toLocaleString()}
                       </p>
                     </div>
                   ))}

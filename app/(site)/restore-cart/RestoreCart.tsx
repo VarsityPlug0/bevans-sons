@@ -14,20 +14,27 @@ export default function RestoreCart() {
 
     try {
       const items = JSON.parse(atob(encoded)) as {
-        id: string; name: string; price: string;
+        id: string; name: string; price: string | number;
         qty: number; imageUrl?: string; category?: string;
+        variantId?: string; size?: string; colour?: string; sku?: string;
       }[];
 
       for (const item of items) {
+        const variantId = item.variantId ?? item.id;
+        const price = typeof item.price === "number" ? item.price : parseFloat(String(item.price).replace(/[^0-9.]/g, "")) || 0;
         add({
           id: item.id,
+          variantId,
           name: item.name,
-          price: item.price,
+          price,
           imageUrl: item.imageUrl ?? "",
           category: item.category ?? "",
+          size: item.size ?? "",
+          colour: item.colour ?? "",
+          sku: item.sku ?? "",
         });
         if (item.qty > 1) {
-          setQty(item.id, item.qty);
+          setQty(variantId, item.qty);
         }
       }
     } catch {

@@ -1,14 +1,9 @@
 import Database from "better-sqlite3";
 import path from "path";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, writeFileSync } from "fs";
 
 const DATA_DIR = process.env.DATA_DIR ?? path.join(process.cwd(), "data");
-const DB_PATH = path.join(DATA_DIR, "daisy.db");
-// Fallback JSON paths: persistent disk backup → built-in image seed
-const JSON_PATHS = [
-  path.join(DATA_DIR, "products-backup.json"),
-  path.join(process.cwd(), "data", "products.json"),
-];
+const DB_PATH = path.join(DATA_DIR, "bevans.db");
 
 let _db: Database.Database | null = null;
 
@@ -20,14 +15,10 @@ export function getDb(): Database.Database {
   _db.pragma("journal_mode = WAL");
   _db.pragma("foreign_keys = ON");
   initSchema(_db);
-  addOriginalPriceColumn(_db);
-  migrateFromJson(_db);
-  seedDefaultProducts(_db);
-  exportProductsJson(_db);
+  runMigrations(_db);
   return _db;
 }
 
-// Call after any product create/update/delete to keep the backup current
 export function exportProductsJson(db?: Database.Database): void {
   try {
     const d = db ?? getDb();
@@ -61,26 +52,6 @@ function initSchema(db: Database.Database) {
       message         TEXT,
       productInterest TEXT,
       createdAt       TEXT NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS quotes (
-      id                TEXT PRIMARY KEY,
-      ref               TEXT UNIQUE NOT NULL,
-      name              TEXT NOT NULL DEFAULT '',
-      phone             TEXT NOT NULL DEFAULT '',
-      email             TEXT NOT NULL DEFAULT '',
-      province          TEXT NOT NULL DEFAULT '',
-      propertyType      TEXT NOT NULL DEFAULT '',
-      monthlyBill       TEXT NOT NULL DEFAULT '',
-      mainGoal          TEXT NOT NULL DEFAULT '',
-      appliances        TEXT NOT NULL DEFAULT '[]',
-      budget            TEXT NOT NULL DEFAULT '',
-      recommendedPackage TEXT NOT NULL DEFAULT '',
-      estimatedPrice    TEXT NOT NULL DEFAULT '',
-      message           TEXT NOT NULL DEFAULT '',
-      status            TEXT NOT NULL DEFAULT 'new',
-      source            TEXT NOT NULL DEFAULT 'contact',
-      createdAt         TEXT NOT NULL
     );
 
     CREATE TABLE IF NOT EXISTS orders (
@@ -223,235 +194,297 @@ function initSchema(db: Database.Database) {
     );
   `);
 
-  // Migrate existing orders tables that predate bank_id / tracking_number columns
-  try { db.exec("ALTER TABLE orders ADD COLUMN bank_id TEXT"); } catch { /* already exists */ }
-  try { db.exec("ALTER TABLE orders ADD COLUMN tracking_number TEXT"); } catch { /* already exists */ }
-  try { db.exec("ALTER TABLE installment_applications ADD COLUMN product_imageUrl TEXT"); } catch { /* already exists */ }
+  // Backward-compat column migrations (existing installs)
+  const safeMigrate = (sql: string) => { try { db.exec(sql); } catch { /* already exists */ } };
+  safeMigrate("ALTER TABLE orders ADD COLUMN bank_id TEXT");
+  safeMigrate("ALTER TABLE orders ADD COLUMN tracking_number TEXT");
+  safeMigrate("ALTER TABLE installment_applications ADD COLUMN product_imageUrl TEXT");
 }
 
-function migrateFromJson(db: Database.Database) {
-  const done = db.prepare("SELECT name FROM migrations WHERE name = ?").get("json_import_gadgets_v1");
-  if (done) return;
+function runMigrations(db: Database.Database) {
+  const applied = (name: string) =>
+    !!db.prepare("SELECT name FROM migrations WHERE name = ?").get(name);
+  const mark = (name: string) =>
+    db.prepare("INSERT OR IGNORE INTO migrations (name) VALUES (?)").run(name);
+  const safeMigrate = (sql: string) => { try { db.exec(sql); } catch { /* column/index exists */ } };
 
-  // Try each fallback path in order: persistent disk backup → built-in image seed
-  for (const jsonPath of JSON_PATHS) {
-    if (!existsSync(jsonPath)) continue;
-    try {
-      const products = JSON.parse(readFileSync(jsonPath, "utf-8"));
-      if (Array.isArray(products) && products.length > 0) {
-        db.prepare("DELETE FROM products").run();
-        const insert = db.prepare(`
-          INSERT OR REPLACE INTO products
-            (id, name, price, category, description, imageUrl, inStock, featured, createdAt, updatedAt)
-          VALUES
-            (@id, @name, @price, @category, @description, @imageUrl, @inStock, @featured, @createdAt, @updatedAt)
-        `);
-        db.transaction((rows: Record<string, unknown>[]) => {
-          for (const row of rows) insert.run({ ...row, inStock: row.inStock ? 1 : 0, featured: row.featured ? 1 : 0 });
-        })(products);
-        break;
+  // ── M1: Bevans product columns ──────────────────────────────────────────
+  if (!applied("add_bevans_product_columns_v1")) {
+    safeMigrate("ALTER TABLE products ADD COLUMN slug TEXT NOT NULL DEFAULT ''");
+    safeMigrate("ALTER TABLE products ADD COLUMN gender TEXT NOT NULL DEFAULT 'Unisex'");
+    safeMigrate("ALTER TABLE products ADD COLUMN material TEXT NOT NULL DEFAULT ''");
+    safeMigrate("ALTER TABLE products ADD COLUMN fit TEXT NOT NULL DEFAULT ''");
+    safeMigrate("ALTER TABLE products ADD COLUMN newArrival INTEGER NOT NULL DEFAULT 0");
+    mark("add_bevans_product_columns_v1");
+  }
+
+  // ── M2: Product variants ─────────────────────────────────────────────────
+  if (!applied("create_product_variants_v1")) {
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS product_variants (
+        id             TEXT PRIMARY KEY,
+        product_id     TEXT NOT NULL,
+        colour         TEXT NOT NULL DEFAULT '',
+        size           TEXT NOT NULL DEFAULT '',
+        sku            TEXT UNIQUE NOT NULL,
+        stock          INTEGER NOT NULL DEFAULT 0,
+        price_override TEXT,
+        createdAt      TEXT NOT NULL,
+        updatedAt      TEXT NOT NULL,
+        FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+      );
+      CREATE INDEX IF NOT EXISTS idx_variants_product ON product_variants(product_id);
+      CREATE INDEX IF NOT EXISTS idx_variants_sku ON product_variants(sku);
+    `);
+    mark("create_product_variants_v1");
+  }
+
+  // ── M3: Product images gallery ───────────────────────────────────────────
+  if (!applied("create_product_images_v1")) {
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS product_images (
+        id         TEXT PRIMARY KEY,
+        product_id TEXT NOT NULL,
+        url        TEXT NOT NULL,
+        alt        TEXT NOT NULL DEFAULT '',
+        position   INTEGER NOT NULL DEFAULT 0,
+        createdAt  TEXT NOT NULL,
+        FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+      );
+      CREATE INDEX IF NOT EXISTS idx_images_product ON product_images(product_id);
+    `);
+    mark("create_product_images_v1");
+  }
+
+  // ── M4: Drop solar quotes table ──────────────────────────────────────────
+  if (!applied("drop_solar_quotes_v1")) {
+    const hasQuotes = db.prepare(
+      "SELECT name FROM sqlite_master WHERE type='table' AND name='quotes'"
+    ).get();
+    if (hasQuotes) {
+      const count = (db.prepare("SELECT COUNT(*) as c FROM quotes").get() as { c: number }).c;
+      if (count > 0) {
+        console.warn(`[bevans] quotes table has ${count} row(s) — skipping drop. Manual review needed.`);
+      } else {
+        db.exec("DROP TABLE IF EXISTS quotes");
+        mark("drop_solar_quotes_v1");
       }
-    } catch { /* ignore corrupt JSON, try next */ }
+    } else {
+      mark("drop_solar_quotes_v1");
+    }
   }
 
-  db.prepare("INSERT OR IGNORE INTO migrations (name) VALUES (?)").run("json_import_gadgets_v1");
+  // ── M5: Seed Bevans Sons products ────────────────────────────────────────
+  if (!applied("seed_bevans_products_v1")) {
+    const productCount = (db.prepare("SELECT COUNT(*) as c FROM products").get() as { c: number }).c;
+    // Only seed if no products exist (fresh install or after clearing daisy products)
+    if (productCount === 0) {
+      seedBevanProducts(db);
+    }
+    mark("seed_bevans_products_v1");
+  }
 }
 
-function seedDefaultProducts(db: Database.Database) {
-  const done = db.prepare("SELECT name FROM migrations WHERE name = ?").get("seed_products_v1");
-  if (done) return;
-
-  const count = (db.prepare("SELECT COUNT(*) as c FROM products").get() as { c: number }).c;
-  if (count > 0) {
-    db.prepare("INSERT OR IGNORE INTO migrations (name) VALUES (?)").run("seed_products_v1");
-    return;
-  }
-
+function seedBevanProducts(db: Database.Database) {
   const now = new Date().toISOString();
-  const insert = db.prepare(`
-    INSERT OR IGNORE INTO products (id, name, price, category, description, imageUrl, inStock, featured, createdAt, updatedAt)
-    VALUES (@id, @name, @price, @category, @description, @imageUrl, @inStock, @featured, @createdAt, @updatedAt)
+
+  const insertProduct = db.prepare(`
+    INSERT OR IGNORE INTO products
+      (id, name, slug, price, originalPrice, category, gender, material, fit,
+       description, imageUrl, inStock, featured, newArrival, createdAt, updatedAt)
+    VALUES
+      (@id, @name, @slug, @price, @originalPrice, @category, @gender, @material, @fit,
+       @description, @imageUrl, @inStock, @featured, @newArrival, @createdAt, @updatedAt)
+  `);
+
+  const insertVariant = db.prepare(`
+    INSERT OR IGNORE INTO product_variants
+      (id, product_id, colour, size, sku, stock, createdAt, updatedAt)
+    VALUES
+      (@id, @product_id, @colour, @size, @sku, @stock, @createdAt, @updatedAt)
   `);
 
   const products = [
-    // ── Smartphones ──────────────────────────────────────────────────────────
-    { id: "sm-001", name: "iPhone 15 Pro Max 256GB", price: "R22,999", category: "Smartphones", featured: 1, inStock: 1,
-      description: "Titanium design, A17 Pro chip, 48MP camera system, USB-C, Action button. Available in Natural, Black, White & Blue Titanium.",
-      imageUrl: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&h=600&fit=crop" },
-    { id: "sm-002", name: "iPhone 15 128GB", price: "R16,999", category: "Smartphones", featured: 1, inStock: 1,
-      description: "Dynamic Island, 48MP main camera, USB-C, A16 Bionic chip. Available in Pink, Yellow, Green, Blue & Black.",
-      imageUrl: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=600&fit=crop" },
-    { id: "sm-003", name: "Samsung Galaxy S24 Ultra 256GB", price: "R19,999", category: "Smartphones", featured: 1, inStock: 1,
-      description: "Built-in S Pen, 200MP camera, Snapdragon 8 Gen 3, 6.8\" QHD+ display, 5000mAh battery.",
-      imageUrl: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=600&h=600&fit=crop" },
-    { id: "sm-004", name: "Samsung Galaxy A54 5G 128GB", price: "R7,499", category: "Smartphones", featured: 0, inStock: 1,
-      description: "50MP OIS camera, 5000mAh battery, Super AMOLED display, IP67 water resistant.",
-      imageUrl: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=600&h=600&fit=crop" },
-    { id: "sm-005", name: "Samsung Galaxy S23 FE 256GB", price: "R9,999", category: "Smartphones", featured: 0, inStock: 1,
-      description: "50MP triple camera, Snapdragon 8 Gen 1, 4500mAh, AMOLED 120Hz display.",
-      imageUrl: "https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=600&h=600&fit=crop" },
-
-    // ── Smart TVs ─────────────────────────────────────────────────────────────
-    { id: "tv-001", name: "Samsung 65\" QLED 4K Smart TV", price: "R14,999", category: "TVs", featured: 1, inStock: 1,
-      description: "Quantum Dot technology, Tizen OS, 120Hz, HDR10+, Dolby Atmos, 4 HDMI ports.",
-      imageUrl: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=600&h=600&fit=crop" },
-    { id: "tv-002", name: "Hisense 55\" 4K UHD Smart TV", price: "R6,999", category: "TVs", featured: 0, inStock: 1,
-      description: "4K UHD, VIDAA Smart OS, Dolby Vision, DTS Virtual:X, HDR10, 3 HDMI.",
-      imageUrl: "https://images.unsplash.com/photo-1509281373149-e957c6296406?w=600&h=600&fit=crop" },
-    { id: "tv-003", name: "LG 75\" OLED C3 4K Smart TV", price: "R34,999", category: "TVs", featured: 1, inStock: 1,
-      description: "Evo OLED panel, α9 Gen6 AI processor, Dolby Vision IQ, Dolby Atmos, Game Mode Pro, webOS 23.",
-      imageUrl: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=600&h=600&fit=crop" },
-    { id: "tv-004", name: "Samsung 43\" Crystal UHD Smart TV", price: "R5,499", category: "TVs", featured: 0, inStock: 1,
-      description: "Crystal Processor 4K, PurColor, HDR, Tizen OS, Built-in Wi-Fi.",
-      imageUrl: "https://images.unsplash.com/photo-1461151304267-38535e780c79?w=600&h=600&fit=crop" },
-
-    // ── Gaming Consoles ───────────────────────────────────────────────────────
-    { id: "gc-001", name: "PlayStation 5 Console", price: "R12,999", category: "Gaming Consoles", featured: 1, inStock: 1,
-      description: "825GB SSD, 4K gaming, 120fps, DualSense controller, 3D Audio, Ultra HD Blu-ray.",
-      imageUrl: "https://images.unsplash.com/photo-1607853202273-797f1c22a38e?w=600&h=600&fit=crop" },
-    { id: "gc-002", name: "PlayStation 5 Slim", price: "R10,999", category: "Gaming Consoles", featured: 0, inStock: 1,
-      description: "Slimmer, lighter PS5 with 1TB SSD, detachable disc drive, DualSense controller.",
-      imageUrl: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=600&h=600&fit=crop" },
-    { id: "gc-003", name: "Xbox Series X 1TB", price: "R11,999", category: "Gaming Consoles", featured: 0, inStock: 1,
-      description: "1TB NVMe SSD, 4K 120fps, Quick Resume, Ray Tracing, Xbox Game Pass ready.",
-      imageUrl: "https://images.unsplash.com/photo-1622297845775-5ff3fef71d13?w=600&h=600&fit=crop" },
-    { id: "gc-004", name: "Nintendo Switch OLED", price: "R6,499", category: "Gaming Consoles", featured: 0, inStock: 1,
-      description: "7\" OLED screen, 64GB storage, enhanced audio, wide adjustable stand, dock with LAN port.",
-      imageUrl: "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=600&h=600&fit=crop" },
-
-    // ── Gaming PCs ────────────────────────────────────────────────────────────
-    { id: "gp-001", name: "RTX 4070 Gaming PC Bundle", price: "R22,999", category: "Gaming PCs", featured: 1, inStock: 1,
-      description: "Intel Core i7-13700K, RTX 4070 12GB, 32GB DDR5 RAM, 1TB NVMe SSD, 240mm AIO cooler.",
-      imageUrl: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&h=600&fit=crop" },
-    { id: "gp-002", name: "AMD Ryzen 9 Gaming Rig", price: "R28,999", category: "Gaming PCs", featured: 1, inStock: 1,
-      description: "Ryzen 9 7900X, RX 7900 XT 20GB, 32GB DDR5, 2TB NVMe SSD, Full-tower RGB case.",
-      imageUrl: "https://images.unsplash.com/photo-1593640408182-31c228cba4fc?w=600&h=600&fit=crop" },
-    { id: "gp-003", name: "Intel i5 Starter Gaming PC", price: "R13,999", category: "Gaming PCs", featured: 0, inStock: 1,
-      description: "Intel Core i5-12400F, RTX 3060 12GB, 16GB DDR4, 512GB SSD. Perfect entry-level gaming rig.",
-      imageUrl: "https://images.unsplash.com/photo-1555680202-c86f0e12f086?w=600&h=600&fit=crop" },
-
-    // ── Laptops & MacBooks ────────────────────────────────────────────────────
-    { id: "lb-001", name: "MacBook Pro M3 14\"", price: "R32,999", category: "Laptops & MacBooks", featured: 1, inStock: 1,
-      description: "Apple M3 chip, 8GB RAM, 512GB SSD, Liquid Retina display, 22-hour battery, MagSafe 3.",
-      imageUrl: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&h=600&fit=crop" },
-    { id: "lb-002", name: "MacBook Air M2 13\"", price: "R22,999", category: "Laptops & MacBooks", featured: 1, inStock: 1,
-      description: "Apple M2 chip, 8GB RAM, 256GB SSD, Liquid Retina display, 18-hour battery, fanless design.",
-      imageUrl: "https://images.unsplash.com/photo-1611186871525-4767a56e0f54?w=600&h=600&fit=crop" },
-    { id: "lb-003", name: "Dell XPS 15 Intel i7", price: "R23,999", category: "Laptops & MacBooks", featured: 0, inStock: 1,
-      description: "Intel Core i7-13700H, 16GB DDR5, 512GB SSD, RTX 4050, 15.6\" OLED 3.5K display.",
-      imageUrl: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&h=600&fit=crop" },
-    { id: "lb-004", name: "HP Pavilion Gaming 15\" Laptop", price: "R14,499", category: "Laptops & MacBooks", featured: 0, inStock: 1,
-      description: "AMD Ryzen 7 7745H, RTX 4060 8GB, 16GB DDR5, 512GB SSD, 144Hz FHD display.",
-      imageUrl: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&h=600&fit=crop" },
-    { id: "lb-005", name: "Lenovo ThinkPad X1 Carbon", price: "R19,999", category: "Laptops & MacBooks", featured: 0, inStock: 1,
-      description: "Intel Core i7-1365U, 16GB LPDDR5, 512GB SSD, 14\" IPS 2.8K OLED, 57Wh battery.",
-      imageUrl: "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=600&h=600&fit=crop" },
-
-    // ── Tablets & Watches ─────────────────────────────────────────────────────
-    { id: "tw-001", name: "iPad Pro M2 12.9\" 256GB", price: "R21,999", category: "Tablets & Watches", featured: 1, inStock: 1,
-      description: "Apple M2 chip, Liquid Retina XDR display, Wi-Fi 6E, 12MP + 10MP cameras, Face ID.",
-      imageUrl: "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=600&h=600&fit=crop" },
-    { id: "tw-002", name: "Apple Watch Series 9 45mm", price: "R8,999", category: "Tablets & Watches", featured: 0, inStock: 1,
-      description: "S9 SiP chip, Double Tap gesture, Always-On Retina display, crash detection, GPS.",
-      imageUrl: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=600&fit=crop" },
-    { id: "tw-003", name: "Samsung Galaxy Tab S9 256GB", price: "R13,499", category: "Tablets & Watches", featured: 0, inStock: 1,
-      description: "Snapdragon 8 Gen 2, 11\" Dynamic AMOLED 2X, S Pen included, IP68, 8400mAh.",
-      imageUrl: "https://images.unsplash.com/photo-1561154464-82e9adf32764?w=600&h=600&fit=crop" },
-    { id: "tw-004", name: "Apple Watch Ultra 2 49mm", price: "R13,999", category: "Tablets & Watches", featured: 0, inStock: 1,
-      description: "Titanium case, 3000 nits display, dual-frequency GPS, 60-hour battery, Action button.",
-      imageUrl: "https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=600&h=600&fit=crop" },
-
-    // ── Home Appliances ───────────────────────────────────────────────────────
-    { id: "ha-001", name: "Samsung 15kg Top Loader Washing Machine", price: "R7,499", category: "Home Appliances", featured: 1, inStock: 1,
-      description: "Digital Inverter Motor, Eco Tub Clean, child lock, 15 wash programs, 5-year motor warranty.",
-      imageUrl: "https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=600&h=600&fit=crop" },
-    { id: "ha-002", name: "LG 600L Double Door Fridge", price: "R12,999", category: "Home Appliances", featured: 1, inStock: 1,
-      description: "Linear Inverter Compressor, Door-in-Door, Multi Air Flow, Smart Diagnosis, A++ energy rating.",
-      imageUrl: "https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=600&h=600&fit=crop" },
-    { id: "ha-003", name: "Hisense 7kg Front Loader Washer", price: "R5,499", category: "Home Appliances", featured: 0, inStock: 1,
-      description: "Inverter motor, 1200 RPM spin, 15 wash programs, anti-vibration design, delay start.",
-      imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=600&fit=crop" },
-    { id: "ha-004", name: "Bosch 60cm Built-In Dishwasher", price: "R8,999", category: "Home Appliances", featured: 0, inStock: 1,
-      description: "14 place settings, EcoSilence motor, 6 programs, AutoDry, A++ energy class.",
-      imageUrl: "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=600&h=600&fit=crop" },
-
-    // ── Kitchen Appliances ────────────────────────────────────────────────────
-    { id: "ka-001", name: "De'Longhi Magnifica Evo Espresso Machine", price: "R5,999", category: "Kitchen Appliances", featured: 1, inStock: 1,
-      description: "Bean-to-cup, 15-bar pressure, LatteCrema System, 250g bean hopper, My Menu display.",
-      imageUrl: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&h=600&fit=crop" },
-    { id: "ka-002", name: "Samsung 28L Convection Microwave", price: "R2,999", category: "Kitchen Appliances", featured: 0, inStock: 1,
-      description: "900W, Slim Fry technology, Ceramic enamel interior, 28L capacity, slim design.",
-      imageUrl: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=600&fit=crop" },
-    { id: "ka-003", name: "Smeg Retro Kettle + Toaster Set", price: "R2,499", category: "Kitchen Appliances", featured: 0, inStock: 1,
-      description: "1.7L stainless steel kettle, 2-slice toaster, iconic retro design. Available in multiple colours.",
-      imageUrl: "https://images.unsplash.com/photo-1525904097878-94fb15835963?w=600&h=600&fit=crop" },
-    { id: "ka-004", name: "Nutribullet Pro 900W", price: "R1,299", category: "Kitchen Appliances", featured: 0, inStock: 1,
-      description: "900W motor, 2x 900ml cups, stainless steel blades, BPA-free, dishwasher-safe cups.",
-      imageUrl: "https://images.unsplash.com/photo-1570222094114-d054a817e56b?w=600&h=600&fit=crop" },
-
-    // ── Solar & Power Solutions ───────────────────────────────────────────────
-    { id: "sp-001", name: "5kVA Inverter + 200Ah Lithium Battery Bundle", price: "R18,999", category: "Solar & Power Solutions", featured: 1, inStock: 1,
-      description: "Pure sine wave inverter, 200Ah LiFePO4 battery, WiFi monitoring, 4000W load capacity. Ideal for load shedding.",
-      imageUrl: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&h=600&fit=crop" },
-    { id: "sp-002", name: "10kVA Solar System (8 Panels + Inverter)", price: "R49,999", category: "Solar & Power Solutions", featured: 1, inStock: 1,
-      description: "8x 550W solar panels, 10kVA hybrid inverter, 2x 200Ah lithium batteries. Full installation package available.",
-      imageUrl: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=600&h=600&fit=crop" },
-    { id: "sp-003", name: "3kVA Load Shedding Inverter Kit", price: "R9,999", category: "Solar & Power Solutions", featured: 0, inStock: 1,
-      description: "3kVA pure sine wave inverter + 100Ah AGM battery. Powers lights, TV, DSTV, router & small appliances.",
-      imageUrl: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=600&h=600&fit=crop" },
-    { id: "sp-004", name: "200W Portable Folding Solar Panel", price: "R2,999", category: "Solar & Power Solutions", featured: 0, inStock: 1,
-      description: "Monocrystalline cells, 200W peak output, USB-A/USB-C, MC4 connector, IP67 waterproof.",
-      imageUrl: "https://images.unsplash.com/photo-1497440001374-f26997328c1b?w=600&h=600&fit=crop" },
-
-    // ── Electric Ride-On Cars ─────────────────────────────────────────────────
-    { id: "er-001", name: "Kids Mercedes AMG Electric Ride-On 24V", price: "R5,999", category: "Electric Ride-On Cars", featured: 1, inStock: 1,
-      description: "Licensed Mercedes AMG, 24V dual motor, leather seat, rubber tyres, parental remote control, MP3/Bluetooth.",
-      imageUrl: "https://images.unsplash.com/photo-1547394765-185e1e68f34e?w=600&h=600&fit=crop" },
-    { id: "er-002", name: "BMW X5 Electric Ride-On 12V", price: "R3,999", category: "Electric Ride-On Cars", featured: 0, inStock: 1,
-      description: "Licensed BMW X5, 12V battery, 2 speeds, LED lights, music player, remote control.",
-      imageUrl: "https://images.unsplash.com/photo-1620188467120-5042ed1eb5da?w=600&h=600&fit=crop" },
-    { id: "er-003", name: "Lamborghini Electric Kids Car 12V", price: "R4,499", category: "Electric Ride-On Cars", featured: 0, inStock: 1,
-      description: "Licensed Lamborghini, 12V motor, doors open, horn, LED headlights, remote control, up to 5km/h.",
-      imageUrl: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=600&h=600&fit=crop" },
-
-    // ── Furniture ─────────────────────────────────────────────────────────────
-    { id: "fu-001", name: "L-Shape Corner Sofa Set", price: "R8,999", category: "Furniture", featured: 1, inStock: 1,
-      description: "Premium fabric upholstery, solid wood frame, reversible chaise lounge. Seats 5–6 people. Multiple colours.",
-      imageUrl: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&h=600&fit=crop" },
-    { id: "fu-002", name: "King Size Bed Frame + Headboard", price: "R5,999", category: "Furniture", featured: 0, inStock: 1,
-      description: "Solid wood slat base, padded headboard, centre support legs. Fits standard 183x200cm mattress.",
-      imageUrl: "https://images.unsplash.com/photo-1505693314120-0d443867891c?w=600&h=600&fit=crop" },
-    { id: "fu-003", name: "Electric Height-Adjustable Standing Desk", price: "R6,499", category: "Furniture", featured: 0, inStock: 1,
-      description: "Dual motor electric lift, 140x70cm desktop, 4 memory presets, cable management, 80kg capacity.",
-      imageUrl: "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=600&h=600&fit=crop" },
-    { id: "fu-004", name: "Recliner Lounge Chair", price: "R4,499", category: "Furniture", featured: 0, inStock: 1,
-      description: "PU leather, 360° swivel, 135° recline, padded armrests. Available in Black, Brown & Grey.",
-      imageUrl: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&h=600&fit=crop" },
-
-    // ── Office Equipment ──────────────────────────────────────────────────────
-    { id: "oe-001", name: "HP Color LaserJet Pro MFP", price: "R5,499", category: "Office Equipment", featured: 0, inStock: 1,
-      description: "Print, scan, copy & fax. 22ppm colour, Wi-Fi + LAN, auto duplex, 250-sheet tray.",
-      imageUrl: "https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?w=600&h=600&fit=crop" },
-    { id: "oe-002", name: "Canon PIXMA MegaTank All-in-One", price: "R1,999", category: "Office Equipment", featured: 0, inStock: 1,
-      description: "Ink tank system (no cartridges), print/scan/copy, Wi-Fi, up to 6,000 black pages per fill.",
-      imageUrl: "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=600&h=600&fit=crop" },
-    { id: "oe-003", name: "Ergonomic Mesh Office Chair", price: "R3,499", category: "Office Equipment", featured: 0, inStock: 1,
-      description: "Lumbar support, adjustable armrests, headrest, seat height & tilt. Max 120kg. 360° casters.",
-      imageUrl: "https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=600&h=600&fit=crop" },
+    {
+      id: "bs-hoodie-001", name: "Bevans Signature Hoodie", slug: "bevans-signature-hoodie",
+      price: "899.00", originalPrice: "", category: "Men's Hoodies", gender: "Men",
+      material: "400gsm Cotton Fleece", fit: "Oversized",
+      description: "Our flagship heavyweight hoodie. Drop-shoulder silhouette, kangaroo pocket, ribbed cuffs and hem. Built to last, crafted for style.",
+      imageUrl: "https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=800&h=1000&fit=crop&q=85",
+      inStock: 1, featured: 1, newArrival: 1,
+      variants: [
+        { colour: "Black", sizes: [{ size: "S", sku: "BSH-BLK-S", stock: 10 }, { size: "M", sku: "BSH-BLK-M", stock: 15 }, { size: "L", sku: "BSH-BLK-L", stock: 8 }, { size: "XL", sku: "BSH-BLK-XL", stock: 5 }] },
+        { colour: "Charcoal", sizes: [{ size: "S", sku: "BSH-CHR-S", stock: 7 }, { size: "M", sku: "BSH-CHR-M", stock: 12 }, { size: "L", sku: "BSH-CHR-L", stock: 9 }, { size: "XL", sku: "BSH-CHR-XL", stock: 4 }] },
+        { colour: "Cream", sizes: [{ size: "S", sku: "BSH-CRM-S", stock: 6 }, { size: "M", sku: "BSH-CRM-M", stock: 8 }, { size: "L", sku: "BSH-CRM-L", stock: 5 }, { size: "XL", sku: "BSH-CRM-XL", stock: 2 }] },
+      ],
+    },
+    {
+      id: "bs-hoodie-002", name: "Bevans Essential Hoodie", slug: "bevans-essential-hoodie",
+      price: "649.00", originalPrice: "799.00", category: "Unisex Hoodies", gender: "Unisex",
+      material: "320gsm Cotton-Polyester Blend", fit: "Regular",
+      description: "The everyday essential. Midweight fleece, classic fit, embroidered logo. Perfect for any occasion, any season.",
+      imageUrl: "https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=800&h=1000&fit=crop&q=85",
+      inStock: 1, featured: 1, newArrival: 0,
+      variants: [
+        { colour: "Black", sizes: [{ size: "XS", sku: "BEH-BLK-XS", stock: 5 }, { size: "S", sku: "BEH-BLK-S", stock: 12 }, { size: "M", sku: "BEH-BLK-M", stock: 18 }, { size: "L", sku: "BEH-BLK-L", stock: 14 }, { size: "XL", sku: "BEH-BLK-XL", stock: 7 }, { size: "XXL", sku: "BEH-BLK-XXL", stock: 3 }] },
+        { colour: "Slate Grey", sizes: [{ size: "S", sku: "BEH-SLT-S", stock: 8 }, { size: "M", sku: "BEH-SLT-M", stock: 14 }, { size: "L", sku: "BEH-SLT-L", stock: 10 }, { size: "XL", sku: "BEH-SLT-XL", stock: 5 }] },
+        { colour: "Olive", sizes: [{ size: "S", sku: "BEH-OLV-S", stock: 6 }, { size: "M", sku: "BEH-OLV-M", stock: 9 }, { size: "L", sku: "BEH-OLV-L", stock: 7 }] },
+      ],
+    },
+    {
+      id: "bs-tee-001", name: "Bevans Signature Tee", slug: "bevans-signature-tee",
+      price: "399.00", originalPrice: "", category: "Men's T-Shirts", gender: "Men",
+      material: "200gsm Combed Cotton", fit: "Relaxed",
+      description: "Heavyweight premium tee with a relaxed boxy fit. Triple-stitched seams, reinforced collar. Made to outlast trends.",
+      imageUrl: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=1000&fit=crop&q=85",
+      inStock: 1, featured: 1, newArrival: 1,
+      variants: [
+        { colour: "White", sizes: [{ size: "S", sku: "BST-WHT-S", stock: 20 }, { size: "M", sku: "BST-WHT-M", stock: 25 }, { size: "L", sku: "BST-WHT-L", stock: 20 }, { size: "XL", sku: "BST-WHT-XL", stock: 12 }, { size: "XXL", sku: "BST-WHT-XXL", stock: 6 }] },
+        { colour: "Black", sizes: [{ size: "S", sku: "BST-BLK-S", stock: 18 }, { size: "M", sku: "BST-BLK-M", stock: 22 }, { size: "L", sku: "BST-BLK-L", stock: 18 }, { size: "XL", sku: "BST-BLK-XL", stock: 10 }] },
+        { colour: "Stone", sizes: [{ size: "S", sku: "BST-STN-S", stock: 10 }, { size: "M", sku: "BST-STN-M", stock: 14 }, { size: "L", sku: "BST-STN-L", stock: 11 }, { size: "XL", sku: "BST-STN-XL", stock: 5 }] },
+      ],
+    },
+    {
+      id: "bs-tee-002", name: "Bevans Essential Tee", slug: "bevans-essential-tee",
+      price: "299.00", originalPrice: "", category: "Unisex T-Shirts", gender: "Unisex",
+      material: "180gsm Combed Cotton", fit: "Regular",
+      description: "The clean essential. Minimal branding, superior cotton, everyday comfort. Available in versatile neutrals.",
+      imageUrl: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&h=1000&fit=crop&q=85",
+      inStock: 1, featured: 0, newArrival: 0,
+      variants: [
+        { colour: "White", sizes: [{ size: "XS", sku: "BET-WHT-XS", stock: 15 }, { size: "S", sku: "BET-WHT-S", stock: 20 }, { size: "M", sku: "BET-WHT-M", stock: 25 }, { size: "L", sku: "BET-WHT-L", stock: 20 }, { size: "XL", sku: "BET-WHT-XL", stock: 10 }] },
+        { colour: "Black", sizes: [{ size: "XS", sku: "BET-BLK-XS", stock: 12 }, { size: "S", sku: "BET-BLK-S", stock: 18 }, { size: "M", sku: "BET-BLK-M", stock: 22 }, { size: "L", sku: "BET-BLK-L", stock: 17 }, { size: "XL", sku: "BET-BLK-XL", stock: 8 }] },
+        { colour: "Beige", sizes: [{ size: "S", sku: "BET-BGE-S", stock: 10 }, { size: "M", sku: "BET-BGE-M", stock: 15 }, { size: "L", sku: "BET-BGE-L", stock: 12 }] },
+      ],
+    },
+    {
+      id: "bs-tee-003", name: "Bevans Oversized Tee", slug: "bevans-oversized-tee",
+      price: "349.00", originalPrice: "", category: "Men's T-Shirts", gender: "Men",
+      material: "220gsm Heavy Cotton", fit: "Oversized",
+      description: "Drop-shoulder, extended length, boxy silhouette. The go-to for an effortless streetwear look.",
+      imageUrl: "https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?w=800&h=1000&fit=crop&q=85",
+      inStock: 1, featured: 0, newArrival: 1,
+      variants: [
+        { colour: "Black", sizes: [{ size: "S", sku: "BOT-BLK-S", stock: 12 }, { size: "M", sku: "BOT-BLK-M", stock: 16 }, { size: "L", sku: "BOT-BLK-L", stock: 12 }, { size: "XL", sku: "BOT-BLK-XL", stock: 6 }] },
+        { colour: "White", sizes: [{ size: "S", sku: "BOT-WHT-S", stock: 10 }, { size: "M", sku: "BOT-WHT-M", stock: 14 }, { size: "L", sku: "BOT-WHT-L", stock: 10 }, { size: "XL", sku: "BOT-WHT-XL", stock: 5 }] },
+        { colour: "Washed Grey", sizes: [{ size: "S", sku: "BOT-WGR-S", stock: 8 }, { size: "M", sku: "BOT-WGR-M", stock: 11 }, { size: "L", sku: "BOT-WGR-L", stock: 8 }] },
+      ],
+    },
+    {
+      id: "bs-jacket-001", name: "Bevans Street Jacket", slug: "bevans-street-jacket",
+      price: "1299.00", originalPrice: "1599.00", category: "Men's Jackets", gender: "Men",
+      material: "Nylon Shell, Mesh Lining", fit: "Relaxed",
+      description: "Lightweight technical jacket with a premium feel. Zip chest pocket, adjustable hem, water-resistant shell. From the street to anywhere.",
+      imageUrl: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&h=1000&fit=crop&q=85",
+      inStock: 1, featured: 1, newArrival: 0,
+      variants: [
+        { colour: "Black", sizes: [{ size: "S", sku: "BSJ-BLK-S", stock: 5 }, { size: "M", sku: "BSJ-BLK-M", stock: 8 }, { size: "L", sku: "BSJ-BLK-L", stock: 6 }, { size: "XL", sku: "BSJ-BLK-XL", stock: 3 }] },
+        { colour: "Olive", sizes: [{ size: "S", sku: "BSJ-OLV-S", stock: 4 }, { size: "M", sku: "BSJ-OLV-M", stock: 7 }, { size: "L", sku: "BSJ-OLV-L", stock: 5 }, { size: "XL", sku: "BSJ-OLV-XL", stock: 2 }] },
+      ],
+    },
+    {
+      id: "bs-pants-001", name: "Bevans Relaxed Cargo Pants", slug: "bevans-relaxed-cargo-pants",
+      price: "799.00", originalPrice: "", category: "Men's Pants", gender: "Men",
+      material: "100% Cotton Twill", fit: "Relaxed",
+      description: "Utility-inspired cargo pants with a modern relaxed fit. Six-pocket design, adjustable ankle cuffs, straight leg.",
+      imageUrl: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=800&h=1000&fit=crop&q=85",
+      inStock: 1, featured: 0, newArrival: 1,
+      variants: [
+        { colour: "Black", sizes: [{ size: "S", sku: "BCP-BLK-S", stock: 6 }, { size: "M", sku: "BCP-BLK-M", stock: 10 }, { size: "L", sku: "BCP-BLK-L", stock: 8 }, { size: "XL", sku: "BCP-BLK-XL", stock: 4 }] },
+        { colour: "Khaki", sizes: [{ size: "S", sku: "BCP-KHK-S", stock: 5 }, { size: "M", sku: "BCP-KHK-M", stock: 9 }, { size: "L", sku: "BCP-KHK-L", stock: 7 }, { size: "XL", sku: "BCP-KHK-XL", stock: 3 }] },
+        { colour: "Olive", sizes: [{ size: "S", sku: "BCP-OLV-S", stock: 4 }, { size: "M", sku: "BCP-OLV-M", stock: 7 }, { size: "L", sku: "BCP-OLV-L", stock: 5 }] },
+      ],
+    },
+    {
+      id: "bs-cap-001", name: "Bevans Classic Cap", slug: "bevans-classic-cap",
+      price: "299.00", originalPrice: "", category: "Caps", gender: "Unisex",
+      material: "100% Cotton Twill", fit: "One Size",
+      description: "Clean 6-panel structured cap with embroidered Bevans Sons logo. Adjustable strap, curved brim.",
+      imageUrl: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=800&h=1000&fit=crop&q=85",
+      inStock: 1, featured: 0, newArrival: 0,
+      variants: [
+        { colour: "Black", sizes: [{ size: "One Size", sku: "BCC-BLK-OS", stock: 20 }] },
+        { colour: "White", sizes: [{ size: "One Size", sku: "BCC-WHT-OS", stock: 15 }] },
+        { colour: "Tan", sizes: [{ size: "One Size", sku: "BCC-TAN-OS", stock: 12 }] },
+      ],
+    },
+    {
+      id: "bs-dress-001", name: "Bevans Linen Midi Dress", slug: "bevans-linen-midi-dress",
+      price: "699.00", originalPrice: "899.00", category: "Women's Dresses", gender: "Women",
+      material: "55% Linen, 45% Viscose", fit: "Relaxed",
+      description: "Effortlessly elegant. Midi length, wide-leg silhouette, side pockets, V-neckline. A wardrobe staple.",
+      imageUrl: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=800&h=1000&fit=crop&q=85",
+      inStock: 1, featured: 1, newArrival: 1,
+      variants: [
+        { colour: "Ecru", sizes: [{ size: "XS", sku: "BLD-ECR-XS", stock: 5 }, { size: "S", sku: "BLD-ECR-S", stock: 9 }, { size: "M", sku: "BLD-ECR-M", stock: 12 }, { size: "L", sku: "BLD-ECR-L", stock: 8 }, { size: "XL", sku: "BLD-ECR-XL", stock: 4 }] },
+        { colour: "Black", sizes: [{ size: "XS", sku: "BLD-BLK-XS", stock: 4 }, { size: "S", sku: "BLD-BLK-S", stock: 8 }, { size: "M", sku: "BLD-BLK-M", stock: 10 }, { size: "L", sku: "BLD-BLK-L", stock: 7 }, { size: "XL", sku: "BLD-BLK-XL", stock: 3 }] },
+      ],
+    },
+    {
+      id: "bs-top-001", name: "Bevans Ribbed Tank", slug: "bevans-ribbed-tank",
+      price: "249.00", originalPrice: "", category: "Women's Tops", gender: "Women",
+      material: "95% Cotton, 5% Elastane", fit: "Slim",
+      description: "Fine ribbed knit tank with a clean, minimal aesthetic. Pairs perfectly with high-waisted bottoms.",
+      imageUrl: "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=800&h=1000&fit=crop&q=85",
+      inStock: 1, featured: 0, newArrival: 1,
+      variants: [
+        { colour: "White", sizes: [{ size: "XS", sku: "BRT-WHT-XS", stock: 15 }, { size: "S", sku: "BRT-WHT-S", stock: 18 }, { size: "M", sku: "BRT-WHT-M", stock: 20 }, { size: "L", sku: "BRT-WHT-L", stock: 14 }] },
+        { colour: "Black", sizes: [{ size: "XS", sku: "BRT-BLK-XS", stock: 12 }, { size: "S", sku: "BRT-BLK-S", stock: 16 }, { size: "M", sku: "BRT-BLK-M", stock: 18 }, { size: "L", sku: "BRT-BLK-L", stock: 12 }] },
+        { colour: "Chocolate", sizes: [{ size: "XS", sku: "BRT-CHC-XS", stock: 8 }, { size: "S", sku: "BRT-CHC-S", stock: 11 }, { size: "M", sku: "BRT-CHC-M", stock: 13 }, { size: "L", sku: "BRT-CHC-L", stock: 9 }] },
+      ],
+    },
+    {
+      id: "bs-shirt-001", name: "Bevans Oversized Oxford Shirt", slug: "bevans-oversized-oxford-shirt",
+      price: "549.00", originalPrice: "", category: "Men's Shirts", gender: "Men",
+      material: "100% Cotton Oxford Weave", fit: "Oversized",
+      description: "A versatile oversized shirt in premium Oxford cloth. Button-down collar, chest pocket, clean drape. Wear it open or buttoned.",
+      imageUrl: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=800&h=1000&fit=crop&q=85",
+      inStock: 1, featured: 0, newArrival: 0,
+      variants: [
+        { colour: "White", sizes: [{ size: "S", sku: "BOS-WHT-S", stock: 8 }, { size: "M", sku: "BOS-WHT-M", stock: 12 }, { size: "L", sku: "BOS-WHT-L", stock: 10 }, { size: "XL", sku: "BOS-WHT-XL", stock: 5 }] },
+        { colour: "Blue", sizes: [{ size: "S", sku: "BOS-BLU-S", stock: 6 }, { size: "M", sku: "BOS-BLU-M", stock: 10 }, { size: "L", sku: "BOS-BLU-L", stock: 8 }, { size: "XL", sku: "BOS-BLU-XL", stock: 4 }] },
+      ],
+    },
+    {
+      id: "bs-hoodie-003", name: "Bevans Women's Cropped Hoodie", slug: "bevans-womens-cropped-hoodie",
+      price: "599.00", originalPrice: "", category: "Women's Hoodies", gender: "Women",
+      material: "360gsm French Terry", fit: "Cropped",
+      description: "Premium cropped hoodie with a clean, feminine silhouette. Soft brushed interior, kangaroo pocket.",
+      imageUrl: "https://images.unsplash.com/photo-1485518882345-15568b007407?w=800&h=1000&fit=crop&q=85",
+      inStock: 1, featured: 0, newArrival: 1,
+      variants: [
+        { colour: "Pink", sizes: [{ size: "XS", sku: "BWH-PNK-XS", stock: 8 }, { size: "S", sku: "BWH-PNK-S", stock: 12 }, { size: "M", sku: "BWH-PNK-M", stock: 14 }, { size: "L", sku: "BWH-PNK-L", stock: 9 }] },
+        { colour: "Black", sizes: [{ size: "XS", sku: "BWH-BLK-XS", stock: 7 }, { size: "S", sku: "BWH-BLK-S", stock: 10 }, { size: "M", sku: "BWH-BLK-M", stock: 12 }, { size: "L", sku: "BWH-BLK-L", stock: 8 }] },
+        { colour: "Lavender", sizes: [{ size: "XS", sku: "BWH-LAV-XS", stock: 0 }, { size: "S", sku: "BWH-LAV-S", stock: 0 }, { size: "M", sku: "BWH-LAV-M", stock: 5 }, { size: "L", sku: "BWH-LAV-L", stock: 3 }] },
+      ],
+    },
   ];
 
-  const seedInsert = db.transaction((items: typeof products) => {
-    for (const p of items) {
-      insert.run({ ...p, createdAt: now, updatedAt: now });
+  const seedTx = db.transaction(() => {
+    for (const p of products) {
+      insertProduct.run({
+        id: p.id, name: p.name, slug: p.slug,
+        price: p.price, originalPrice: p.originalPrice,
+        category: p.category, gender: p.gender,
+        material: p.material, fit: p.fit,
+        description: p.description, imageUrl: p.imageUrl,
+        inStock: p.inStock, featured: p.featured, newArrival: p.newArrival,
+        createdAt: now, updatedAt: now,
+      });
+
+      for (const colourGroup of p.variants) {
+        for (const v of colourGroup.sizes) {
+          const variantId = `${p.id}-${colourGroup.colour.toLowerCase().replace(/\s+/g, "-")}-${v.size.toLowerCase()}`;
+          insertVariant.run({
+            id: variantId, product_id: p.id,
+            colour: colourGroup.colour, size: v.size,
+            sku: v.sku, stock: v.stock,
+            createdAt: now, updatedAt: now,
+          });
+        }
+      }
     }
   });
-  seedInsert(products);
 
-  db.prepare("INSERT OR IGNORE INTO migrations (name) VALUES (?)").run("seed_products_v1");
-}
-
-function addOriginalPriceColumn(db: Database.Database) {
-  try {
-    db.exec("ALTER TABLE products ADD COLUMN originalPrice TEXT NOT NULL DEFAULT ''");
-  } catch { /* column already exists — ignore */ }
+  seedTx();
 }

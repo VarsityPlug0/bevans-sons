@@ -2,9 +2,9 @@
 import { useEffect, useState } from "react";
 import { Tag, Zap } from "lucide-react";
 
-const VISITOR_KEY   = "daisy_visitor_id";
-const CAPTURED_KEY  = "daisy_lead_captured";
-const DISMISSED_KEY = "daisy_lead_dismissed";
+const VISITOR_KEY   = "bevans_visitor_id";
+const CAPTURED_KEY  = "bevans_lead_captured";
+const DISMISSED_KEY = "bevans_lead_dismissed";
 const DELAY_MS      = 5000;
 const SUPPRESS_DAYS = 30;
 
@@ -55,9 +55,9 @@ export default function LeadCapturePopup() {
         body: JSON.stringify({ visitorId, name, phone, email }),
       });
       localStorage.setItem(CAPTURED_KEY, String(Date.now()));
-      localStorage.setItem("daisy_visitor_name", name);
-      localStorage.setItem("daisy_visitor_phone", phone);
-      localStorage.setItem("daisy_visitor_email", email);
+      localStorage.setItem("bevans_visitor_name", name);
+      localStorage.setItem("bevans_visitor_phone", phone);
+      localStorage.setItem("bevans_visitor_email", email);
     } catch { /* non-fatal */ }
     setLoading(false);
     setStep("done");

@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { name, price, originalPrice, category, description, imageUrl, inStock, featured } = body;
+  const { name, price, originalPrice, category, description, imageUrl, inStock, featured, gender, material, fit, newArrival, slug } = body;
 
   if (!name || !price || !category) {
     return NextResponse.json({ error: "name, price and category are required" }, { status: 400 });
@@ -24,6 +24,7 @@ export async function POST(req: NextRequest) {
 
   const product = createProduct({
     name,
+    slug: slug ?? "",
     price,
     originalPrice: originalPrice ?? "",
     category,
@@ -31,6 +32,10 @@ export async function POST(req: NextRequest) {
     imageUrl: imageUrl ?? "",
     inStock: inStock !== false,
     featured: featured === true,
+    gender: gender ?? null,
+    material: material ?? null,
+    fit: fit ?? null,
+    newArrival: newArrival === true,
   });
 
   exportProductsJson();

@@ -7,7 +7,7 @@ cloudinary.config({
 });
 
 export async function uploadImage(buffer: Buffer, filename: string): Promise<string> {
-  const folder = filename.startsWith("proof-") ? "daisy-co/proofs" : "daisy-co/products";
+  const folder = filename.startsWith("proof-") ? "bevans-sons/proofs" : "bevans-sons/products";
   const publicId = `${folder}/${Date.now()}-${filename.replace(/\.[^.]+$/, "").replace(/[^a-z0-9]/gi, "-")}`;
   const isPdf = filename.toLowerCase().endsWith(".pdf");
 

@@ -39,7 +39,7 @@ const PIPELINE_LABEL: Record<string, string> = {
   awaiting_payment: "Awaiting Payment", active: "Active", completed: "Completed",
 };
 
-const WA_NUM = "27825876811";
+const WA_NUM = "27724816274";
 
 export default function AdminInstallmentsPage() {
   const [tab, setTab] = useState<"applications" | "settings">("applications");
@@ -109,15 +109,15 @@ export default function AdminInstallmentsPage() {
     const num = app.phone.replace(/[\s\-()]/g, "").replace(/^0/, "27");
     const fmt = (n: number) => `R ${Number(n).toLocaleString("en-ZA")}`;
     const messages: Record<string, string> = {
-      new: `Hi ${app.name.split(" ")[0]}, this is Daisy Gadgets Co. We've received your installment application ${app.ref} for the ${app.product_name}. We're reviewing it and will be in touch shortly.`,
+      new: `Hi ${app.name.split(" ")[0]}, this is Bevans Sons We've received your installment application ${app.ref} for the ${app.product_name}. We're reviewing it and will be in touch shortly.`,
       reviewing: `Hi ${app.name.split(" ")[0]}, we're currently reviewing your installment application ${app.ref} for the ${app.product_name}. Could you confirm your ID number and address for verification?`,
       approved: `Hi ${app.name.split(" ")[0]}, great news! 🎉 Your installment application ${app.ref} for the ${app.product_name} has been APPROVED! Your deposit of ${fmt(app.deposit)} gets your plan started. Check your email for full payment details, or reply here and I'll send the bank details.`,
       awaiting_payment: `Hi ${app.name.split(" ")[0]}, we're waiting for your deposit of ${fmt(app.deposit)} to activate your installment plan for the ${app.product_name}. Please make the payment to our account and send proof of payment here. Reference: ${app.ref}`,
       active: `Hi ${app.name.split(" ")[0]}, your installment plan for the ${app.product_name} is active. Your monthly payment is ${fmt(app.monthly_payment)}. Please ensure payments are made on time. Reference: ${app.ref}`,
-      completed: `Hi ${app.name.split(" ")[0]}, congratulations! 🎉 Your installment plan ${app.ref} for the ${app.product_name} is fully paid off. Thank you for choosing Daisy Gadgets Co.!`,
+      completed: `Hi ${app.name.split(" ")[0]}, congratulations! 🎉 Your installment plan ${app.ref} for the ${app.product_name} is fully paid off. Thank you for choosing Bevans Sons!`,
       declined: `Hi ${app.name.split(" ")[0]}, unfortunately your installment application ${app.ref} for the ${app.product_name} was not approved at this time. Please contact us if you'd like to discuss alternatives or other payment options.`,
     };
-    const text = messages[app.status] ?? `Hi ${app.name.split(" ")[0]}, this is Daisy Gadgets Co. regarding your installment application ${app.ref} for the ${app.product_name}.`;
+    const text = messages[app.status] ?? `Hi ${app.name.split(" ")[0]}, this is Bevans Sons regarding your installment application ${app.ref} for the ${app.product_name}.`;
     return `https://wa.me/${num}?text=${encodeURIComponent(text)}`;
   }
 

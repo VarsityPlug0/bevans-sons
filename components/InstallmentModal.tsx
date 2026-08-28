@@ -36,7 +36,7 @@ function track(event: string, extra?: Record<string, unknown>) {
   }).catch(() => {});
 }
 
-const WA_NUM = "27825876811";
+const WA_NUM = "27724816274";
 
 export default function InstallmentModal({ product, settings, onClose }: Props) {
   const price = parseFloat(product.price.replace(/[^0-9.]/g, "")) || 0;
@@ -114,9 +114,9 @@ export default function InstallmentModal({ product, settings, onClose }: Props) 
       setResult({ ref: data.ref, phone: form.phone });
       setStep("success");
 
-      // Direct WhatsApp redirect to the recent number (082 587 6811 / 27825876811)
+      // Direct WhatsApp redirect to the recent number (WhatsApp / 27724816274)
       const msg = encodeURIComponent(
-        `Hi Daisy Gadgets Co, I submitted an installment application for the ${product.name} (${term} months, R${monthly.toLocaleString("en-ZA")}/mo). Application Ref: ${data.ref}`
+        `Hi Bevans Sons, I submitted an installment application for the ${product.name} (${term} months, R${monthly.toLocaleString("en-ZA")}/mo). Application Ref: ${data.ref}`
       );
       const waUrl = `https://wa.me/${WA_NUM}?text=${msg}`;
       try {
@@ -135,7 +135,7 @@ export default function InstallmentModal({ product, settings, onClose }: Props) 
     if (result) {
       track("whatsapp_clicked", { product_id: product.id, ref: result.ref });
       const msg = encodeURIComponent(
-        `Hi Daisy Gadgets Co, I submitted an installment application for the ${product.name} (${term} months, R${monthly.toLocaleString("en-ZA")}/mo). Application Ref: ${result.ref}`
+        `Hi Bevans Sons, I submitted an installment application for the ${product.name} (${term} months, R${monthly.toLocaleString("en-ZA")}/mo). Application Ref: ${result.ref}`
       );
       window.open(`https://wa.me/${WA_NUM}?text=${msg}`, "_blank");
     }
@@ -293,7 +293,7 @@ export default function InstallmentModal({ product, settings, onClose }: Props) 
                   {consent && <Check size={11} color="black" strokeWidth={3} />}
                 </div>
                 <p className="text-gray-500 text-xs leading-relaxed">
-                  I consent to Daisy Gadgets Co. collecting and using my personal information to process this installment application and contact me via WhatsApp.
+                  I consent to Bevans Sons collecting and using my personal information to process this installment application and contact me via WhatsApp.
                 </p>
               </label>
             </div>
@@ -351,7 +351,7 @@ export default function InstallmentModal({ product, settings, onClose }: Props) 
               </div>
               <a
                 href={`https://wa.me/${WA_NUM}?text=${encodeURIComponent(
-                  `Hi Daisy Gadgets Co, I submitted an installment application for the ${product.name} (${term} months, R${monthly.toLocaleString("en-ZA")}/mo). Application Ref: ${result.ref}`
+                  `Hi Bevans Sons, I submitted an installment application for the ${product.name} (${term} months, R${monthly.toLocaleString("en-ZA")}/mo). Application Ref: ${result.ref}`
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -360,7 +360,7 @@ export default function InstallmentModal({ product, settings, onClose }: Props) 
                 style={{ background: "#25D366" }}
               >
                 <MessageCircle size={20} />
-                CONTINUE ON WHATSAPP (+27 82 587 6811)
+                CONTINUE ON WHATSAPP (WhatsApp)
               </a>
               <button onClick={onClose}
                 className="w-full text-center text-gray-600 text-sm hover:text-gray-400 transition-colors py-2">

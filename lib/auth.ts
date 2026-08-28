@@ -2,12 +2,16 @@ import { cookies } from "next/headers";
 import { createHmac, timingSafeEqual } from "crypto";
 
 const SECRET = process.env.ADMIN_SECRET;
-if (!SECRET && process.env.NODE_ENV === "production") {
-  throw new Error("ADMIN_SECRET env var is required in production");
+if (!SECRET) {
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("ADMIN_SECRET env var is required in production");
+  } else {
+    console.warn("[bevans] ADMIN_SECRET is not set. Set it in your .env file.");
+  }
 }
-const _SECRET = SECRET ?? "daisy-co-admin-secret-dev-only";
+const _SECRET = SECRET ?? "bevans-sons-dev-secret-change-me";
 
-const COOKIE_NAME = "daisy_admin_session";
+const COOKIE_NAME = "bevans_admin_session";
 const MAX_AGE = 60 * 60 * 8; // 8 hours
 
 export function signSession(userId: string): string {
@@ -21,14 +25,12 @@ export function verifySession(token: string): boolean {
   if (parts.length !== 3) return false;
   const [userId, tsStr, sig] = parts;
 
-  // Check token age against MAX_AGE
   const ts = parseInt(tsStr, 10);
   if (isNaN(ts) || Date.now() - ts > MAX_AGE * 1000) return false;
 
   const payload = `${userId}:${tsStr}`;
   const expected = createHmac("sha256", _SECRET).update(payload).digest("hex");
 
-  // Timing-safe comparison
   try {
     return timingSafeEqual(Buffer.from(sig, "hex"), Buffer.from(expected, "hex"));
   } catch {
