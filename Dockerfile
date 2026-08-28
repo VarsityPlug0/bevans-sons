@@ -1,4 +1,7 @@
-FROM node:20
+FROM node:20-bullseye
+
+# Build tools needed for native modules (better-sqlite3)
+RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -7,6 +10,8 @@ RUN npm ci
 
 COPY . .
 
+# Increase memory for Next.js/Turbopack build
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN npm run build
 
 EXPOSE 3000
