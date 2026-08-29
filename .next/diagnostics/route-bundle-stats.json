@@ -309,21 +309,6 @@
     ]
   },
   {
-    "route": "/solar/inverters-batteries",
-    "firstLoadUncompressedJsBytes": 534422,
-    "firstLoadChunkPaths": [
-      ".next/static/chunks/44oxwbh__ebkl.js",
-      ".next/static/chunks/1jjl7z3fjdjdu.js",
-      ".next/static/chunks/1cb58d1n_pa7t.js",
-      ".next/static/chunks/15xu1ty0vby04.js",
-      ".next/static/chunks/3ivcc6t1s04dh.js",
-      ".next/static/chunks/06w359146frpk.js",
-      ".next/static/chunks/3eugurg7-xpx7.js",
-      ".next/static/chunks/1xq5hd4t-wj19.js",
-      ".next/static/chunks/turbopack-3vgjv2mewyq9y.js"
-    ]
-  },
-  {
     "route": "/admin/dashboard/orders",
     "firstLoadUncompressedJsBytes": 523245,
     "firstLoadChunkPaths": [

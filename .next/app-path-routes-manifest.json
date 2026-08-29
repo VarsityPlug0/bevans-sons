@@ -17,7 +17,6 @@
   "/(site)/reviews/page": "/reviews",
   "/(site)/shop/[id]/page": "/shop/[id]",
   "/(site)/shop/page": "/shop",
-  "/(site)/solar/inverters-batteries/page": "/solar/inverters-batteries",
   "/(site)/special-offers/page": "/special-offers",
   "/(site)/track-order/page": "/track-order",
   "/_global-error/page": "/_global-error",

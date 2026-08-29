@@ -17,7 +17,6 @@
   "/(site)/reviews/page": "app/(site)/reviews/page.js",
   "/(site)/shop/[id]/page": "app/(site)/shop/[id]/page.js",
   "/(site)/shop/page": "app/(site)/shop/page.js",
-  "/(site)/solar/inverters-batteries/page": "app/(site)/solar/inverters-batteries/page.js",
   "/(site)/special-offers/page": "app/(site)/special-offers/page.js",
   "/(site)/track-order/page": "app/(site)/track-order/page.js",
   "/_global-error/page": "app/_global-error/page.js",
