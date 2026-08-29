@@ -209,15 +209,6 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
-// Validate ../../app/(site)/solar/inverters-batteries/page.tsx
-{
-  type __IsExpected<Specific extends AppPageConfig<"/solar/inverters-batteries">> = Specific
-  const handler = {} as typeof import("../../app/(site)/solar/inverters-batteries/page.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
-}
-
 // Validate ../../app/(site)/special-offers/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/special-offers">> = Specific

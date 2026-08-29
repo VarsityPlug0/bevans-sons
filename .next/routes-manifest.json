@@ -486,12 +486,6 @@
       "namedRegex": "^/sitemap\\.xml(?:/)?$"
     },
     {
-      "page": "/solar/inverters-batteries",
-      "regex": "^/solar/inverters\\-batteries(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/solar/inverters\\-batteries(?:/)?$"
-    },
-    {
       "page": "/special-offers",
       "regex": "^/special\\-offers(?:/)?$",
       "routeKeys": {},
