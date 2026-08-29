@@ -402,12 +402,6 @@
       "namedRegex": "^/delivery(?:/)?$"
     },
     {
-      "page": "/electronics",
-      "regex": "^/electronics(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/electronics(?:/)?$"
-    },
-    {
       "page": "/faq",
       "regex": "^/faq(?:/)?$",
       "routeKeys": {},

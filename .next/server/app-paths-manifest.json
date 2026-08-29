@@ -4,7 +4,6 @@
   "/(site)/clothing/page": "app/(site)/clothing/page.js",
   "/(site)/contact/page": "app/(site)/contact/page.js",
   "/(site)/delivery/page": "app/(site)/delivery/page.js",
-  "/(site)/electronics/page": "app/(site)/electronics/page.js",
   "/(site)/faq/page": "app/(site)/faq/page.js",
   "/(site)/new-arrivals/page": "app/(site)/new-arrivals/page.js",
   "/(site)/page": "app/(site)/page.js",
