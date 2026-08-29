@@ -90,7 +90,7 @@ export default async function SpecialOffersPage() {
                     <div className="w-full py-2.5 rounded-xl text-sm font-semibold text-center text-white border border-[#2a2a2a] group-hover:border-[#D4AF37]/50 transition-colors">
                       View Details
                     </div>
-                    <AddToEnquiry id={p.id} slug={p.slug} />
+                    <AddToEnquiry id={p.id} name={p.name} price={p.price} imageUrl={p.imageUrl} category={p.category} />
                   </div>
                 </div>
               </Link>

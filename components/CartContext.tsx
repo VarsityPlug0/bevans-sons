@@ -6,34 +6,39 @@ import { X, ShoppingBag, Trash2, Plus, Minus } from "lucide-react";
 
 export interface CartItem {
   id: string;
-  variantId: string;
+  variantId?: string;
   name: string;
-  price: number;
-  originalPrice?: number;
+  price: string;
+  originalPrice?: string;
   imageUrl: string;
   category: string;
-  size: string;
-  colour: string;
-  sku: string;
+  size?: string;
+  colour?: string;
+  sku?: string;
   qty: number;
+}
+
+function itemKey(item: Omit<CartItem, "qty"> | CartItem): string {
+  return item.variantId ?? item.id;
 }
 
 type CartAction =
   | { type: "ADD"; item: Omit<CartItem, "qty"> }
-  | { type: "REMOVE"; variantId: string }
-  | { type: "QTY"; variantId: string; qty: number }
+  | { type: "REMOVE"; key: string }
+  | { type: "QTY"; key: string; qty: number }
   | { type: "CLEAR" }
   | { type: "LOAD"; items: CartItem[] };
 
 function cartReducer(state: CartItem[], action: CartAction): CartItem[] {
   switch (action.type) {
     case "ADD": {
-      const existing = state.find((i) => i.variantId === action.item.variantId);
-      if (existing) return state.map((i) => i.variantId === action.item.variantId ? { ...i, qty: i.qty + 1 } : i);
+      const key = itemKey(action.item);
+      const existing = state.find((i) => itemKey(i) === key);
+      if (existing) return state.map((i) => itemKey(i) === key ? { ...i, qty: i.qty + 1 } : i);
       return [...state, { ...action.item, qty: 1 }];
     }
-    case "REMOVE": return state.filter((i) => i.variantId !== action.variantId);
-    case "QTY":   return state.map((i) => i.variantId === action.variantId ? { ...i, qty: Math.max(1, action.qty) } : i);
+    case "REMOVE": return state.filter((i) => itemKey(i) !== action.key);
+    case "QTY":   return state.map((i) => itemKey(i) === action.key ? { ...i, qty: Math.max(1, action.qty) } : i);
     case "CLEAR": return [];
     case "LOAD":  return action.items;
     default:      return state;
@@ -45,8 +50,8 @@ interface CartContextValue {
   count: number;
   total: number;
   add: (item: Omit<CartItem, "qty">) => void;
-  remove: (variantId: string) => void;
-  setQty: (variantId: string, qty: number) => void;
+  remove: (key: string) => void;
+  setQty: (key: string, qty: number) => void;
   clear: () => void;
   openCart: () => void;
 }
@@ -80,7 +85,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [items, hydrated]);
 
   const count = items.reduce((s, i) => s + i.qty, 0);
-  const total = items.reduce((s, i) => s + i.price * i.qty, 0);
+  const total = items.reduce((s, i) => s + (parseFloat(i.price.replace(/[^0-9.]/g, "")) || 0) * i.qty, 0);
 
   const ctx: CartContextValue = {
     items, count, total,
@@ -92,12 +97,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         fetch("/api/track/cart", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ visitorId, visitorEmail, productId: item.id, productName: item.name, price: String(item.price), category: item.category }),
+          body: JSON.stringify({ visitorId, visitorEmail, productId: item.id, productName: item.name, price: item.price, category: item.category }),
         }).catch(() => {});
       } catch { }
     },
-    remove: (variantId) => dispatch({ type: "REMOVE", variantId }),
-    setQty: (variantId, qty) => dispatch({ type: "QTY", variantId, qty }),
+    remove: (key) => dispatch({ type: "REMOVE", key }),
+    setQty: (key, qty) => dispatch({ type: "QTY", key, qty }),
     clear: () => dispatch({ type: "CLEAR" }),
     openCart: () => setOpen(true),
   };
@@ -152,7 +157,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           ) : (
             <div className="px-4 py-4 space-y-3">
               {items.map((item) => (
-                <div key={item.variantId} className="flex gap-4 bg-[#111111] border border-[#1A1A1A] rounded-xl p-4">
+                <div key={itemKey(item)} className="flex gap-4 bg-[#111111] border border-[#1A1A1A] rounded-xl p-4">
                   {item.imageUrl && (
                     <div className="w-16 h-20 rounded overflow-hidden shrink-0 bg-[#0A0A0A]">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -161,27 +166,29 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                   )}
                   <div className="flex-1 min-w-0">
                     <p className="text-white text-sm font-medium leading-snug">{item.name}</p>
-                    <p className="text-gray-500 text-xs mt-0.5">{item.colour} · {item.size}</p>
+                    {(item.colour || item.size) && (
+                      <p className="text-gray-500 text-xs mt-0.5">{[item.colour, item.size].filter(Boolean).join(" · ")}</p>
+                    )}
                     <div className="flex items-center gap-2 mt-1">
-                      <p className="text-white font-bold text-sm">R {(item.price * item.qty).toLocaleString("en-ZA")}</p>
-                      {item.originalPrice && item.originalPrice > item.price && (
-                        <p className="text-gray-600 text-xs line-through">R {item.originalPrice.toLocaleString("en-ZA")}</p>
+                      <p className="text-white font-bold text-sm">R {((parseFloat(item.price.replace(/[^0-9.]/g, "")) || 0) * item.qty).toLocaleString("en-ZA")}</p>
+                      {item.originalPrice && (
+                        <p className="text-gray-600 text-xs line-through">{item.originalPrice}</p>
                       )}
                     </div>
                     <div className="flex items-center gap-2 mt-2">
                       <button
-                        onClick={() => ctx.setQty(item.variantId, item.qty - 1)}
+                        onClick={() => ctx.setQty(itemKey(item), item.qty - 1)}
                         disabled={item.qty <= 1}
                         className="w-6 h-6 rounded border border-[#2a2a2a] flex items-center justify-center text-gray-400 hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                       >
                         <Minus size={11} />
                       </button>
                       <span className="text-white text-xs font-bold w-5 text-center">{item.qty}</span>
-                      <button onClick={() => ctx.setQty(item.variantId, item.qty + 1)}
+                      <button onClick={() => ctx.setQty(itemKey(item), item.qty + 1)}
                         className="w-6 h-6 rounded border border-[#2a2a2a] flex items-center justify-center text-gray-400 hover:text-white transition-colors">
                         <Plus size={11} />
                       </button>
-                      <button onClick={() => ctx.remove(item.variantId)}
+                      <button onClick={() => ctx.remove(itemKey(item))}
                         className="ml-auto w-6 h-6 rounded flex items-center justify-center text-gray-600 hover:text-red-400 transition-colors">
                         <Trash2 size={11} />
                       </button>
