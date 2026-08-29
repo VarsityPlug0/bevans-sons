@@ -1,3 +1,0 @@
-module.exports=[46106,a=>{"use strict";var b=a.i(7997);a.s(["default",0,function({children:a}){return(0,b.jsx)(b.Fragment,{children:a})},"metadata",0,{title:"Track Your Order",description:"Track your Bevans Sons order in real time. Enter your order reference number to see the current status and delivery updates.",alternates:{canonical:"https://bevanssons.store/track-order"}}])},24614,function(a){a.n(a.i(46106))}];
-
-//# sourceMappingURL=app_%28site%29_track-order_layout_tsx_1nl8qdc._.js.map

@@ -1,6 +1,0 @@
-User-Agent: *
-Allow: /
-Disallow: /admin
-Disallow: /api/
-
-Sitemap: https://bevans-sons.onrender.com/sitemap.xml

@@ -1,3 +1,0 @@
-module.exports=[29719,a=>{"use strict";var b=a.i(7997);a.s(["default",0,function({children:a}){return(0,b.jsx)(b.Fragment,{children:a})},"metadata",0,{title:"Contact Us & Get a Free Quote | Bevans Sons",description:"Get a free solar or electronics quote from Bevans Sons Contact us via WhatsApp, email or our online form. We respond fast — nationwide South Africa."}])},60819,function(a){a.n(a.i(29719))}];
-
-//# sourceMappingURL=app_%28site%29_contact_layout_tsx_1af2of8._.js.map
