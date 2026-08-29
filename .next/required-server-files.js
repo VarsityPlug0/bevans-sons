@@ -118,7 +118,7 @@ self.__SERVER_FILES_MANIFEST={
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "C:\\Users\\money\\daisy-co",
+    "outputFileTracingRoot": "/home/runner/work/bevans-sons/bevans-sons",
     "enablePrerenderSourceMaps": true,
     "cacheComponents": false,
     "cacheLife": {
@@ -338,9 +338,9 @@ self.__SERVER_FILES_MANIFEST={
       "cloudinary",
       "nodemailer"
     ],
-    "repoRoot": "C:\\Users\\money\\daisy-co",
+    "repoRoot": "/home/runner/work/bevans-sons/bevans-sons",
     "turbopack": {
-      "root": "C:\\Users\\money\\daisy-co"
+      "root": "/home/runner/work/bevans-sons/bevans-sons"
     },
     "distDirRoot": ".next",
     "_originalRedirects": [
@@ -361,27 +361,27 @@ self.__SERVER_FILES_MANIFEST={
       }
     ]
   },
-  "appDir": "C:\\Users\\money\\daisy-co",
+  "appDir": "/home/runner/work/bevans-sons/bevans-sons",
   "relativeAppDir": "",
   "files": [
-    ".next\\package.json",
-    ".next\\routes-manifest.json",
-    ".next\\server\\pages-manifest.json",
-    ".next\\build-manifest.json",
-    ".next\\prerender-manifest.json",
-    ".next\\server\\functions-config-manifest.json",
-    ".next\\server\\middleware-manifest.json",
-    ".next\\server\\middleware-build-manifest.js",
-    ".next\\server\\app-paths-manifest.json",
-    ".next\\app-path-routes-manifest.json",
-    ".next\\server\\server-reference-manifest.js",
-    ".next\\server\\server-reference-manifest.json",
-    ".next\\server\\prefetch-hints.json",
-    ".next\\BUILD_ID",
-    ".next\\server\\next-font-manifest.js",
-    ".next\\server\\next-font-manifest.json",
-    ".next\\required-server-files.json",
-    ".next\\server\\instrumentation.js"
+    ".next/package.json",
+    ".next/routes-manifest.json",
+    ".next/server/pages-manifest.json",
+    ".next/build-manifest.json",
+    ".next/prerender-manifest.json",
+    ".next/server/functions-config-manifest.json",
+    ".next/server/middleware-manifest.json",
+    ".next/server/middleware-build-manifest.js",
+    ".next/server/app-paths-manifest.json",
+    ".next/app-path-routes-manifest.json",
+    ".next/server/server-reference-manifest.js",
+    ".next/server/server-reference-manifest.json",
+    ".next/server/prefetch-hints.json",
+    ".next/BUILD_ID",
+    ".next/server/next-font-manifest.js",
+    ".next/server/next-font-manifest.json",
+    ".next/required-server-files.json",
+    ".next/server/instrumentation.js"
   ],
   "ignore": []
 }
