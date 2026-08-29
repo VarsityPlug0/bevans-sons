@@ -16,6 +16,7 @@
 # next.js — exclude cache but keep server bundle for Docker deploy
 .next/cache/
 .next/dev/
+.next/node_modules/
 
 /out/
 
