@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Truck, MapPin, Clock, Globe, Package } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Delivery Information | Bevans Sons",
+  title: "Delivery Information | Daisy Gadgets Co.",
   description: "Learn about our delivery options, timeframes, and shipping coverage. Same-day delivery in South Africa. Worldwide shipping available.",
 };
 
@@ -78,7 +78,7 @@ export default function DeliveryPage() {
         ].map(([q, a]) => (
           <details key={q as string} className="group bg-[#111111] border border-[#1F1F1F] rounded-2xl overflow-hidden">
             <summary className="flex items-center justify-between px-6 py-5 cursor-pointer select-none list-none">
-              <span style={{ fontFamily: "var(--font-inter)", fontWeight: 600, fontSize: 14, color: "#F0F0F0" }}>{q as string}</span>
+              <span style={{ fontFamily: "var(--font-outfit)", fontWeight: 600, fontSize: 14, color: "#F0F0F0" }}>{q as string}</span>
               <svg className="shrink-0 ml-3 transition-transform duration-200 group-open:rotate-180" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2.5"><path d="M6 9l6 6 6-6" /></svg>
             </summary>
             <p className="px-6 pb-5 text-gray-400 text-sm leading-relaxed border-t border-[#1F1F1F] pt-4">{a as string}</p>
@@ -90,7 +90,7 @@ export default function DeliveryPage() {
         <h3 className="text-xl font-bold text-white mb-3">Need a delivery quote?</h3>
         <p className="text-gray-400 text-sm mb-6">Chat with us on WhatsApp for international shipping quotes and special delivery arrangements.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="https://wa.me/27724816274" target="_blank" rel="noopener noreferrer" className="btn-gold px-8 py-3.5 rounded-xl font-bold">Chat on WhatsApp</a>
+          <a href="https://wa.me/27825876811" target="_blank" rel="noopener noreferrer" className="btn-gold px-8 py-3.5 rounded-xl font-bold">Chat on WhatsApp</a>
           <Link href="/track-order" className="btn-outline px-8 py-3.5 rounded-xl font-bold">Track My Order</Link>
         </div>
       </div>

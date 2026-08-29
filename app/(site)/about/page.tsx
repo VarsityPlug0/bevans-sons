@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ShieldCheck, Truck, BadgeCheck, Headphones, MapPin, Phone, Mail, Building2 } from "lucide-react";
-// Phone/Mail shown as static placeholders until contact details are confirmed
+import { ShieldCheck, Truck, BadgeCheck, Headphones, MapPin, Phone, Mail } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "About Us | Bevans Sons",
-  description: "Bevans Sons is a registered South African clothing brand — premium streetwear, hoodies, tees, jackets and more. Founded by Bevan Mkhabele, operating online across South Africa.",
+  title: "About Us | Daisy Gadgets Co. — Premium Gadgets Worldwide",
+  description: "Daisy Gadgets Co. is a proudly South African gadget retailer offering premium electronics, appliances, gaming, solar & more with worldwide shipping.",
 };
 
 const values = [
-  { icon: BadgeCheck, title: "Quality First",    desc: "Every piece is quality-checked before it ships. No compromises." },
+  { icon: BadgeCheck, title: "Authenticity",     desc: "Every product is 100% genuine. We never sell counterfeit goods." },
   { icon: ShieldCheck, title: "Transparency",    desc: "Clear pricing, honest communication, no hidden fees." },
   { icon: Truck,       title: "Reliability",     desc: "We deliver on our promises — fast shipping, secure packaging." },
   { icon: Headphones,  title: "Customer First",  desc: "Real human support via WhatsApp. We're here when you need us." },
@@ -28,65 +27,54 @@ export default function AboutPage() {
       {/* Header */}
       <div className="mb-16 text-center">
         <p className="section-label mb-3">Our Story</p>
-        <h1
-          className="text-4xl md:text-5xl font-bold text-white mb-6"
-          style={{ fontFamily: "var(--font-playfair)" }}
-        >
-          About Bevans Sons
+        <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6">
+          About <span className="gold-text">Daisy Gadgets Co.</span>
         </h1>
         <p className="text-gray-400 text-lg leading-relaxed max-w-2xl mx-auto">
-          A proudly South African clothing brand — crafting premium streetwear and everyday essentials for those who wear their confidence.
+          We&apos;re a proudly South African gadget retailer on a mission to make premium technology accessible to everyone — locally and worldwide.
         </p>
       </div>
 
       {/* Mission */}
-      <div className="bg-[#111111] border border-[#1F1F1F] rounded-3xl p-10 mb-12 text-center">
-        <p className="section-label mb-4">Our Mission</p>
-        <p className="text-white text-xl md:text-2xl font-bold leading-relaxed max-w-3xl mx-auto" style={{ fontFamily: "var(--font-playfair)" }}>
-          &ldquo;Premium clothing. Crafted for the Bold.&rdquo;
+      <div className="bg-[#111111] border border-[#D4AF37]/20 rounded-3xl p-10 mb-12 text-center">
+        <p className="text-[#D4AF37] text-xs uppercase tracking-widest font-bold mb-4">Our Mission</p>
+        <p className="text-white text-xl md:text-2xl font-bold leading-relaxed max-w-3xl mx-auto">
+          &ldquo;Premium gadgets for everyday convenience. Worldwide shipping available. Same-day delivery in South Africa.&rdquo;
         </p>
       </div>
 
-      {/* Story + Contact */}
+      {/* Story */}
       <div className="grid md:grid-cols-2 gap-10 mb-16">
         <div>
           <h2 className="text-2xl font-bold text-white mb-4">Who We Are</h2>
           <p className="text-gray-400 leading-relaxed mb-4">
-            Bevans Sons (Pty) Ltd was founded by Bevan Ndzhaka Mkhabele in September 2023 with a simple vision: to give South Africans access to premium clothing at fair prices, backed by genuine service and after-sales support.
+            Daisy Gadgets Co. was founded with a simple vision: to offer South Africans access to the best gadgets at fair prices, backed by reliable service and genuine after-sales support.
           </p>
           <p className="text-gray-400 leading-relaxed mb-4">
-            Based in South Africa, we serve customers across all 9 South African provinces and ship internationally. Our range covers men&apos;s and women&apos;s clothing — hoodies, tees, jackets, streetwear, accessories and more.
+            Based in Bellville, Cape Town, we serve customers across all 9 South African provinces and ship internationally. Whether you&apos;re buying an iPhone, a PS5, a solar inverter, or a new fridge — we have you covered.
           </p>
           <p className="text-gray-400 leading-relaxed">
-            We&apos;re available via WhatsApp every day to help you find the right size, track your order, or resolve any issue — fast.
+            Our team is available via WhatsApp every day to help you choose the right product, track your order, or resolve any issue.
           </p>
         </div>
-
-        {/* Contact card */}
         <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-7">
-          <h3 className="text-white font-bold text-lg mb-5">Contact &amp; Company Info</h3>
+          <h3 className="text-white font-bold text-lg mb-5">Find Us</h3>
           <div className="space-y-4 text-sm">
-            <div className="flex items-center gap-3">
-              <MapPin size={16} className="text-gray-400 shrink-0" />
-              <p className="text-gray-400">South Africa — Online Only</p>
-            </div>
-            <div className="flex items-center gap-3">
-              <Phone size={16} className="text-gray-400 shrink-0" />
-              <span className="text-gray-400">WhatsApp — coming soon</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <Mail size={16} className="text-gray-400 shrink-0" />
-              <Link href="/contact" className="text-white hover:text-gray-300 transition-colors">
-                Contact Us
-              </Link>
-            </div>
-            <div className="flex items-start gap-3 pt-3 border-t border-[#1F1F1F]">
-              <Building2 size={16} className="text-gray-400 shrink-0 mt-0.5" />
+            <div className="flex items-start gap-3">
+              <MapPin size={16} color="#D4AF37" className="shrink-0 mt-0.5" />
               <div>
-                <p className="text-white font-medium">Bevans Sons (Pty) Ltd</p>
-                <p className="text-gray-500">Reg: 2023/116995/07</p>
-                <p className="text-gray-500">CIPC Registered — In Business since 26 Sep 2023</p>
+                <p className="text-white font-medium">Unit 7, Eagle Street</p>
+                <p className="text-gray-500">Okavango Park, Bellville, Cape Town</p>
+                <p className="text-gray-500">South Africa</p>
               </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Phone size={16} color="#D4AF37" className="shrink-0" />
+              <a href="https://wa.me/27825876811" className="text-white hover:text-[#D4AF37] transition-colors">+27 82 587 6811</a>
+            </div>
+            <div className="flex items-center gap-3">
+              <Mail size={16} color="#D4AF37" className="shrink-0" />
+              <a href="mailto:daisygadgetsco@gmail.com" className="text-white hover:text-[#D4AF37] transition-colors">daisygadgetsco@gmail.com</a>
             </div>
           </div>
         </div>
@@ -98,8 +86,8 @@ export default function AboutPage() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {values.map(({ icon: Icon, title, desc }) => (
             <div key={title} className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-6 text-center">
-              <div className="w-11 h-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-3">
-                <Icon size={20} className="text-white" strokeWidth={1.8} />
+              <div className="w-11 h-11 rounded-xl bg-[#D4AF37]/10 flex items-center justify-center mx-auto mb-3">
+                <Icon size={20} color="#D4AF37" strokeWidth={1.8} />
               </div>
               <h3 className="text-white font-bold text-sm mb-2">{title}</h3>
               <p className="text-gray-500 text-xs leading-relaxed">{desc}</p>
@@ -113,16 +101,9 @@ export default function AboutPage() {
         <h2 className="text-xl font-bold text-white mb-6">Where We Deliver</h2>
         <div className="flex flex-wrap gap-2">
           {areas.map((a) => (
-            <span
-              key={a}
-              className={`text-xs font-semibold px-3 py-1.5 rounded-full border ${
-                a.includes("International")
-                  ? "border-white/30 text-white bg-white/5"
-                  : "border-[#2a2a2a] text-gray-400"
-              }`}
-            >
-              {a}
-            </span>
+            <span key={a} className={`text-xs font-semibold px-3 py-1.5 rounded-full border ${
+              a.includes("International") ? "border-[#D4AF37]/40 text-[#D4AF37] bg-[#D4AF37]/5" : "border-[#2a2a2a] text-gray-400"
+            }`}>{a}</span>
           ))}
         </div>
       </div>
@@ -132,8 +113,9 @@ export default function AboutPage() {
         <h2 className="text-2xl font-bold text-white mb-4">Ready to Shop?</h2>
         <p className="text-gray-400 mb-8">Browse our full catalogue or chat with us on WhatsApp to get started.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href="/shop" className="btn-primary px-10 py-4 rounded-xl font-bold">Shop Now</Link>
-          <Link href="/contact" className="btn-outline px-10 py-4 rounded-xl font-bold">Contact Us</Link>
+          <Link href="/shop" className="btn-gold px-10 py-4 rounded-xl font-bold">Shop Now</Link>
+          <a href="https://wa.me/27825876811" target="_blank" rel="noopener noreferrer"
+            className="btn-outline px-10 py-4 rounded-xl font-bold">Chat on WhatsApp</a>
         </div>
       </div>
 

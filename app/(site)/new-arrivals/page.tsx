@@ -8,7 +8,7 @@ import AddToEnquiry from "@/app/(site)/shop/AddToEnquiry";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "New Arrivals | Bevans Sons",
+  title: "New Arrivals | Daisy Gadgets Co.",
   description: "Shop the latest gadgets just added to our store. New smartphones, TVs, gaming consoles, laptops and more.",
 };
 
@@ -59,7 +59,7 @@ export default async function NewArrivalsPage() {
                 <p className="text-[10px] text-[#D4AF37] uppercase tracking-wider mb-1.5">{p.category}</p>
                 <p className="font-semibold text-white text-sm leading-snug mb-2 flex-1 line-clamp-2">{p.name}</p>
                 <p className="text-[#D4AF37] font-bold text-lg mb-3">{p.price}</p>
-                <AddToEnquiry id={p.id} slug={p.slug} />
+                <AddToEnquiry id={p.id} name={p.name} price={p.price} imageUrl={p.imageUrl} category={p.category} />
               </div>
             </Link>
           ))}

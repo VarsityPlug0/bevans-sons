@@ -2,48 +2,33 @@
 
 import { useState, useRef, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { CATEGORIES, MEN_CATEGORIES, WOMEN_CATEGORIES, UNISEX_CATEGORIES, ACCESSORIES_CATEGORIES } from "@/lib/categories";
+import { DEVICE_CATEGORIES, CLOTHING_CATEGORIES, isClothingCategory, isDeviceCategory } from "@/lib/categories";
 import {
   Search, X, LayoutGrid, ChevronDown,
-  Shirt, Sparkles, Users, ShoppingBag, Tag,
+  Smartphone, Tv, Gamepad2, Monitor, Tablet, Sofa,
+  WashingMachine, ChefHat, Zap, Car, Printer, Laptop,
+  Shirt, Sparkles, Flame, Footprints, Tag, Layers,
 } from "lucide-react";
 
-const CAT_ICON: Record<string, { icon: React.ElementType; color: string }> = {
-  "Men's T-Shirts":    { icon: Shirt,       color: "#3B82F6" },
-  "Men's Hoodies":     { icon: Shirt,       color: "#6366F1" },
-  "Men's Shirts":      { icon: Shirt,       color: "#0EA5E9" },
-  "Men's Jackets":     { icon: Shirt,       color: "#1D4ED8" },
-  "Men's Pants":       { icon: Shirt,       color: "#2563EB" },
-  "Men's Shorts":      { icon: Shirt,       color: "#60A5FA" },
-  "Women's Tops":      { icon: Sparkles,    color: "#EC4899" },
-  "Women's Dresses":   { icon: Sparkles,    color: "#F43F5E" },
-  "Women's Hoodies":   { icon: Sparkles,    color: "#DB2777" },
-  "Women's Jackets":   { icon: Sparkles,    color: "#BE185D" },
-  "Women's Pants":     { icon: Sparkles,    color: "#F9A8D4" },
-  "Women's Shorts":    { icon: Sparkles,    color: "#FBCFE8" },
-  "Unisex T-Shirts":   { icon: Users,       color: "#8B5CF6" },
-  "Unisex Hoodies":    { icon: Users,       color: "#7C3AED" },
-  "Streetwear":        { icon: ShoppingBag, color: "#F97316" },
-  "Caps":              { icon: Tag,         color: "#D97706" },
-  "Bags":              { icon: ShoppingBag, color: "#92400E" },
-  "Sneakers":          { icon: Tag,         color: "#065F46" },
-  "Accessories":       { icon: Tag,         color: "#6B7280" },
-};
-
-const GENDER_TABS = [
-  { id: "all",   label: "All",         icon: LayoutGrid },
-  { id: "men",   label: "Men",         icon: Shirt },
-  { id: "women", label: "Women",       icon: Sparkles },
-  { id: "unisex",label: "Unisex",      icon: Users },
-  { id: "acc",   label: "Accessories", icon: Tag },
-];
-
-const GENDER_CATS: Record<string, readonly string[]> = {
-  all: CATEGORIES,
-  men: MEN_CATEGORIES,
-  women: WOMEN_CATEGORIES,
-  unisex: UNISEX_CATEGORIES,
-  acc: ACCESSORIES_CATEGORIES,
+const CAT_META: Record<string, { icon: React.ElementType; color: string }> = {
+  "Smartphones":             { icon: Smartphone,     color: "#3B82F6" },
+  "TVs":                     { icon: Tv,             color: "#8B5CF6" },
+  "Gaming Consoles":         { icon: Gamepad2,       color: "#EF4444" },
+  "Gaming PCs":              { icon: Monitor,        color: "#F59E0B" },
+  "Tablets & Watches":       { icon: Tablet,         color: "#06B6D4" },
+  "Laptops & MacBooks":      { icon: Laptop,         color: "#10B981" },
+  "Clothing & Apparel":      { icon: Shirt,          color: "#F43F5E" },
+  "Men's Wear":              { icon: Shirt,          color: "#3B82F6" },
+  "Women's Fashion":         { icon: Sparkles,       color: "#EC4899" },
+  "Hoodies & Streetwear":    { icon: Flame,          color: "#F97316" },
+  "Sneakers & Shoes":        { icon: Footprints,     color: "#10B981" },
+  "Caps & Accessories":      { icon: Tag,            color: "#A855F7" },
+  "Furniture":               { icon: Sofa,           color: "#A78BFA" },
+  "Home Appliances":         { icon: WashingMachine, color: "#60A5FA" },
+  "Solar & Power Solutions": { icon: Zap,            color: "#D4AF37" },
+  "Electric Ride-On Cars":   { icon: Car,            color: "#F97316" },
+  "Kitchen Appliances":      { icon: ChefHat,        color: "#EC4899" },
+  "Office Equipment":        { icon: Printer,        color: "#6B7280" },
 };
 
 const SORT_OPTIONS = [
@@ -55,10 +40,10 @@ const SORT_OPTIONS = [
 
 const PRICE_RANGES = [
   { value: "", label: "All prices" },
-  { value: "under500",  label: "< R500" },
-  { value: "500to1000", label: "R500–R1k" },
-  { value: "1000to2000",label: "R1k–R2k" },
-  { value: "over2000",  label: "R2k+" },
+  { value: "under5", label: "< R5k" },
+  { value: "5to15", label: "R5k–R15k" },
+  { value: "15to30", label: "R15k–R30k" },
+  { value: "over30", label: "R30k+" },
 ];
 
 export default function ShopFilters({ total }: { total: number }) {
@@ -70,12 +55,9 @@ export default function ShopFilters({ total }: { total: number }) {
   const price = params.get("price") ?? "";
 
   const [searchVal, setSearchVal] = useState(q);
-  const [gender, setGender] = useState<string>(() => {
-    if (!cat) return "all";
-    if ((MEN_CATEGORIES as readonly string[]).includes(cat)) return "men";
-    if ((WOMEN_CATEGORIES as readonly string[]).includes(cat)) return "women";
-    if ((UNISEX_CATEGORIES as readonly string[]).includes(cat)) return "unisex";
-    if ((ACCESSORIES_CATEGORIES as readonly string[]).includes(cat)) return "acc";
+  const [department, setDepartment] = useState<"all" | "devices" | "clothing">(() => {
+    if (cat && isClothingCategory(cat)) return "clothing";
+    if (cat && isDeviceCategory(cat)) return "devices";
     return "all";
   });
 
@@ -104,44 +86,104 @@ export default function ShopFilters({ total }: { total: number }) {
     debounceRef.current = setTimeout(() => push({ q: val }), 400);
   }
 
-  function handleGenderChange(g: string) {
-    setGender(g);
-    const cats = GENDER_CATS[g];
-    // If current cat is not in the new gender group, clear it
-    if (cat && !(cats as readonly string[]).includes(cat)) {
+  function scrollBy(dir: number) {
+    scrollRef.current?.scrollBy({ left: dir * 200, behavior: "smooth" });
+  }
+
+  function handleDepartmentChange(dept: "all" | "devices" | "clothing") {
+    setDepartment(dept);
+    if (dept === "devices" && cat && isClothingCategory(cat)) {
+      push({ cat: "" });
+    } else if (dept === "clothing" && cat && isDeviceCategory(cat)) {
       push({ cat: "" });
     }
   }
 
+  // Determine active category list based on department
+  const activeCatList =
+    department === "devices"
+      ? DEVICE_CATEGORIES
+      : department === "clothing"
+      ? CLOTHING_CATEGORIES
+      : [...DEVICE_CATEGORIES, ...CLOTHING_CATEGORIES];
+
   const visibleCats = [
-    { id: "", label: "All", icon: LayoutGrid, color: "#fff" },
-    ...GENDER_CATS[gender].map(c => ({
-      id: c, label: c,
-      icon: CAT_ICON[c]?.icon ?? LayoutGrid,
-      color: CAT_ICON[c]?.color ?? "#6B7280",
+    { id: "", label: department === "all" ? "All Categories" : department === "devices" ? "All Devices" : "All Clothing", icon: LayoutGrid, color: "#D4AF37" },
+    ...activeCatList.map(c => ({
+      id: c,
+      label: c,
+      icon: CAT_META[c]?.icon ?? LayoutGrid,
+      color: CAT_META[c]?.color ?? "#6B7280",
     })),
   ];
 
   return (
     <div className="mb-6 space-y-4">
-      {/* Gender tabs */}
-      <div className="flex gap-1 p-1 bg-[#111111] border border-[#1F1F1F] rounded-lg overflow-x-auto no-scrollbar">
-        {GENDER_TABS.map(({ id, label, icon: Icon }) => (
-          <button
-            key={id}
-            type="button"
-            onClick={() => handleGenderChange(id)}
-            className={`flex-1 min-w-[90px] flex items-center justify-center gap-1.5 py-2.5 px-3 rounded text-xs font-semibold uppercase tracking-wide transition-all ${
-              gender === id
-                ? "bg-white text-black shadow"
-                : "text-gray-400 hover:text-white hover:bg-white/5"
-            }`}
-          >
-            <Icon size={13} />
-            {label}
-          </button>
-        ))}
+      {/* ── Main Department Switcher Tabs ─────────────────────── */}
+      <div className="flex items-center gap-2 p-1.5 bg-[#111111] border border-[#1F1F1F] rounded-2xl w-full overflow-x-auto">
+        <button
+          type="button"
+          onClick={() => handleDepartmentChange("all")}
+          className={`flex-1 min-w-[130px] flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-bold transition-all ${
+            department === "all"
+              ? "bg-[#1E1E1E] text-white border border-white/10 shadow-lg"
+              : "text-gray-400 hover:text-white hover:bg-white/5"
+          }`}
+        >
+          <Layers size={15} className={department === "all" ? "text-[#D4AF37]" : "text-gray-500"} />
+          <span>All Store</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => handleDepartmentChange("devices")}
+          className={`flex-1 min-w-[160px] flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-bold transition-all ${
+            department === "devices"
+              ? "bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/40 shadow-lg shadow-[#D4AF37]/10"
+              : "text-gray-400 hover:text-white hover:bg-white/5"
+          }`}
+        >
+          <Smartphone size={15} />
+          <span>Devices & Tech</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => handleDepartmentChange("clothing")}
+          className={`flex-1 min-w-[180px] flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-bold transition-all ${
+            department === "clothing"
+              ? "bg-gradient-to-r from-[#D4AF37] to-[#AA771C] text-black shadow-lg shadow-[#D4AF37]/20 font-black"
+              : "text-gray-400 hover:text-white hover:bg-white/5"
+          }`}
+        >
+          <Shirt size={15} />
+          <span>Clothing</span>
+          <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-black/40 text-[#F3E5AB]">
+            Coming Soon
+          </span>
+        </button>
       </div>
+
+      {/* Department Notice for Clothing */}
+      {department === "clothing" && (
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-2xl bg-gradient-to-r from-[#D4AF37]/15 via-[#141414] to-[#141414] border border-[#D4AF37]/30">
+          <div className="flex items-center gap-2.5">
+            <Sparkles size={18} className="text-[#D4AF37] shrink-0" />
+            <div>
+              <p className="text-xs font-bold text-white">Official Clothing & Streetwear Drop — Coming Soon</p>
+              <p className="text-[11px] text-gray-400">Pre-order or enquire on WhatsApp to get launch-day priority.</p>
+            </div>
+          </div>
+          <a
+            href="https://wa.me/27825876811?text=Hi%20Daisy%20Gadgets%20Co,%20I'd%20like%20to%20enquire%20about%20the%20Clothing%20drop!"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-gold px-4 py-2 rounded-xl text-xs font-bold shrink-0"
+          >
+            Pre-Order Enquiry
+          </a>
+        </div>
+      )}
 
       {/* Search + sort */}
       <div className="flex gap-2">
@@ -150,10 +192,10 @@ export default function ShopFilters({ total }: { total: number }) {
           <input
             type="text"
             inputMode="search"
-            placeholder="Search clothing, hoodies, jackets…"
+            placeholder={department === "clothing" ? "Search hoodies, jackets, sneakers, caps…" : "Search smartphones, TVs, laptops, solar…"}
             value={searchVal}
             onChange={e => handleSearch(e.target.value)}
-            className="w-full bg-[#111111] border border-[#1F1F1F] rounded-lg pl-9 pr-8 py-2.5 text-white text-sm placeholder-gray-600 transition-colors"
+            className="w-full bg-[#111111] border border-[#1F1F1F] rounded-xl pl-9 pr-8 py-2.5 text-white text-sm placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]/50 transition-colors"
           />
           {searchVal && (
             <button
@@ -169,7 +211,7 @@ export default function ShopFilters({ total }: { total: number }) {
           <select
             value={sort}
             onChange={e => push({ sort: e.target.value })}
-            className="appearance-none bg-[#111111] border border-[#1F1F1F] rounded-lg pl-3 pr-8 py-2.5 text-sm text-gray-300 cursor-pointer"
+            className="appearance-none bg-[#111111] border border-[#1F1F1F] rounded-xl pl-3 pr-8 py-2.5 text-sm text-gray-300 focus:outline-none focus:border-[#D4AF37]/50 transition-colors cursor-pointer"
           >
             {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
@@ -177,62 +219,105 @@ export default function ShopFilters({ total }: { total: number }) {
         </div>
       </div>
 
-      {/* Price ranges + count */}
+      {/* Price range + count */}
       <div className="flex items-center gap-2 flex-wrap">
         {PRICE_RANGES.map(r => (
           <button
             key={r.value}
             onClick={() => push({ price: r.value })}
-            className={`px-3 py-1.5 rounded text-xs font-medium transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               price === r.value
-                ? "bg-white text-black"
-                : "bg-[#111111] border border-[#1F1F1F] text-gray-400 hover:border-white/20 hover:text-gray-200"
+                ? "bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/40"
+                : "bg-[#111111] border border-[#1F1F1F] text-gray-400 hover:border-[#D4AF37]/30 hover:text-gray-200"
             }`}
           >
             {r.label}
           </button>
         ))}
         <span className="ml-auto text-xs text-gray-600 shrink-0">
-          {total} item{total !== 1 ? "s" : ""}
+          {total} product{total !== 1 ? "s" : ""}
         </span>
       </div>
 
       {/* Category strip */}
-      <div
-        ref={scrollRef}
-        className="no-scrollbar flex gap-2 overflow-x-auto py-1"
-        style={{ WebkitOverflowScrolling: "touch" }}
-      >
-        {visibleCats.map(({ id, label, icon: Icon, color }) => {
-          const active = id === "" ? !cat : cat === id;
-          return (
-            <button
-              key={id}
-              onClick={() => push({ cat: id === "" ? "" : cat === id ? "" : id })}
-              className={`flex items-center gap-1.5 shrink-0 rounded px-3 py-1.5 text-xs font-medium transition-all ${
-                active
-                  ? "bg-white text-black"
-                  : "bg-[#111111] border border-[#1F1F1F] text-gray-400 hover:text-white hover:border-white/20"
-              }`}
-            >
-              <Icon size={12} color={active ? "#000" : color} />
-              {label}
-            </button>
-          );
-        })}
+      <div className="relative">
+        <button
+          onClick={() => scrollBy(-1)}
+          aria-label="Scroll left"
+          className="hidden md:flex absolute left-0 top-0 bottom-0 z-10 items-center pr-4 pl-1"
+          style={{ background: "linear-gradient(to right, #0A0A0A 55%, transparent)" }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+
+        <div
+          ref={scrollRef}
+          className="no-scrollbar flex gap-2 overflow-x-auto py-1 px-0.5 md:px-8"
+          style={{ WebkitOverflowScrolling: "touch", scrollSnapType: "x proximity" }}
+        >
+          {visibleCats.map(({ id, label, icon: Icon, color }) => {
+            const active = id === "" ? !cat : cat === id;
+            return (
+              <button
+                key={id}
+                onClick={() => push({ cat: id === "" ? "" : cat === id ? "" : id })}
+                style={{ scrollSnapAlign: "start" }}
+                className="flex flex-col items-center gap-1.5 shrink-0 rounded-xl px-3 py-2 transition-all duration-200 active:scale-95"
+              >
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200"
+                  style={{
+                    background: active ? "#D4AF37" : `${color}18`,
+                    border: active ? "1px solid #D4AF37" : "1px solid rgba(255,255,255,0.06)",
+                    boxShadow: active ? "0 4px 14px rgba(212,175,55,0.3)" : "none",
+                  }}
+                >
+                  <Icon size={17} color={active ? "#0A0A0A" : color} strokeWidth={active ? 2.5 : 1.8} />
+                </div>
+                <span
+                  style={{
+                    fontSize: 11,
+                    fontFamily: "var(--font-outfit)",
+                    fontWeight: active ? 700 : 500,
+                    color: active ? "#D4AF37" : "#6B7280",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        <button
+          onClick={() => scrollBy(1)}
+          aria-label="Scroll right"
+          className="hidden md:flex absolute right-0 top-0 bottom-0 z-10 items-center pl-4 pr-1 justify-end"
+          style={{ background: "linear-gradient(to left, #0A0A0A 55%, transparent)" }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="2.5"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
       </div>
 
       {/* Active filter chips */}
       {(cat || price || (sort && sort !== "featured") || q) && (
         <div className="flex items-center gap-2 flex-wrap pt-1">
           {cat && (
-            <span className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-white/10 text-white border border-white/20">
+            <span
+              className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full"
+              style={{
+                background: `${CAT_META[cat]?.color ?? "#D4AF37"}15`,
+                color: CAT_META[cat]?.color ?? "#D4AF37",
+                border: `1px solid ${CAT_META[cat]?.color ?? "#D4AF37"}30`,
+              }}
+            >
               {cat}
               <button onClick={() => push({ cat: "" })}><X size={9} /></button>
             </span>
           )}
           {price && (
-            <span className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-white/10 text-white border border-white/20">
+            <span className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/25">
               {PRICE_RANGES.find(r => r.value === price)?.label}
               <button onClick={() => push({ price: "" })}><X size={9} /></button>
             </span>

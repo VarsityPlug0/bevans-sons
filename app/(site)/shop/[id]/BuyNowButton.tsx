@@ -35,31 +35,23 @@ export default function BuyNowButton({ product }: Props) {
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [added, setAdded] = useState(false);
 
-  function getCartItem() {
-    const price = parseFloat(String(product.price).replace(/[^0-9.]/g, "")) || 0;
-    const originalPrice = product.originalPrice ? parseFloat(String(product.originalPrice).replace(/[^0-9.]/g, "")) || undefined : undefined;
-    const variantId = `${product.id}-${selectedSize.replace(/\s+/g, "_")}-${selectedColor.replace(/\s+/g, "_")}`;
+  function getFormattedProduct() {
+    if (!isClothing) return product;
+    const variantTag = `(${selectedSize}${selectedColor ? `, ${selectedColor}` : ""})`;
     return {
-      id: product.id,
-      variantId,
-      name: product.name,
-      price,
-      originalPrice,
-      imageUrl: product.imageUrl,
-      category: product.category,
-      size: selectedSize,
-      colour: selectedColor,
-      sku: variantId,
+      ...product,
+      id: `${product.id}-${selectedSize.replace(/\s+/g, "_")}`,
+      name: `${product.name} ${variantTag}`,
     };
   }
 
   function handleBuyNow() {
-    add(getCartItem());
+    add(getFormattedProduct());
     router.push("/checkout");
   }
 
   function handleAddToCart() {
-    add(getCartItem());
+    add(getFormattedProduct());
     setAdded(true);
     openCart();
     setTimeout(() => setAdded(false), 2000);

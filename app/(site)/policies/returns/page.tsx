@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Returns Policy | Bevans Sons",
-  description: "Our returns policy — how to return a product and what to expect at Bevans Sons",
+  title: "Returns Policy | Daisy Gadgets Co.",
+  description: "Our returns policy — how to return a product and what to expect at Daisy Gadgets Co.",
 };
 
 export default function ReturnsPage() {
@@ -31,7 +31,7 @@ export default function ReturnsPage() {
           },
           {
             title: "4. How to Return",
-            body: "Step 1: Contact us via WhatsApp (WhatsApp) or email with your order reference and reason for return. Step 2: We will provide return shipping instructions. Step 3: Package the item securely and ship it to us. Step 4: Once received and inspected, we process your refund or exchange.",
+            body: "Step 1: Contact us via WhatsApp (+27 82 587 6811) or email with your order reference and reason for return. Step 2: We will provide return shipping instructions. Step 3: Package the item securely and ship it to us. Step 4: Once received and inspected, we process your refund or exchange.",
           },
           {
             title: "5. Return Shipping",
@@ -47,11 +47,11 @@ export default function ReturnsPage() {
           },
           {
             title: "8. Contact",
-            body: "Returns enquiries: contact us via our contact page",
+            body: "Returns enquiries: daisygadgetsco@gmail.com | WhatsApp: +27 82 587 6811",
           },
         ].map(({ title, body }) => (
           <div key={title}>
-            <h2 style={{ fontFamily: "var(--font-inter)", fontWeight: 700, fontSize: 16, color: "#fff", marginBottom: 8 }}>{title}</h2>
+            <h2 style={{ fontFamily: "var(--font-outfit)", fontWeight: 700, fontSize: 16, color: "#fff", marginBottom: 8 }}>{title}</h2>
             <p>{body}</p>
           </div>
         ))}

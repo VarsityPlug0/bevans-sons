@@ -13,8 +13,9 @@
 # testing
 /coverage
 
-# next.js — exclude entire build output (build on deploy target)
-.next/
+# next.js — exclude cache but keep server bundle for Docker deploy
+.next/cache/
+.next/dev/
 
 /out/
 
@@ -46,8 +47,6 @@ next-env.d.ts
 /data/*.db
 /data/*.db-shm
 /data/*.db-wal
-/data/*.db-backup
-/data/*.pre-bevans-backup
 /public/uploads/
 
 # Claude agent files

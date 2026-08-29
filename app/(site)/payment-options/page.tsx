@@ -3,7 +3,7 @@ import Link from "next/link";
 import { BANKS } from "@/lib/bankDetails";
 
 export const metadata: Metadata = {
-  title: "Payment Options | Bevans Sons",
+  title: "Payment Options | Daisy Gadgets Co.",
   description: "We accept EFT, PayShap, Visa, Mastercard and all major South African bank payments. View our bank details and payment options.",
 };
 
@@ -30,7 +30,7 @@ export default function PaymentOptionsPage() {
         ].map(({ title, desc, badge }) => (
           <div key={title} className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-6">
             <div className="flex items-center gap-3 mb-3">
-              <h3 style={{ fontFamily: "var(--font-inter)", fontWeight: 700, fontSize: 15, color: "#fff" }}>{title}</h3>
+              <h3 style={{ fontFamily: "var(--font-outfit)", fontWeight: 700, fontSize: 15, color: "#fff" }}>{title}</h3>
               {badge && <span className="text-[9px] font-bold text-[#0A0A0A] bg-[#D4AF37] rounded-full px-2 py-0.5">{badge}</span>}
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">{desc}</p>
@@ -88,7 +88,7 @@ export default function PaymentOptionsPage() {
             <div key={step as string} className="flex gap-4 items-start">
               <div className="w-8 h-8 rounded-full bg-[#D4AF37] text-black font-extrabold text-sm flex items-center justify-center shrink-0">{i + 1}</div>
               <div className="bg-[#111111] border border-[#1F1F1F] rounded-xl px-5 py-4 flex-1">
-                <p style={{ fontFamily: "var(--font-inter)", fontWeight: 700, fontSize: 14, color: "#fff", marginBottom: 4 }}>{step as string}</p>
+                <p style={{ fontFamily: "var(--font-outfit)", fontWeight: 700, fontSize: 14, color: "#fff", marginBottom: 4 }}>{step as string}</p>
                 <p className="text-gray-400 text-sm">{desc as string}</p>
               </div>
             </div>
@@ -100,7 +100,7 @@ export default function PaymentOptionsPage() {
         <h3 className="text-xl font-bold text-white mb-3">Questions about payment?</h3>
         <p className="text-gray-400 text-sm mb-6">Our team is happy to help you through the payment process.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="https://wa.me/27724816274" target="_blank" rel="noopener noreferrer" className="btn-gold px-8 py-3.5 rounded-xl font-bold">Chat on WhatsApp</a>
+          <a href="https://wa.me/27825876811" target="_blank" rel="noopener noreferrer" className="btn-gold px-8 py-3.5 rounded-xl font-bold">Chat on WhatsApp</a>
           <Link href="/shop" className="btn-outline px-8 py-3.5 rounded-xl font-bold">Start Shopping</Link>
         </div>
       </div>

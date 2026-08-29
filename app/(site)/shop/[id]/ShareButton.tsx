@@ -10,7 +10,7 @@ export default function ShareButton({ name, price, url }: { name: string; price:
       try {
         await navigator.share({
           title: name,
-          text: `Check out the ${name} for ${price} at Bevans Sons`,
+          text: `Check out the ${name} for ${price} at Daisy Gadgets Co.`,
           url,
         });
         return;
