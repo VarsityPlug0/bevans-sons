@@ -12,7 +12,7 @@ export default function TermsPage() {
       <div className="mb-10">
         <p className="section-label mb-3">Legal</p>
         <h1 className="text-4xl font-extrabold text-white mb-2">Terms & <span className="gold-text">Conditions</span></h1>
-        <p className="text-gray-500 text-sm">Last updated: August 2025</p>
+        <p className="text-gray-500 text-sm">Last updated: August 2026 &middot; Bevans Sons (Reg. 2023/116995/07)</p>
       </div>
 
       <div className="prose prose-invert max-w-none space-y-8 text-gray-400 text-sm leading-relaxed">
@@ -59,7 +59,7 @@ export default function TermsPage() {
           },
           {
             title: "11. Contact",
-            body: "For questions about these Terms, contact us at MkhabeleEnterprise@gmail.com or via WhatsApp at +27 72 481 6274.",
+            body: "For questions about these Terms, contact us at MkhabeleEnterprise@gmail.com or via WhatsApp at +27 72 481 6274. Bevans Sons is a registered South African private company (Reg. No. 2023/116995/07).",
           },
         ].map(({ title, body }) => (
           <div key={title}>

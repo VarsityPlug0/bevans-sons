@@ -146,8 +146,8 @@ export default function Footer() {
                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                     <polyline points="22,6 12,13 2,6"/>
                   </svg>
-                  <a href={`mailto:hello@${domain}`} className="text-white font-medium hover:text-gray-300 transition-colors">
-                    hello@{domain}
+                  <a href={`mailto:${BRAND.email}`} className="text-white font-medium hover:text-gray-300 transition-colors">
+                    {BRAND.email}
                   </a>
                 </li>
                 <li className="flex items-start gap-2.5">
@@ -170,7 +170,7 @@ export default function Footer() {
           <div className="gold-divider mt-10 mb-6" />
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-gray-600 text-xs">
-              &copy; {year} {BRAND.name}. All Rights Reserved. &nbsp;·&nbsp; South Africa
+              &copy; {year} {BRAND.name}. All Rights Reserved. &nbsp;·&nbsp; South Africa &nbsp;·&nbsp; Reg. 2023/116995/07
             </p>
             {/* Payment method icons */}
             <div className="flex items-center gap-2">
@@ -236,7 +236,7 @@ export default function Footer() {
             ))}
           </div>
           <p className="text-gray-700 text-[10px]">
-            &copy; {new Date().getFullYear()} {BRAND.name}. All Rights Reserved.
+            &copy; {new Date().getFullYear()} {BRAND.name}. All Rights Reserved. &nbsp;·&nbsp; Reg. 2023/116995/07
           </p>
         </div>
       </div>

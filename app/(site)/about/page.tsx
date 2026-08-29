@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ShieldCheck, Truck, BadgeCheck, Headphones, MapPin, Phone, Mail } from "lucide-react";
+import { ShieldCheck, Truck, BadgeCheck, Headphones, Phone, Mail, FileText } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "About Us | Bevans Sons — Premium Gadgets Worldwide",
-  description: "Bevans Sons is a proudly South African gadget retailer offering premium electronics, appliances, gaming, solar & more with worldwide shipping.",
+  title: "About Us | Bevans Sons — Premium Clothing",
+  description: "Bevans Sons is a proudly South African registered clothing brand offering premium men's and women's fashion with fast delivery across South Africa.",
 };
 
 const values = [
@@ -31,7 +31,7 @@ export default function AboutPage() {
           About <span className="gold-text">Bevans Sons</span>
         </h1>
         <p className="text-gray-400 text-lg leading-relaxed max-w-2xl mx-auto">
-          We&apos;re a proudly South African gadget retailer on a mission to make premium technology accessible to everyone — locally and worldwide.
+          We&apos;re a proudly South African registered clothing brand on a mission to bring premium men&apos;s and women&apos;s fashion to everyone — at prices that make sense.
         </p>
       </div>
 
@@ -39,7 +39,7 @@ export default function AboutPage() {
       <div className="bg-[#111111] border border-[#D4AF37]/20 rounded-3xl p-10 mb-12 text-center">
         <p className="text-[#D4AF37] text-xs uppercase tracking-widest font-bold mb-4">Our Mission</p>
         <p className="text-white text-xl md:text-2xl font-bold leading-relaxed max-w-3xl mx-auto">
-          &ldquo;Premium gadgets for everyday convenience. Worldwide shipping available. Same-day delivery in South Africa.&rdquo;
+          &ldquo;Premium clothing, crafted for the bold. Free delivery across South Africa. Style that speaks before you do.&rdquo;
         </p>
       </div>
 
@@ -48,24 +48,24 @@ export default function AboutPage() {
         <div>
           <h2 className="text-2xl font-bold text-white mb-4">Who We Are</h2>
           <p className="text-gray-400 leading-relaxed mb-4">
-            Bevans Sons was founded with a simple vision: to offer South Africans access to the best gadgets at fair prices, backed by reliable service and genuine after-sales support.
+            Bevans Sons is a registered South African private company founded in 2023. We exist to give South Africans access to premium clothing — quality pieces built to last, at prices that are honest and fair.
           </p>
           <p className="text-gray-400 leading-relaxed mb-4">
-            Based in Bellville, Cape Town, we serve customers across all 9 South African provinces and ship internationally. Whether you&apos;re buying an iPhone, a PS5, a solar inverter, or a new fridge — we have you covered.
+            We deliver to all 9 provinces across South Africa. Every order is handled with care, and our team is available via WhatsApp to assist with sizing, orders, or anything else you need.
           </p>
           <p className="text-gray-400 leading-relaxed">
-            Our team is available via WhatsApp every day to help you choose the right product, track your order, or resolve any issue.
+            We believe clothing should make you feel confident. That&apos;s the standard we hold every product to before it reaches you.
           </p>
         </div>
         <div className="bg-[#111111] border border-[#1F1F1F] rounded-2xl p-7">
-          <h3 className="text-white font-bold text-lg mb-5">Find Us</h3>
+          <h3 className="text-white font-bold text-lg mb-5">Company Info</h3>
           <div className="space-y-4 text-sm">
             <div className="flex items-start gap-3">
-              <MapPin size={16} color="#D4AF37" className="shrink-0 mt-0.5" />
+              <FileText size={16} color="#D4AF37" className="shrink-0 mt-0.5" />
               <div>
-                <p className="text-white font-medium">Unit 7, Eagle Street</p>
-                <p className="text-gray-500">Okavango Park, Bellville, Cape Town</p>
-                <p className="text-gray-500">South Africa</p>
+                <p className="text-xs text-gray-500 uppercase tracking-wider font-bold mb-0.5">Registration Number</p>
+                <p className="text-white font-medium">2023 / 116995 / 07</p>
+                <p className="text-gray-500 text-xs">CIPC Registered Private Company</p>
               </div>
             </div>
             <div className="flex items-center gap-3">

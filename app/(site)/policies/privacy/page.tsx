@@ -12,7 +12,7 @@ export default function PrivacyPage() {
       <div className="mb-10">
         <p className="section-label mb-3">Legal</p>
         <h1 className="text-4xl font-extrabold text-white mb-2"><span className="gold-text">Privacy</span> Policy</h1>
-        <p className="text-gray-500 text-sm">Last updated: August 2025 &middot; POPIA Compliant</p>
+        <p className="text-gray-500 text-sm">Last updated: August 2026 &middot; POPIA Compliant &middot; Bevans Sons (Reg. 2023/116995/07)</p>
       </div>
 
       <div className="space-y-8 text-gray-400 text-sm leading-relaxed">
