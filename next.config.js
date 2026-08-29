@@ -27,7 +27,6 @@ const nextConfig = {
       { source: "/solar",           destination: "/shop", permanent: true },
       { source: "/solar/:path*",    destination: "/shop", permanent: true },
       { source: "/electronics",     destination: "/shop", permanent: true },
-      { source: "/clothing",        destination: "/shop", permanent: true },
     ];
   },
 };
