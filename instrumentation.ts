@@ -1,6 +1,13 @@
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     const { runFollowUps } = await import("./lib/followups");
+    const { syncProductsFromJson } = await import("./lib/db");
+
+    // Sync all committed products from data/products.json after startup.
+    // Runs asynchronously so it never blocks the health check.
+    setTimeout(() => {
+      try { syncProductsFromJson(); } catch { /* non-fatal */ }
+    }, 2_000);
 
     const run = async () => {
       try {
