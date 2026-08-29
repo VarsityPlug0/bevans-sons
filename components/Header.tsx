@@ -142,9 +142,7 @@ export default function Header() {
               )}
             </div>
 
-            <Link href="/men"          className={`nav-link px-3 py-2${isActive("/men") ? " active" : ""}`}>Men</Link>
-            <Link href="/women"        className={`nav-link px-3 py-2${isActive("/women") ? " active" : ""}`}>Women</Link>
-            <Link href="/collections"  className={`nav-link px-3 py-2${isActive("/collections") ? " active" : ""}`}>Collections</Link>
+            <Link href="/clothing"     className={`nav-link px-3 py-2${isActive("/clothing") ? " active" : ""}`}>Clothing</Link>
             <Link href="/new-arrivals" className={`nav-link px-3 py-2${isActive("/new-arrivals") ? " active" : ""}`}>New</Link>
             <Link href="/about"        className={`nav-link px-3 py-2${isActive("/about") ? " active" : ""}`}>About</Link>
           </nav>
@@ -160,8 +158,8 @@ export default function Header() {
                 WhatsApp
               </a>
             )}
-            <Link href="/size-guide" className="btn-ghost" style={{ fontSize: 12, padding: "9px 14px" }}>
-              Size Guide
+            <Link href="/clothing" className="btn-ghost" style={{ fontSize: 12, padding: "9px 14px" }}>
+              Clothing
             </Link>
           </div>
 
@@ -184,11 +182,8 @@ export default function Header() {
             {[
               { label: "Home",           href: "/" },
               { label: "Shop All",       href: "/shop" },
-              { label: "Men",            href: "/men" },
-              { label: "Women",          href: "/women" },
-              { label: "Collections",    href: "/collections" },
+              { label: "Clothing",       href: "/clothing" },
               { label: "New Arrivals",   href: "/new-arrivals" },
-              { label: "Size Guide",     href: "/size-guide" },
               { label: "Track My Order", href: "/track-order" },
               { label: "FAQ",            href: "/faq" },
               { label: "About Us",       href: "/about" },

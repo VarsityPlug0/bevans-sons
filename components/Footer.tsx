@@ -102,13 +102,10 @@ export default function Footer() {
               <p className="section-label mb-5">Shop</p>
               <ul className="space-y-2.5">
                 <FooterLink href="/shop">All Products</FooterLink>
-                <FooterLink href="/men">Men</FooterLink>
-                <FooterLink href="/women">Women</FooterLink>
-                <FooterLink href="/collections">Collections</FooterLink>
+                <FooterLink href="/clothing">Clothing</FooterLink>
                 <FooterLink href="/new-arrivals">New Arrivals</FooterLink>
                 <FooterLink href="/shop?cat=Streetwear">Streetwear</FooterLink>
                 <FooterLink href="/shop?cat=Accessories">Accessories</FooterLink>
-                <FooterLink href="/size-guide">Size Guide</FooterLink>
               </ul>
             </div>
 
