@@ -225,6 +225,21 @@ export default async function Dashboard() {
             <p className="text-gray-500 text-xs mt-0.5">{inStock} in stock</p>
           </Link>
 
+          {/* Categories */}
+          <Link href="/admin/dashboard/categories"
+            className="group bg-[#111111] border border-[#1F1F1F] hover:border-[#D4AF37]/40 rounded-2xl p-4 transition-all hover:bg-[#141414]">
+            <div className="flex items-start justify-between mb-3">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${BLUE}18` }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={BLUE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
+                  <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+                </svg>
+              </div>
+            </div>
+            <p className="text-white font-semibold text-sm">Categories</p>
+            <p className="text-gray-500 text-xs mt-0.5">Manage product categories</p>
+          </Link>
+
           {/* Clothing & Apparel */}
           <Link href="/admin/dashboard/clothing"
             className="group bg-[#111111] border border-[#1F1F1F] hover:border-[#D4AF37]/40 rounded-2xl p-4 transition-all hover:bg-[#141414]">

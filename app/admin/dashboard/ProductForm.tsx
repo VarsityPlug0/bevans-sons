@@ -1,7 +1,6 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { CATEGORIES, DEVICE_CATEGORIES, CLOTHING_CATEGORIES } from "@/lib/categories";
 import type { Product } from "@/lib/products";
 import { Upload, X, Scissors } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -15,9 +14,23 @@ interface Props {
 export default function ProductForm({ product }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const initialCategory = searchParams.get("category") || product?.category || CATEGORIES[0];
   const fileRef = useRef<HTMLInputElement>(null);
   const isEdit = !!product;
+
+  type DbCategory = { id: string; name: string; gender: string };
+  const [categories, setCategories] = useState<DbCategory[]>([]);
+  useEffect(() => {
+    fetch("/api/admin/categories")
+      .then((r) => r.json())
+      .then((data: DbCategory[]) => {
+        setCategories(data);
+        if (!isEdit && !searchParams.get("category") && data.length > 0) {
+          setForm((f) => ({ ...f, category: f.category || data[0].name }));
+        }
+      });
+  }, [isEdit, searchParams]);
+
+  const initialCategory = searchParams.get("category") || product?.category || "";
 
   const [form, setForm] = useState({
     name: product?.name ?? "",
@@ -157,16 +170,20 @@ export default function ProductForm({ product }: Props) {
               onChange={(e) => set("category", e.target.value)}
               className="w-full bg-[#0A0A0A] border border-[#2a2a2a] rounded-xl px-4 py-3 text-white text-sm focus:outline-none"
             >
-              <optgroup label="── Clothing & Streetwear ──">
-                {CLOTHING_CATEGORIES.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </optgroup>
-              <optgroup label="── Electronics & Gadgets ──">
-                {DEVICE_CATEGORIES.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </optgroup>
+              {form.category && !categories.find((c) => c.name === form.category) && (
+                <option value={form.category}>{form.category}</option>
+              )}
+              {["Men", "Women", "Unisex", "Accessories"].map((g) => {
+                const items = categories.filter((c) => c.gender === g);
+                if (!items.length) return null;
+                return (
+                  <optgroup key={g} label={`── ${g} ──`}>
+                    {items.map((c) => (
+                      <option key={c.id} value={c.name}>{c.name}</option>
+                    ))}
+                  </optgroup>
+                );
+              })}
             </select>
           </div>
 
