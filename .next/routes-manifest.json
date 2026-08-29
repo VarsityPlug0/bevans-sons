@@ -30,12 +30,6 @@
       "destination": "/shop",
       "statusCode": 308,
       "regex": "^(?!/_next)/electronics(?:/)?$"
-    },
-    {
-      "source": "/clothing",
-      "destination": "/shop",
-      "statusCode": 308,
-      "regex": "^(?!/_next)/clothing(?:/)?$"
     }
   ],
   "headers": [
@@ -408,6 +402,12 @@
       "namedRegex": "^/delivery(?:/)?$"
     },
     {
+      "page": "/electronics",
+      "regex": "^/electronics(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/electronics(?:/)?$"
+    },
+    {
       "page": "/faq",
       "regex": "^/faq(?:/)?$",
       "routeKeys": {},
@@ -490,6 +490,12 @@
       "regex": "^/sitemap\\.xml(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/sitemap\\.xml(?:/)?$"
+    },
+    {
+      "page": "/solar/inverters-batteries",
+      "regex": "^/solar/inverters\\-batteries(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/solar/inverters\\-batteries(?:/)?$"
     },
     {
       "page": "/special-offers",

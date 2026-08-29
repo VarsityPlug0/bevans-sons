@@ -1,6 +1,6 @@
 import Database from "better-sqlite3";
 import path from "path";
-import { existsSync, mkdirSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, writeFileSync, readFileSync } from "fs";
 
 const DATA_DIR = process.env.DATA_DIR ?? path.join(process.cwd(), "data");
 const DB_PATH = path.join(DATA_DIR, "bevans.db");
@@ -282,6 +282,55 @@ function runMigrations(db: Database.Database) {
       seedBevanProducts(db);
     }
     mark("seed_bevans_products_v1");
+  }
+
+  // ── M6: Import products from committed products.json ─────────────────────
+  // products.json is committed to git so it survives ephemeral Render deploys.
+  // INSERT OR IGNORE means existing admin-edited rows are never overwritten.
+  if (!applied("import_products_json_v1")) {
+    const jsonPath = path.join(DATA_DIR, "products.json");
+    if (existsSync(jsonPath)) {
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const rows: any[] = JSON.parse(readFileSync(jsonPath, "utf8"));
+        const insert = db.prepare(`
+          INSERT OR IGNORE INTO products
+            (id, name, slug, price, originalPrice, category, gender, material, fit,
+             description, imageUrl, inStock, featured, newArrival, createdAt, updatedAt)
+          VALUES
+            (@id, @name, @slug, @price, @originalPrice, @category, @gender, @material, @fit,
+             @description, @imageUrl, @inStock, @featured, @newArrival, @createdAt, @updatedAt)
+        `);
+        const now = new Date().toISOString();
+        const tx = db.transaction(() => {
+          for (const p of rows) {
+            insert.run({
+              id:            p.id,
+              name:          p.name ?? "",
+              slug:          p.slug ?? p.id,
+              price:         p.price ?? "",
+              originalPrice: p.originalPrice ?? "",
+              category:      p.category ?? "",
+              gender:        p.gender ?? "Unisex",
+              material:      p.material ?? "",
+              fit:           p.fit ?? "",
+              description:   p.description ?? "",
+              imageUrl:      p.imageUrl ?? "",
+              inStock:       p.inStock ? 1 : 0,
+              featured:      p.featured ? 1 : 0,
+              newArrival:    p.newArrival ? 1 : 0,
+              createdAt:     p.createdAt ?? now,
+              updatedAt:     p.updatedAt ?? now,
+            });
+          }
+        });
+        tx();
+        console.log(`[bevans] imported ${rows.length} products from products.json`);
+      } catch (e) {
+        console.error("[bevans] failed to import products.json:", e);
+      }
+    }
+    mark("import_products_json_v1");
   }
 }
 
