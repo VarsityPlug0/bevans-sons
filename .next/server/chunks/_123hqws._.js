@@ -1,3 +1,0 @@
-module.exports=[69449,e=>{"use strict";async function s(){{let{runFollowUps:s}=await e.A(69480),{syncProductsFromJson:t}=await e.A(68622);setTimeout(()=>{try{t()}catch{}},2e3);let r=async()=>{try{let e=await s();console.log("[scheduler] follow-ups:",e)}catch(e){console.error("[scheduler] error:",e)}};setTimeout(r,6e4),setInterval(r,72e5)}}e.s(["register",0,s])},68622,e=>{e.v(s=>Promise.all(["server/chunks/[externals]__0uthm8e._.js","server/chunks/lib_db_ts_0tfvek2._.js"].map(s=>e.l(s))).then(()=>s(99904)))},69480,e=>{e.v(s=>Promise.all(["server/chunks/[externals]__0qb57ya._.js","server/chunks/lib_followups_ts_1u3wnoc._.js","server/chunks/lib_db_ts_0tfvek2._.js"].map(s=>e.l(s))).then(()=>s(94689)))}];
-
-//# sourceMappingURL=_123hqws._.js.map
