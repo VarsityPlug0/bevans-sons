@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { getClothingProducts } from "@/lib/products";
+import { getProductsByCategory } from "@/lib/products";
 import AddToEnquiry from "@/app/(site)/shop/AddToEnquiry";
 import {
   Shirt, Sparkles, Flame, Footprints, Tag, ShieldCheck,
@@ -11,7 +11,7 @@ import {
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Clothing & Streetwear — Premium Fashion | Daisy & Co.",
+  title: "Clothing & Streetwear — Premium Fashion | Bevans Sons",
   description: "Shop premium urban clothing, heavyweight hoodies, streetwear, sneakers, caps and designer fashion. Fast delivery across South Africa.",
 };
 
@@ -54,7 +54,7 @@ const FEATURED_CATS = [
 ];
 
 export default function ClothingPage() {
-  const allClothing = getClothingProducts();
+  const allClothing = getProductsByCategory("Clothing & Apparel");
 
   return (
     <div className="min-h-screen">
@@ -83,7 +83,7 @@ export default function ClothingPage() {
 
               <div className="flex flex-wrap gap-4 justify-center lg:justify-start pt-2">
                 <a
-                  href="https://wa.me/27825876811?text=Hi%20Daisy%20Gadgets%20Co,%20I%20would%20like%20to%20be%20notified%20when%20the%20Clothing%20%26%20Streetwear%20drop%20launches!"
+                  href="https://wa.me/27724816274?text=Hi%20Bevans%20Sons,%20I%20would%20like%20to%20be%20notified%20when%20the%20Clothing%20%26%20Streetwear%20drop%20launches!"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-gold px-8 py-4 rounded-xl font-extrabold text-sm flex items-center gap-2 shadow-xl shadow-[#D4AF37]/20"
@@ -123,7 +123,7 @@ export default function ClothingPage() {
               <div className="relative mx-auto max-w-md aspect-[4/5] rounded-3xl overflow-hidden border border-[#D4AF37]/40 shadow-2xl shadow-black/80">
                 <Image
                   src="https://images.unsplash.com/photo-1509967419530-da38b4704bc6?w=900&auto=format&fit=crop&q=90"
-                  alt="Daisy Streetwear Model Coming Soon"
+                  alt="Bevans Sons Streetwear Coming Soon"
                   fill
                   priority
                   className="object-cover"
@@ -134,7 +134,7 @@ export default function ClothingPage() {
                 </div>
                 <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-black/70 backdrop-blur-md border border-white/10">
                   <p className="text-xs text-[#D4AF37] font-bold uppercase tracking-wider">Upcoming Drop</p>
-                  <h2 className="text-lg font-bold text-white">Daisy Acid-Wash Vintage Graphic Hoodie</h2>
+                  <h2 className="text-lg font-bold text-white">Bevans Sons Acid-Wash Vintage Graphic Hoodie</h2>
                   <div className="flex items-center justify-between mt-2">
                     <span className="text-white font-extrabold">R 950 <span className="text-xs text-gray-400 font-normal line-through">R 1,350</span></span>
                     <span className="text-[10px] bg-[#D4AF37]/20 border border-[#D4AF37] text-[#D4AF37] font-bold px-2.5 py-0.5 rounded-full">DROPPING SOON</span>
