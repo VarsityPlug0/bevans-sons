@@ -5,7 +5,7 @@ type AppRoutes = "/" | "/about" | "/admin" | "/admin/dashboard" | "/admin/dashbo
 type AppRouteHandlerRoutes = "/api/admin/chat/reply" | "/api/admin/chat/sessions" | "/api/admin/installments" | "/api/admin/installments/[id]" | "/api/admin/installments/settings/[productId]" | "/api/admin/login" | "/api/admin/logout" | "/api/admin/orders/[id]/notify" | "/api/admin/orders/[id]/proof" | "/api/admin/products" | "/api/admin/products/[id]" | "/api/admin/send-campaign" | "/api/admin/site-images" | "/api/admin/test-email" | "/api/admin/upload" | "/api/ai-assistant" | "/api/chat/messages" | "/api/chat/session" | "/api/contact" | "/api/cron/follow-ups" | "/api/installments/apply" | "/api/installments/events" | "/api/installments/settings/[productId]" | "/api/orders" | "/api/orders/[id]" | "/api/track-order" | "/api/track/cart" | "/api/track/email" | "/api/track/lead" | "/api/upload-proof"
 type PageRoutes = never
 type LayoutRoutes = "/" | "/admin/dashboard" | "/contact" | "/track-order"
-type RedirectRoutes = "/clothing" | "/electronics" | "/solar" | "/solar/[[...path]]"
+type RedirectRoutes = "/electronics" | "/solar" | "/solar/[[...path]]"
 type RewriteRoutes = never
 type Routes = AppRoutes | PageRoutes | LayoutRoutes | RedirectRoutes | RewriteRoutes | AppRouteHandlerRoutes
 

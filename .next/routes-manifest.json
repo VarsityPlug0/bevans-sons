@@ -30,12 +30,6 @@
       "destination": "/shop",
       "statusCode": 308,
       "regex": "^(?!/_next)/electronics(?:/)?$"
-    },
-    {
-      "source": "/clothing",
-      "destination": "/shop",
-      "statusCode": 308,
-      "regex": "^(?!/_next)/clothing(?:/)?$"
     }
   ],
   "headers": [

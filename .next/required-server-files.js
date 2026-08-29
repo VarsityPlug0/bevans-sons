@@ -358,11 +358,6 @@ self.__SERVER_FILES_MANIFEST={
         "source": "/electronics",
         "destination": "/shop",
         "permanent": true
-      },
-      {
-        "source": "/clothing",
-        "destination": "/shop",
-        "permanent": true
       }
     ]
   },

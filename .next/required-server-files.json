@@ -358,11 +358,6 @@
         "source": "/electronics",
         "destination": "/shop",
         "permanent": true
-      },
-      {
-        "source": "/clothing",
-        "destination": "/shop",
-        "permanent": true
       }
     ]
   },
