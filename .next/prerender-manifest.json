@@ -62,7 +62,7 @@
       "routeType": "page",
       "response": "complete",
       "compute": "static",
-      "htmlSize": 66714,
+      "htmlSize": 64934,
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -118,7 +118,7 @@
       "routeType": "page",
       "response": "complete",
       "compute": "static",
-      "htmlSize": 45785,
+      "htmlSize": 45199,
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -142,39 +142,11 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/collections": {
-      "routeType": "page",
-      "response": "complete",
-      "compute": "static",
-      "htmlSize": 66997,
-      "experimentalBypassFor": [
-        {
-          "type": "header",
-          "key": "next-action"
-        },
-        {
-          "type": "header",
-          "key": "content-type",
-          "value": "multipart/form-data;.*"
-        }
-      ],
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/collections",
-      "dataRoute": "/collections.rsc",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
     "/contact": {
       "routeType": "page",
       "response": "complete",
       "compute": "static",
-      "htmlSize": 51701,
+      "htmlSize": 50747,
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -202,7 +174,7 @@
       "routeType": "page",
       "response": "complete",
       "compute": "static",
-      "htmlSize": 73920,
+      "htmlSize": 73354,
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -230,7 +202,7 @@
       "routeType": "page",
       "response": "complete",
       "compute": "static",
-      "htmlSize": 96366,
+      "htmlSize": 95870,
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -286,39 +258,11 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/men": {
-      "routeType": "page",
-      "response": "complete",
-      "compute": "static",
-      "htmlSize": 69585,
-      "experimentalBypassFor": [
-        {
-          "type": "header",
-          "key": "next-action"
-        },
-        {
-          "type": "header",
-          "key": "content-type",
-          "value": "multipart/form-data;.*"
-        }
-      ],
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/men",
-      "dataRoute": "/men.rsc",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
     "/payment-options": {
       "routeType": "page",
       "response": "complete",
       "compute": "static",
-      "htmlSize": 57760,
+      "htmlSize": 57202,
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -346,7 +290,7 @@
       "routeType": "page",
       "response": "complete",
       "compute": "static",
-      "htmlSize": 54575,
+      "htmlSize": 54067,
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -374,7 +318,7 @@
       "routeType": "page",
       "response": "complete",
       "compute": "static",
-      "htmlSize": 52516,
+      "htmlSize": 52100,
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -402,7 +346,7 @@
       "routeType": "page",
       "response": "complete",
       "compute": "static",
-      "htmlSize": 53369,
+      "htmlSize": 52879,
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -430,7 +374,7 @@
       "routeType": "page",
       "response": "complete",
       "compute": "static",
-      "htmlSize": 56370,
+      "htmlSize": 55962,
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -458,7 +402,7 @@
       "routeType": "page",
       "response": "complete",
       "compute": "static",
-      "htmlSize": 53882,
+      "htmlSize": 53404,
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -486,7 +430,7 @@
       "routeType": "page",
       "response": "complete",
       "compute": "static",
-      "htmlSize": 45809,
+      "htmlSize": 45223,
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -514,7 +458,7 @@
       "routeType": "page",
       "response": "complete",
       "compute": "static",
-      "htmlSize": 120597,
+      "htmlSize": 120061,
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -570,39 +514,11 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/size-guide": {
-      "routeType": "page",
-      "response": "complete",
-      "compute": "static",
-      "htmlSize": 77977,
-      "experimentalBypassFor": [
-        {
-          "type": "header",
-          "key": "next-action"
-        },
-        {
-          "type": "header",
-          "key": "content-type",
-          "value": "multipart/form-data;.*"
-        }
-      ],
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/size-guide",
-      "dataRoute": "/size-guide.rsc",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
     "/track-order": {
       "routeType": "page",
       "response": "complete",
       "compute": "static",
-      "htmlSize": 47370,
+      "htmlSize": 46784,
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -617,34 +533,6 @@
       "initialRevalidateSeconds": false,
       "srcRoute": "/track-order",
       "dataRoute": "/track-order.rsc",
-      "allowHeader": [
-        "host",
-        "x-matched-path",
-        "x-prerender-revalidate",
-        "x-prerender-revalidate-if-generated",
-        "x-next-revalidated-tags",
-        "x-next-revalidate-tag-token"
-      ]
-    },
-    "/women": {
-      "routeType": "page",
-      "response": "complete",
-      "compute": "static",
-      "htmlSize": 60534,
-      "experimentalBypassFor": [
-        {
-          "type": "header",
-          "key": "next-action"
-        },
-        {
-          "type": "header",
-          "key": "content-type",
-          "value": "multipart/form-data;.*"
-        }
-      ],
-      "initialRevalidateSeconds": false,
-      "srcRoute": "/women",
-      "dataRoute": "/women.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",

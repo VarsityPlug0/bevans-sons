@@ -390,10 +390,10 @@
       "namedRegex": "^/checkout(?:/)?$"
     },
     {
-      "page": "/collections",
-      "regex": "^/collections(?:/)?$",
+      "page": "/clothing",
+      "regex": "^/clothing(?:/)?$",
       "routeKeys": {},
-      "namedRegex": "^/collections(?:/)?$"
+      "namedRegex": "^/clothing(?:/)?$"
     },
     {
       "page": "/contact",
@@ -418,12 +418,6 @@
       "regex": "^/favicon\\.ico(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/favicon\\.ico(?:/)?$"
-    },
-    {
-      "page": "/men",
-      "regex": "^/men(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/men(?:/)?$"
     },
     {
       "page": "/new-arrivals",
@@ -498,12 +492,6 @@
       "namedRegex": "^/sitemap\\.xml(?:/)?$"
     },
     {
-      "page": "/size-guide",
-      "regex": "^/size\\-guide(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/size\\-guide(?:/)?$"
-    },
-    {
       "page": "/special-offers",
       "regex": "^/special\\-offers(?:/)?$",
       "routeKeys": {},
@@ -514,12 +502,6 @@
       "regex": "^/track\\-order(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/track\\-order(?:/)?$"
-    },
-    {
-      "page": "/women",
-      "regex": "^/women(?:/)?$",
-      "routeKeys": {},
-      "namedRegex": "^/women(?:/)?$"
     }
   ],
   "dataRoutes": [],
