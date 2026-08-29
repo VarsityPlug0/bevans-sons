@@ -3,8 +3,8 @@ import Link from "next/link";
 import { Star } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Customer Reviews | Daisy Gadgets Co.",
-  description: "Read real customer reviews and testimonials for Daisy Gadgets Co. Trusted by hundreds of happy customers across South Africa.",
+  title: "Customer Reviews | Bevans Sons",
+  description: "Read real customer reviews and testimonials for Bevans Sons Trusted by hundreds of happy customers across South Africa.",
 };
 
 const reviews = [
@@ -69,7 +69,7 @@ export default function ReviewsPage() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/shop" className="btn-gold px-10 py-4 rounded-xl font-bold">Shop Now</Link>
-          <a href="https://wa.me/27825876811" target="_blank" rel="noopener noreferrer"
+          <a href="https://wa.me/27724816274" target="_blank" rel="noopener noreferrer"
             className="btn-outline px-10 py-4 rounded-xl font-bold">Chat on WhatsApp</a>
         </div>
       </div>

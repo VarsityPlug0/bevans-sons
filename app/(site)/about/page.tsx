@@ -3,8 +3,8 @@ import Link from "next/link";
 import { ShieldCheck, Truck, BadgeCheck, Headphones, MapPin, Phone, Mail } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "About Us | Daisy Gadgets Co. — Premium Gadgets Worldwide",
-  description: "Daisy Gadgets Co. is a proudly South African gadget retailer offering premium electronics, appliances, gaming, solar & more with worldwide shipping.",
+  title: "About Us | Bevans Sons — Premium Gadgets Worldwide",
+  description: "Bevans Sons is a proudly South African gadget retailer offering premium electronics, appliances, gaming, solar & more with worldwide shipping.",
 };
 
 const values = [
@@ -28,7 +28,7 @@ export default function AboutPage() {
       <div className="mb-16 text-center">
         <p className="section-label mb-3">Our Story</p>
         <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6">
-          About <span className="gold-text">Daisy Gadgets Co.</span>
+          About <span className="gold-text">Bevans Sons</span>
         </h1>
         <p className="text-gray-400 text-lg leading-relaxed max-w-2xl mx-auto">
           We&apos;re a proudly South African gadget retailer on a mission to make premium technology accessible to everyone — locally and worldwide.
@@ -48,7 +48,7 @@ export default function AboutPage() {
         <div>
           <h2 className="text-2xl font-bold text-white mb-4">Who We Are</h2>
           <p className="text-gray-400 leading-relaxed mb-4">
-            Daisy Gadgets Co. was founded with a simple vision: to offer South Africans access to the best gadgets at fair prices, backed by reliable service and genuine after-sales support.
+            Bevans Sons was founded with a simple vision: to offer South Africans access to the best gadgets at fair prices, backed by reliable service and genuine after-sales support.
           </p>
           <p className="text-gray-400 leading-relaxed mb-4">
             Based in Bellville, Cape Town, we serve customers across all 9 South African provinces and ship internationally. Whether you&apos;re buying an iPhone, a PS5, a solar inverter, or a new fridge — we have you covered.
@@ -70,11 +70,11 @@ export default function AboutPage() {
             </div>
             <div className="flex items-center gap-3">
               <Phone size={16} color="#D4AF37" className="shrink-0" />
-              <a href="https://wa.me/27825876811" className="text-white hover:text-[#D4AF37] transition-colors">+27 82 587 6811</a>
+              <a href="https://wa.me/27724816274" className="text-white hover:text-[#D4AF37] transition-colors">+27 72 481 6274</a>
             </div>
             <div className="flex items-center gap-3">
               <Mail size={16} color="#D4AF37" className="shrink-0" />
-              <a href="mailto:daisygadgetsco@gmail.com" className="text-white hover:text-[#D4AF37] transition-colors">daisygadgetsco@gmail.com</a>
+              <a href="mailto:MkhabeleEnterprise@gmail.com" className="text-white hover:text-[#D4AF37] transition-colors">MkhabeleEnterprise@gmail.com</a>
             </div>
           </div>
         </div>
@@ -114,7 +114,7 @@ export default function AboutPage() {
         <p className="text-gray-400 mb-8">Browse our full catalogue or chat with us on WhatsApp to get started.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/shop" className="btn-gold px-10 py-4 rounded-xl font-bold">Shop Now</Link>
-          <a href="https://wa.me/27825876811" target="_blank" rel="noopener noreferrer"
+          <a href="https://wa.me/27724816274" target="_blank" rel="noopener noreferrer"
             className="btn-outline px-10 py-4 rounded-xl font-bold">Chat on WhatsApp</a>
         </div>
       </div>

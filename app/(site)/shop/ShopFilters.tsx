@@ -175,7 +175,7 @@ export default function ShopFilters({ total }: { total: number }) {
             </div>
           </div>
           <a
-            href="https://wa.me/27825876811?text=Hi%20Daisy%20Gadgets%20Co,%20I'd%20like%20to%20enquire%20about%20the%20Clothing%20drop!"
+            href="https://wa.me/27724816274?text=Hi%20Daisy%20Gadgets%20Co,%20I'd%20like%20to%20enquire%20about%20the%20Clothing%20drop!"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-gold px-4 py-2 rounded-xl text-xs font-bold shrink-0"

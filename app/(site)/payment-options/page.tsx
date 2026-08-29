@@ -3,7 +3,7 @@ import Link from "next/link";
 import { BANKS } from "@/lib/bankDetails";
 
 export const metadata: Metadata = {
-  title: "Payment Options | Daisy Gadgets Co.",
+  title: "Payment Options | Bevans Sons",
   description: "We accept EFT, PayShap, Visa, Mastercard and all major South African bank payments. View our bank details and payment options.",
 };
 
@@ -100,7 +100,7 @@ export default function PaymentOptionsPage() {
         <h3 className="text-xl font-bold text-white mb-3">Questions about payment?</h3>
         <p className="text-gray-400 text-sm mb-6">Our team is happy to help you through the payment process.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="https://wa.me/27825876811" target="_blank" rel="noopener noreferrer" className="btn-gold px-8 py-3.5 rounded-xl font-bold">Chat on WhatsApp</a>
+          <a href="https://wa.me/27724816274" target="_blank" rel="noopener noreferrer" className="btn-gold px-8 py-3.5 rounded-xl font-bold">Chat on WhatsApp</a>
           <Link href="/shop" className="btn-outline px-8 py-3.5 rounded-xl font-bold">Start Shopping</Link>
         </div>
       </div>

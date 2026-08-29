@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions | Daisy Gadgets Co.",
-  description: "Read the Terms and Conditions for shopping at Daisy Gadgets Co.",
+  title: "Terms & Conditions | Bevans Sons",
+  description: "Read the Terms and Conditions for shopping at Bevans Sons",
 };
 
 export default function TermsPage() {
@@ -19,7 +19,7 @@ export default function TermsPage() {
         {[
           {
             title: "1. Acceptance of Terms",
-            body: "By accessing and using the Daisy Gadgets Co. website and placing orders, you accept and agree to be bound by these Terms and Conditions. If you do not agree, please do not use our services.",
+            body: "By accessing and using the Bevans Sons website and placing orders, you accept and agree to be bound by these Terms and Conditions. If you do not agree, please do not use our services.",
           },
           {
             title: "2. Products & Pricing",
@@ -35,7 +35,7 @@ export default function TermsPage() {
           },
           {
             title: "5. Delivery",
-            body: "We offer free delivery within South Africa and worldwide. Delivery timeframes are estimates and not guaranteed. Daisy Gadgets Co. is not responsible for delays caused by courier services, customs, or events outside our control.",
+            body: "We offer free delivery within South Africa and worldwide. Delivery timeframes are estimates and not guaranteed. Bevans Sons is not responsible for delays caused by courier services, customs, or events outside our control.",
           },
           {
             title: "6. Returns & Refunds",
@@ -47,11 +47,11 @@ export default function TermsPage() {
           },
           {
             title: "8. Intellectual Property",
-            body: "All content on this website, including logos, images, and text, is the property of Daisy Gadgets Co. and may not be reproduced without written permission.",
+            body: "All content on this website, including logos, images, and text, is the property of Bevans Sons and may not be reproduced without written permission.",
           },
           {
             title: "9. Limitation of Liability",
-            body: "Daisy Gadgets Co. shall not be liable for any indirect, incidental, or consequential damages arising from the use of our products or services. Our liability is limited to the value of the product purchased.",
+            body: "Bevans Sons shall not be liable for any indirect, incidental, or consequential damages arising from the use of our products or services. Our liability is limited to the value of the product purchased.",
           },
           {
             title: "10. Governing Law",
@@ -59,7 +59,7 @@ export default function TermsPage() {
           },
           {
             title: "11. Contact",
-            body: "For questions about these Terms, contact us at daisygadgetsco@gmail.com or via WhatsApp at +27 82 587 6811.",
+            body: "For questions about these Terms, contact us at MkhabeleEnterprise@gmail.com or via WhatsApp at +27 72 481 6274.",
           },
         ].map(({ title, body }) => (
           <div key={title}>

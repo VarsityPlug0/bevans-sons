@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Truck, MapPin, Clock, Globe, Package } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Delivery Information | Daisy Gadgets Co.",
+  title: "Delivery Information | Bevans Sons",
   description: "Learn about our delivery options, timeframes, and shipping coverage. Same-day delivery in South Africa. Worldwide shipping available.",
 };
 
@@ -90,7 +90,7 @@ export default function DeliveryPage() {
         <h3 className="text-xl font-bold text-white mb-3">Need a delivery quote?</h3>
         <p className="text-gray-400 text-sm mb-6">Chat with us on WhatsApp for international shipping quotes and special delivery arrangements.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="https://wa.me/27825876811" target="_blank" rel="noopener noreferrer" className="btn-gold px-8 py-3.5 rounded-xl font-bold">Chat on WhatsApp</a>
+          <a href="https://wa.me/27724816274" target="_blank" rel="noopener noreferrer" className="btn-gold px-8 py-3.5 rounded-xl font-bold">Chat on WhatsApp</a>
           <Link href="/track-order" className="btn-outline px-8 py-3.5 rounded-xl font-bold">Track My Order</Link>
         </div>
       </div>

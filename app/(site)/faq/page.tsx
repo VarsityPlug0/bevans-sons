@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "FAQ — Frequently Asked Questions | Daisy Gadgets Co.",
-  description: "Answers to common questions about ordering, delivery, payment, warranties, returns and more at Daisy Gadgets Co.",
+  title: "FAQ — Frequently Asked Questions | Bevans Sons",
+  description: "Answers to common questions about ordering, delivery, payment, warranties, returns and more at Bevans Sons",
 };
 
 const sections = [
@@ -16,7 +16,7 @@ const sections = [
       },
       {
         q: "Can I order via WhatsApp?",
-        a: "Yes! Many customers prefer to order directly via WhatsApp (+27 82 587 6811). Just send us the product name and your delivery address and we'll create an order for you.",
+        a: "Yes! Many customers prefer to order directly via WhatsApp (+27 72 481 6274). Just send us the product name and your delivery address and we'll create an order for you.",
       },
       {
         q: "Do you offer bulk or business pricing?",
@@ -168,7 +168,7 @@ export default function FAQPage() {
         <h3 className="text-xl font-bold text-white mb-3">Still have questions?</h3>
         <p className="text-gray-400 mb-6 text-sm">Our team is ready to help. Reach us via WhatsApp for the fastest response.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="https://wa.me/27825876811" target="_blank" rel="noopener noreferrer"
+          <a href="https://wa.me/27724816274" target="_blank" rel="noopener noreferrer"
             className="btn-gold px-8 py-3.5 rounded-xl font-bold">Chat on WhatsApp</a>
           <Link href="/contact" className="btn-outline px-8 py-3.5 rounded-xl font-bold">Send a Message</Link>
         </div>
