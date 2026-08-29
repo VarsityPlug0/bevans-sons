@@ -8,7 +8,7 @@
       "static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2",
       "static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2"
     ],
-    "[project]/app/(site)/collections/page": [
+    "[project]/app/(site)/clothing/page": [
       "static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2",
       "static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2"
     ],
@@ -21,10 +21,6 @@
       "static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2"
     ],
     "[project]/app/(site)/faq/page": [
-      "static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2"
-    ],
-    "[project]/app/(site)/men/page": [
       "static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2",
       "static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2"
     ],
@@ -76,19 +72,11 @@
       "static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2",
       "static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2"
     ],
-    "[project]/app/(site)/size-guide/page": [
-      "static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2"
-    ],
     "[project]/app/(site)/special-offers/page": [
       "static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2",
       "static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2"
     ],
     "[project]/app/(site)/track-order/page": [
-      "static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2",
-      "static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2"
-    ],
-    "[project]/app/(site)/women/page": [
       "static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2",
       "static/media/83afe278b6a6bb3c-s.p.2bn3s6zvc0dyp.woff2"
     ],
