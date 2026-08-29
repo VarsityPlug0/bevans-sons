@@ -1,0 +1,3 @@
+{
+  "/api/installments/settings/[productId]/route": "app/api/installments/settings/[productId]/route.js"
+}
