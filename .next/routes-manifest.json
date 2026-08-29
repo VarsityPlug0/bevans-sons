@@ -84,6 +84,14 @@
       "namedRegex": "^/admin/dashboard/edit/(?<nxtPid>[^/]+?)(?:/)?$"
     },
     {
+      "page": "/api/admin/categories/[id]",
+      "regex": "^/api/admin/categories/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/admin/categories/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
       "page": "/api/admin/installments/settings/[productId]",
       "regex": "^/api/admin/installments/settings/([^/]+?)(?:/)?$",
       "routeKeys": {
@@ -186,6 +194,12 @@
       "namedRegex": "^/admin/dashboard(?:/)?$"
     },
     {
+      "page": "/admin/dashboard/categories",
+      "regex": "^/admin/dashboard/categories(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/dashboard/categories(?:/)?$"
+    },
+    {
       "page": "/admin/dashboard/chat",
       "regex": "^/admin/dashboard/chat(?:/)?$",
       "routeKeys": {},
@@ -238,6 +252,12 @@
       "regex": "^/admin/dashboard/products(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/admin/dashboard/products(?:/)?$"
+    },
+    {
+      "page": "/api/admin/categories",
+      "regex": "^/api/admin/categories(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/categories(?:/)?$"
     },
     {
       "page": "/api/admin/chat/reply",
