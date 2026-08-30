@@ -41,6 +41,7 @@ const adminUploadRoutes = require('./routes/admin/upload')
 const adminCategoriesRoutes = require('./routes/admin/categories')
 const adminEnquiriesRoutes = require('./routes/admin/enquiries')
 const adminEmailRoutes = require('./routes/admin/email')
+const adminChatRoutes = require('./routes/admin/chat')
 
 const app = express()
 
@@ -98,6 +99,7 @@ app.use('/api/admin/upload', adminLimiter, adminUploadRoutes)
 app.use('/api/admin/categories', adminLimiter, adminCategoriesRoutes)
 app.use('/api/admin/enquiries', adminLimiter, adminEnquiriesRoutes)
 app.use('/api/admin/email', adminLimiter, adminEmailRoutes)
+app.use('/api/admin/chat', adminLimiter, adminChatRoutes)
 
 // 404 and error handlers
 app.use(notFound)

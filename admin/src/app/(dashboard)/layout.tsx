@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { isAuthenticated } from '@/lib/auth'
 import { Sidebar } from '@/components/layout/Sidebar'
+import { AdminChat } from '@/components/ui/AdminChat'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -19,6 +20,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <main className="flex-1 ml-60 p-8 overflow-y-auto">
         {children}
       </main>
+      <AdminChat />
     </div>
   )
 }
