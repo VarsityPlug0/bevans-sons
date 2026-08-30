@@ -12,7 +12,7 @@ export async function Footer() {
         {/* Brand */}
         <div className="col-span-2 md:col-span-1">
           {/* Logo white-on-black works perfectly on the dark footer */}
-          <img src="/logo.png" alt="Bevans Sons" className="h-16 w-auto mb-3" />
+          <img src="/logo.jpg" alt="Bevans Sons" className="h-16 w-auto mb-3" />
           <p className="text-brand-muted text-[11px] leading-relaxed mb-4">{info.storeTagline}</p>
           <div className="flex gap-4 text-[11px] font-semibold tracking-[0.1em] uppercase">
             {info.instagram && <a href={info.instagram} target="_blank" rel="noreferrer" className="hover:text-white transition-colors">IG</a>}

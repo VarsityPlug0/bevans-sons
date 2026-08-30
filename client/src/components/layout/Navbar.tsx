@@ -54,7 +54,7 @@ export function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex-shrink-0">
           {/* Logo: black background image inverted to show black on white navbar */}
-          <img src="/logo.png" alt="Bevans Sons" className="h-10 w-auto" style={{ filter: 'invert(1)' }} />
+          <img src="/logo.jpg" alt="Bevans Sons" className="h-10 w-auto" style={{ filter: 'invert(1)' }} />
         </Link>
 
         {/* Nav Links — driven by Admin → Categories */}
