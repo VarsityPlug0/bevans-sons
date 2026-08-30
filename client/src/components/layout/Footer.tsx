@@ -11,7 +11,8 @@ export async function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-5 gap-8 text-xs">
         {/* Brand */}
         <div className="col-span-2 md:col-span-1">
-          <p className="font-bebas text-xl tracking-[0.12em] text-white uppercase mb-3">{info.storeName}</p>
+          {/* Logo white-on-black works perfectly on the dark footer */}
+          <img src="/logo.png" alt="Bevans Sons" className="h-16 w-auto mb-3" />
           <p className="text-brand-muted text-[11px] leading-relaxed mb-4">{info.storeTagline}</p>
           <div className="flex gap-4 text-[11px] font-semibold tracking-[0.1em] uppercase">
             {info.instagram && <a href={info.instagram} target="_blank" rel="noreferrer" className="hover:text-white transition-colors">IG</a>}

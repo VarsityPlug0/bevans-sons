@@ -52,8 +52,9 @@ export function Navbar() {
         </button>
 
         {/* Logo */}
-        <Link href="/" className="font-bebas text-2xl tracking-[0.12em] text-brand-black flex-shrink-0 uppercase">
-          Bevans Sons
+        <Link href="/" className="flex-shrink-0">
+          {/* Logo: black background image inverted to show black on white navbar */}
+          <img src="/logo.png" alt="Bevans Sons" className="h-10 w-auto" style={{ filter: 'invert(1)' }} />
         </Link>
 
         {/* Nav Links — driven by Admin → Categories */}

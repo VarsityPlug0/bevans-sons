@@ -34,7 +34,7 @@ export function Sidebar() {
     <aside className="fixed left-0 top-0 h-full w-60 bg-gray-900 text-gray-100 flex flex-col z-40">
       {/* Logo */}
       <div className="px-6 py-5 border-b border-gray-700">
-        <span className="font-bold text-white text-lg">Store Admin</span>
+        <img src="/logo.png" alt="Bevans Sons" className="h-10 w-auto mb-1" />
         <p className="text-gray-400 text-xs mt-0.5">Business Control Center</p>
       </div>
 
