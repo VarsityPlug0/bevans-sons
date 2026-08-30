@@ -45,6 +45,9 @@ const adminChatRoutes = require('./routes/admin/chat')
 
 const app = express()
 
+// Trust Render/proxy headers for accurate IP-based rate limiting
+app.set('trust proxy', 1)
+
 // Security headers
 app.use(helmet())
 

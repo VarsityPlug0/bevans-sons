@@ -24,16 +24,12 @@ const DEFAULTS: StoreInfo = {
   facebook: 'https://facebook.com',
 }
 
-let cached: StoreInfo | null = null
-
 export async function fetchStoreInfo(): Promise<StoreInfo> {
-  if (cached) return cached
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/store-info`, { next: { revalidate: 60 } })
     if (!res.ok) return DEFAULTS
     const data = await res.json()
-    // Merge with defaults so empty fields fall back gracefully
-    cached = {
+    return {
       storeName: data.storeName || DEFAULTS.storeName,
       storeTagline: data.storeTagline || DEFAULTS.storeTagline,
       storeReg: data.storeReg || DEFAULTS.storeReg,
@@ -45,7 +41,6 @@ export async function fetchStoreInfo(): Promise<StoreInfo> {
       tiktok: data.tiktok || DEFAULTS.tiktok,
       facebook: data.facebook || DEFAULTS.facebook,
     }
-    return cached
   } catch {
     return DEFAULTS
   }

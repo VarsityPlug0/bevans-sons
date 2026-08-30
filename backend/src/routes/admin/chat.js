@@ -169,7 +169,7 @@ Be concise, direct, and actionable. Use ZAR (R) for currency. You are talking to
       'X-Title': 'Bevans Sons Admin',
     },
     body: JSON.stringify({
-      model: 'anthropic/claude-sonnet-4-5',
+      model: 'anthropic/claude-sonnet-4-6',
       messages: [
         { role: 'system', content: systemPrompt },
         ...messages,

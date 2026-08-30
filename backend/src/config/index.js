@@ -1,5 +1,13 @@
 require('dotenv').config()
 
+// Validate required secrets at startup — fail fast rather than fail silently
+const REQUIRED = ['JWT_SECRET', 'JWT_ADMIN_SECRET', 'DATABASE_URL']
+const missing = REQUIRED.filter(k => !process.env[k])
+if (missing.length) {
+  console.error(`[Config] Missing required env vars: ${missing.join(', ')}`)
+  process.exit(1)
+}
+
 module.exports = {
   port: parseInt(process.env.PORT) || 3001,
   nodeEnv: process.env.NODE_ENV || 'development',
@@ -23,9 +31,11 @@ module.exports = {
     apiSecret: process.env.CLOUDINARY_API_SECRET,
   },
 
-  yoco: {
-    secretKey: process.env.YOCO_SECRET_KEY,
-    publicKey: process.env.YOCO_PUBLIC_KEY,
+  payfast: {
+    merchantId: process.env.PAYFAST_MERCHANT_ID,
+    merchantKey: process.env.PAYFAST_MERCHANT_KEY,
+    passphrase: process.env.PAYFAST_PASSPHRASE || '',
+    sandbox: process.env.PAYFAST_SANDBOX !== 'false',
   },
 
   rateLimit: {
