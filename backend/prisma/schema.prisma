@@ -1,0 +1,815 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── USERS (Admin) ────────────────────────────────────────────────────────────
+
+model User {
+  id          String    @id @default(cuid())
+  email       String    @unique
+  password    String
+  firstName   String
+  lastName    String
+  role        UserRole  @default(STAFF)
+  isActive    Boolean   @default(true)
+  lastLoginAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  auditLogs       AuditLog[]
+  expenses        Expense[]
+  refundApprovals RefundRequest[] @relation("ApprovedBy")
+
+  @@map("users")
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  MANAGER
+  STAFF
+}
+
+// ─── CUSTOMERS (Storefront) ───────────────────────────────────────────────────
+
+model Customer {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  firstName     String
+  lastName      String
+  phone         String?
+  isActive      Boolean   @default(true)
+  emailVerified Boolean   @default(false)
+  totalSpent    Decimal   @default(0) @db.Decimal(12, 2)
+  orderCount    Int       @default(0)
+  lastOrderAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  addresses      CustomerAddress[]
+  orders         Order[]
+  refundRequests RefundRequest[]
+
+  @@map("customers")
+}
+
+model CustomerAddress {
+  id         String  @id @default(cuid())
+  customerId String
+  label      String?
+  firstName  String
+  lastName   String
+  phone      String
+  line1      String
+  line2      String?
+  city       String
+  province   String
+  postalCode String
+  country    String  @default("ZA")
+  isDefault  Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  orders   Order[]
+
+  @@map("customer_addresses")
+}
+
+// ─── CATEGORIES ───────────────────────────────────────────────────────────────
+
+model Category {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  description String?
+  parentId    String?
+  imageUrl    String?
+  isActive    Boolean @default(true)
+  showInNav   Boolean @default(false)
+  sortOrder   Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  parent   Category?  @relation("CategoryChildren", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryChildren")
+  products Product[]
+
+  @@map("categories")
+}
+
+// ─── BRANDS ───────────────────────────────────────────────────────────────────
+
+model Brand {
+  id       String  @id @default(cuid())
+  name     String  @unique
+  slug     String  @unique
+  logoUrl  String?
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+
+  products Product[]
+
+  @@map("brands")
+}
+
+// ─── SUPPLIERS ────────────────────────────────────────────────────────────────
+
+model Supplier {
+  id                  String   @id @default(cuid())
+  name                String
+  contactPerson       String?
+  email               String?
+  phone               String?
+  address             String?
+  website             String?
+  paymentTerms        String?
+  leadTimeDays        Int?
+  defaultShippingCost Decimal? @db.Decimal(10, 2)
+  reliability         Int? // 1-5
+  notes               String?
+  isActive            Boolean  @default(true)
+  totalPurchased      Decimal  @default(0) @db.Decimal(12, 2)
+  totalOutstanding    Decimal  @default(0) @db.Decimal(12, 2)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  supplierProducts SupplierProduct[]
+
+  @@map("suppliers")
+}
+
+model SupplierProduct {
+  id            String   @id @default(cuid())
+  supplierId    String
+  productId     String
+  supplierSku   String?
+  costPrice     Decimal  @db.Decimal(10, 2)
+  shippingCost  Decimal  @default(0) @db.Decimal(10, 2)
+  leadTimeDays  Int?
+  minimumOrder  Int?
+  isPrimary     Boolean  @default(false)
+  lastUpdated   DateTime @default(now())
+
+  supplier Supplier @relation(fields: [supplierId], references: [id])
+  product  Product  @relation(fields: [productId], references: [id])
+
+  @@unique([supplierId, productId])
+  @@map("supplier_products")
+}
+
+// ─── PRODUCTS ─────────────────────────────────────────────────────────────────
+
+model Product {
+  id          String        @id @default(cuid())
+  name        String
+  slug        String        @unique
+  description String?
+  categoryId  String
+  brandId     String?
+  status      ProductStatus @default(DRAFT)
+  sku         String?       @unique
+
+  // Direct costs (snapshot inputs)
+  supplierCost      Decimal @db.Decimal(10, 2)
+  inboundShipping   Decimal @default(0) @db.Decimal(10, 2)
+  fulfillmentCost   Decimal @default(0) @db.Decimal(10, 2)
+  packagingCost     Decimal @default(0) @db.Decimal(10, 2)
+  paymentFeePercent Decimal @default(0) @db.Decimal(6, 4)
+  otherDirectCosts  Decimal @default(0) @db.Decimal(10, 2)
+  totalDirectCost   Decimal @default(0) @db.Decimal(10, 2)
+
+  // Pricing
+  recommendedPrice Decimal  @db.Decimal(10, 2)
+  minimumPrice     Decimal  @db.Decimal(10, 2)
+  sellingPrice     Decimal  @db.Decimal(10, 2)
+  marketPrice      Decimal? @db.Decimal(10, 2)
+
+  // Calculated metrics
+  expectedContribution Decimal @default(0) @db.Decimal(10, 2)
+  contributionMargin   Decimal @default(0) @db.Decimal(6, 4)
+  markup               Decimal @default(0) @db.Decimal(6, 4)
+  profitMargin         Decimal @default(0) @db.Decimal(6, 4)
+
+  // Inventory
+  lowStockThreshold Int @default(5)
+
+  // Market data
+  marketViability MarketViability?
+
+  // Approval workflow
+  approvedById    String?
+  approvedAt      DateTime?
+  rejectedAt      DateTime?
+  rejectionReason String?
+  publishedAt     DateTime?
+
+  // Meta
+  images    Json     @default("[]")
+  tags      String[]
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  category           Category            @relation(fields: [categoryId], references: [id])
+  brand              Brand?              @relation(fields: [brandId], references: [id])
+  variants           ProductVariant[]
+  supplierProducts   SupplierProduct[]
+  marketPrices       MarketPrice[]
+  orderItems         OrderItem[]
+  inventoryMovements InventoryMovement[]
+
+  @@map("products")
+}
+
+enum ProductStatus {
+  DRAFT
+  PRICING_REVIEW
+  MARKET_REVIEW
+  APPROVED
+  PUBLISHED
+  REJECTED
+  ARCHIVED
+}
+
+enum MarketViability {
+  COMPETITIVE
+  REVIEW
+  NOT_VIABLE
+}
+
+// ─── PRODUCT VARIANTS ─────────────────────────────────────────────────────────
+
+model ProductVariant {
+  id        String  @id @default(cuid())
+  productId String
+  sku       String  @unique
+  size      String?
+  color     String?
+  colorHex  String?
+  imageUrl  String?
+
+  priceOverride Decimal? @db.Decimal(10, 2)
+  costOverride  Decimal? @db.Decimal(10, 2)
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product            Product             @relation(fields: [productId], references: [id], onDelete: Cascade)
+  inventory          Inventory?
+  inventoryMovements InventoryMovement[]
+  orderItems         OrderItem[]
+
+  @@map("product_variants")
+}
+
+// ─── INVENTORY ────────────────────────────────────────────────────────────────
+
+model Inventory {
+  id        String   @id @default(cuid())
+  variantId String   @unique
+  available Int      @default(0)
+  reserved  Int      @default(0)
+  committed Int      @default(0)
+  damaged   Int      @default(0)
+  returned  Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  variant ProductVariant @relation(fields: [variantId], references: [id])
+
+  @@map("inventory")
+}
+
+model InventoryMovement {
+  id        String            @id @default(cuid())
+  variantId String
+  productId String
+  type      InventoryMoveType
+  quantity  Int
+  reason    String?
+  orderId   String?
+  userId    String?
+  notes     String?
+  createdAt DateTime          @default(now())
+
+  variant ProductVariant @relation(fields: [variantId], references: [id])
+  product Product        @relation(fields: [productId], references: [id])
+  order   Order?         @relation(fields: [orderId], references: [id])
+
+  @@map("inventory_movements")
+}
+
+enum InventoryMoveType {
+  PURCHASE
+  SALE
+  RETURN
+  DAMAGED
+  ADJUSTMENT
+  RESERVED
+  RELEASED
+}
+
+// ─── MARKET PRICES ────────────────────────────────────────────────────────────
+
+model MarketPrice {
+  id            String          @id @default(cuid())
+  productId     String
+  marketLow     Decimal         @db.Decimal(10, 2)
+  marketAverage Decimal         @db.Decimal(10, 2)
+  marketHigh    Decimal         @db.Decimal(10, 2)
+  myPrice       Decimal         @db.Decimal(10, 2)
+  priceDiff     Decimal         @db.Decimal(10, 2)
+  priceDiffPct  Decimal         @db.Decimal(8, 4)
+  source        String
+  viability     MarketViability
+  notes         String?
+  checkedAt     DateTime        @default(now())
+
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("market_prices")
+}
+
+// ─── PRICING RULES ────────────────────────────────────────────────────────────
+
+model PricingRule {
+  id          String  @id @default(cuid())
+  name        String
+  key         String  @unique
+  value       Decimal @db.Decimal(10, 4)
+  description String?
+
+  updatedAt DateTime @updatedAt
+
+  @@map("pricing_rules")
+}
+
+// ─── BUSINESS SETTINGS ────────────────────────────────────────────────────────
+
+model BusinessSetting {
+  id          String  @id @default(cuid())
+  key         String  @unique
+  value       String
+  type        String  @default("string")
+  category    String?
+  description String?
+
+  updatedAt DateTime @updatedAt
+
+  @@map("business_settings")
+}
+
+// ─── ORDERS ───────────────────────────────────────────────────────────────────
+
+model Order {
+  id          String @id @default(cuid())
+  orderNumber String @unique
+  customerId  String
+  addressId   String?
+
+  // Revenue
+  subtotal       Decimal @db.Decimal(10, 2)
+  discountAmount Decimal @default(0) @db.Decimal(10, 2)
+  shippingAmount Decimal @default(0) @db.Decimal(10, 2)
+  paymentFee     Decimal @default(0) @db.Decimal(10, 2)
+  totalAmount    Decimal @db.Decimal(10, 2)
+
+  // Cost snapshot (all locked at order creation)
+  totalProductCost     Decimal @default(0) @db.Decimal(10, 2)
+  totalFulfillmentCost Decimal @default(0) @db.Decimal(10, 2)
+  totalMarketingAlloc  Decimal @default(0) @db.Decimal(10, 2)
+  totalOtherCosts      Decimal @default(0) @db.Decimal(10, 2)
+
+  // Contribution
+  contribution       Decimal @default(0) @db.Decimal(10, 2)
+  contributionMargin Decimal @default(0) @db.Decimal(6, 4)
+
+  // Status
+  paymentStatus     PaymentStatus     @default(PENDING)
+  fulfillmentStatus FulfillmentStatus @default(UNFULFILLED)
+  refundStatus      RefundStatus      @default(NONE)
+
+  // Payment info
+  paymentMethod    String?
+  paymentReference String?
+  paidAt           DateTime?
+
+  // Fulfillment info
+  trackingNumber  String?
+  trackingCarrier String?
+  shippedAt       DateTime?
+  deliveredAt     DateTime?
+
+  // Attribution
+  campaignId String?
+
+  notes        String?
+  cancelledAt  DateTime?
+  cancelReason String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  customer              Customer              @relation(fields: [customerId], references: [id])
+  address               CustomerAddress?      @relation(fields: [addressId], references: [id])
+  items                 OrderItem[]
+  payments              Payment[]
+  refundRequests        RefundRequest[]
+  inventoryMovements    InventoryMovement[]
+  financialTransactions FinancialTransaction[]
+  campaign              MarketingCampaign?    @relation(fields: [campaignId], references: [id])
+
+  @@map("orders")
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  PARTIALLY_PAID
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
+enum FulfillmentStatus {
+  UNFULFILLED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  FAILED
+  CANCELLED
+}
+
+enum RefundStatus {
+  NONE
+  REQUESTED
+  APPROVED
+  PROCESSING
+  REFUNDED
+  PARTIALLY_REFUNDED
+  REJECTED
+}
+
+// ─── ORDER ITEMS ──────────────────────────────────────────────────────────────
+
+model OrderItem {
+  id        String @id @default(cuid())
+  orderId   String
+  productId String
+  variantId String
+
+  // Snapshot
+  productName String
+  variantSku  String
+  size        String?
+  color       String?
+
+  quantity       Int
+  unitPrice      Decimal @db.Decimal(10, 2)
+  discountAmount Decimal @default(0) @db.Decimal(10, 2)
+  lineTotal      Decimal @db.Decimal(10, 2)
+
+  // Cost snapshot (locked at order creation — never changes)
+  unitCost        Decimal @db.Decimal(10, 2)
+  fulfillmentCost Decimal @default(0) @db.Decimal(10, 2)
+  packagingCost   Decimal @default(0) @db.Decimal(10, 2)
+
+  // Calculated
+  contribution Decimal @default(0) @db.Decimal(10, 2)
+  margin       Decimal @default(0) @db.Decimal(6, 4)
+
+  refundedQty Int @default(0)
+
+  createdAt DateTime @default(now())
+
+  order       Order          @relation(fields: [orderId], references: [id])
+  product     Product        @relation(fields: [productId], references: [id])
+  variant     ProductVariant @relation(fields: [variantId], references: [id])
+  refundItems RefundItem[]
+
+  @@map("order_items")
+}
+
+// ─── PAYMENTS ─────────────────────────────────────────────────────────────────
+
+model Payment {
+  id              String        @id @default(cuid())
+  orderId         String
+  amount          Decimal       @db.Decimal(10, 2)
+  method          String
+  status          PaymentStatus @default(PENDING)
+  reference       String?
+  gatewayResponse Json?
+  processedAt     DateTime?
+  createdAt       DateTime      @default(now())
+
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@map("payments")
+}
+
+// ─── REFUNDS ──────────────────────────────────────────────────────────────────
+
+model RefundRequest {
+  id          String @id @default(cuid())
+  orderId     String
+  customerId  String
+  requestedBy String @default("customer")
+
+  reason          RefundReason
+  description     String
+  evidence        Json         @default("[]")
+  requestedAmount Decimal      @db.Decimal(10, 2)
+  approvedAmount  Decimal?     @db.Decimal(10, 2)
+
+  status          RefundRequestStatus @default(PENDING)
+  approvedById    String?
+  approvedAt      DateTime?
+  rejectionReason String?
+
+  refundMethod    String?
+  refundReference String?
+  processedAt     DateTime?
+  notes           String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  order             Order                 @relation(fields: [orderId], references: [id])
+  customer          Customer              @relation(fields: [customerId], references: [id])
+  approvedBy        User?                 @relation("ApprovedBy", fields: [approvedById], references: [id])
+  items             RefundItem[]
+  financialReversal FinancialTransaction? @relation("RefundReversal")
+
+  @@map("refund_requests")
+}
+
+enum RefundReason {
+  WRONG_SIZE
+  WRONG_ITEM
+  DAMAGED
+  NOT_AS_DESCRIBED
+  CHANGED_MIND
+  NOT_DELIVERED
+  OTHER
+}
+
+enum RefundRequestStatus {
+  PENDING
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  PROCESSING
+  COMPLETED
+}
+
+model RefundItem {
+  id              String  @id @default(cuid())
+  refundRequestId String
+  orderItemId     String
+  quantity        Int
+  refundAmount    Decimal @db.Decimal(10, 2)
+
+  refundRequest RefundRequest @relation(fields: [refundRequestId], references: [id])
+  orderItem     OrderItem     @relation(fields: [orderItemId], references: [id])
+
+  @@map("refund_items")
+}
+
+// ─── FINANCIAL ACCOUNTS (Virtual Wallets) ─────────────────────────────────────
+
+model FinancialAccount {
+  id          String  @id @default(cuid())
+  name        String
+  key         String  @unique
+  description String?
+  balance     Decimal @default(0) @db.Decimal(14, 2)
+  committed   Decimal @default(0) @db.Decimal(14, 2)
+  color       String?
+  icon        String?
+  sortOrder   Int     @default(0)
+  isActive    Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  transactions FinancialTransaction[]
+  allocations  FinancialAllocation[]
+
+  @@map("financial_accounts")
+}
+
+// ─── FINANCIAL TRANSACTIONS (Ledger) ─────────────────────────────────────────
+
+model FinancialTransaction {
+  id              String          @id @default(cuid())
+  type            TransactionType
+  amount          Decimal         @db.Decimal(14, 2)
+  direction       String // "credit" | "debit"
+  accountId       String?
+  orderId         String?
+  refundRequestId String?         @unique
+  description     String
+  reference       String?
+  metadata        Json?
+  createdBy       String?
+  createdAt       DateTime        @default(now())
+
+  account       FinancialAccount? @relation(fields: [accountId], references: [id])
+  order         Order?            @relation(fields: [orderId], references: [id])
+  refundRequest RefundRequest?    @relation("RefundReversal", fields: [refundRequestId], references: [id])
+  allocations   FinancialAllocation[]
+
+  @@map("financial_transactions")
+}
+
+enum TransactionType {
+  SALE
+  PAYMENT_RECEIVED
+  REFUND
+  REFUND_REVERSAL
+  EXPENSE
+  SUPPLIER_PAYMENT
+  MARKETING_SPEND
+  ALLOCATION
+  ALLOCATION_REVERSAL
+  ADJUSTMENT
+  OWNER_WITHDRAWAL
+  COMMITMENT
+  COMMITMENT_RELEASE
+}
+
+// ─── FINANCIAL ALLOCATIONS ────────────────────────────────────────────────────
+
+model FinancialAllocation {
+  id            String  @id @default(cuid())
+  transactionId String
+  accountId     String
+  amount        Decimal @db.Decimal(14, 2)
+  ruleKey       String?
+  description   String?
+
+  createdAt DateTime @default(now())
+
+  transaction FinancialTransaction @relation(fields: [transactionId], references: [id])
+  account     FinancialAccount     @relation(fields: [accountId], references: [id])
+
+  @@map("financial_allocations")
+}
+
+// ─── ALLOCATION RULES ─────────────────────────────────────────────────────────
+
+model AllocationRule {
+  id          String  @id @default(cuid())
+  accountKey  String  @unique
+  percentage  Decimal @db.Decimal(6, 4)
+  name        String
+  description String?
+  isActive    Boolean @default(true)
+  sortOrder   Int     @default(0)
+
+  updatedAt DateTime @updatedAt
+
+  @@map("allocation_rules")
+}
+
+// ─── EXPENSES ─────────────────────────────────────────────────────────────────
+
+model Expense {
+  id              String          @id @default(cuid())
+  category        ExpenseCategory
+  description     String
+  amount          Decimal         @db.Decimal(10, 2)
+  date            DateTime
+  supplierId      String?
+  paymentMethod   String?
+  receiptUrl      String?
+  isRecurring     Boolean         @default(false)
+  recurringPeriod String?
+  notes           String?
+  createdById     String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdBy User @relation(fields: [createdById], references: [id])
+
+  @@map("expenses")
+}
+
+enum ExpenseCategory {
+  ADVERTISING
+  SOFTWARE
+  HOSTING
+  BANKING
+  PACKAGING
+  OPERATIONS
+  PROFESSIONAL_SERVICES
+  EQUIPMENT
+  OTHER
+}
+
+// ─── MARKETING CAMPAIGNS ──────────────────────────────────────────────────────
+
+model MarketingCampaign {
+  id        String         @id @default(cuid())
+  name      String
+  platform  String
+  budget    Decimal        @db.Decimal(10, 2)
+  spend     Decimal        @default(0) @db.Decimal(10, 2)
+  startDate DateTime?
+  endDate   DateTime?
+  status    CampaignStatus @default(DRAFT)
+
+  orderCount    Int     @default(0)
+  revenue       Decimal @default(0) @db.Decimal(12, 2)
+  contribution  Decimal @default(0) @db.Decimal(12, 2)
+  customerCount Int     @default(0)
+  cac           Decimal @default(0) @db.Decimal(10, 2)
+  roas          Decimal @default(0) @db.Decimal(8, 4)
+
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders Order[]
+
+  @@map("marketing_campaigns")
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+// ─── AUDIT LOG ────────────────────────────────────────────────────────────────
+
+model AuditLog {
+  id            String   @id @default(cuid())
+  userId        String?
+  action        String
+  entity        String
+  entityId      String?
+  previousValue Json?
+  newValue      Json?
+  ipAddress     String?
+  userAgent     String?
+  createdAt     DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("audit_logs")
+}
+
+// ─── ALERTS ───────────────────────────────────────────────────────────────────
+
+model Alert {
+  id         String        @id @default(cuid())
+  type       AlertType
+  severity   AlertSeverity
+  title      String
+  message    String
+  entityType String?
+  entityId   String?
+  isRead     Boolean       @default(false)
+  isResolved Boolean       @default(false)
+  resolvedAt DateTime?
+  createdAt  DateTime      @default(now())
+
+  @@map("alerts")
+}
+
+enum AlertType {
+  LOW_STOCK
+  OUT_OF_STOCK
+  LOW_MARGIN
+  UNPROFITABLE_PRODUCT
+  PENDING_FULFILLMENT
+  FAILED_PAYMENT
+  SUPPLIER_PAYMENT_DUE
+  EXCESSIVE_REFUNDS
+  POOR_CAMPAIGN_PERFORMANCE
+  LOW_CASH_RESERVE
+  UNUSUAL_EXPENSE
+  PRODUCT_APPROVAL_NEEDED
+  MINIMUM_CONTRIBUTION_BREACH
+}
+
+enum AlertSeverity {
+  INFO
+  WARNING
+  CRITICAL
+}
